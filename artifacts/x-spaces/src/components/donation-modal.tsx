@@ -2,6 +2,8 @@ import { useState } from "react";
 
 const AMOUNTS = [4.2, 6.9, 42, 69];
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
+const CASHAPP_URL = "https://cash.app/$RSukhi";
+const PAYPAL_QR: string | null = null; // drop your PayPal QR image in public/ and set path here e.g. "/paypal-qr.png"
 
 function VenmoIcon() {
   return (
@@ -11,26 +13,32 @@ function VenmoIcon() {
   );
 }
 
-function ApplePayIcon() {
+function CashAppIcon() {
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1 }}>
-      {/* Apple logo */}
-      <svg viewBox="0 0 814 1000" fill="currentColor" style={{ width: 13, height: 16 }}>
-        <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.3-166.8-106.6C112.4 756 64 651.2 64 551.1c0-190.5 124.2-291.2 246.1-291.2 66.2 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/>
-      </svg>
-      <span>Pay</span>
-    </span>
-  );
-}
-
-function CardIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ width: 20, height: 20 }}>
-      <rect x="2" y="5" width="20" height="14" rx="2" />
-      <path d="M2 10h20" />
+    <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20 }}>
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm1.688 17.418l-.34 1.267c-.03.11-.13.187-.244.187h-1.522a.254.254 0 0 1-.245-.32l.322-1.204a4.51 4.51 0 0 1-2.574-1.09.254.254 0 0 1-.012-.366l1.005-1.005a.254.254 0 0 1 .339-.018c.55.46 1.246.733 1.986.733.86 0 1.373-.376 1.373-.963 0-.513-.32-.806-1.417-1.13-1.6-.476-2.674-1.1-2.674-2.61 0-1.22.862-2.148 2.27-2.47l.322-1.204a.254.254 0 0 1 .245-.187h1.522c.16 0 .276.154.245.312l-.316 1.18a4.424 4.424 0 0 1 2.04.897.254.254 0 0 1 .024.366l-.963.996a.254.254 0 0 1-.34.022 2.764 2.764 0 0 0-1.727-.587c-.77 0-1.22.34-1.22.862 0 .476.394.733 1.6 1.09 1.655.49 2.49 1.19 2.49 2.673-.002 1.274-.9 2.23-2.37 2.568z"/>
     </svg>
   );
 }
+
+function PayPalIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20 }}>
+      <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+    </svg>
+  );
+}
+
+function QRIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ width: 20, height: 20 }}>
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+      <path d="M14 14h1v1h-1zM17 14h1v1h-1zM20 14h1v1h-1zM14 17h1v1h-1zM17 17h1v1h-1zM20 17h1v1h-1zM14 20h1v1h-1zM17 20h1v1h-1zM20 20h1v1h-1z"/>
+    </svg>
+  );
+}
+
+type Method = "venmo" | "cashapp" | "paypal";
 
 interface DonationModalProps {
   onClose: () => void;
@@ -39,24 +47,33 @@ interface DonationModalProps {
 export function DonationModal({ onClose }: DonationModalProps) {
   const [amount, setAmount] = useState(4.2);
   const [custom, setCustom] = useState("");
-  const [method, setMethod] = useState<"venmo" | "apple" | "card">("venmo");
+  const [method, setMethod] = useState<Method>("venmo");
 
   const finalAmount = custom ? parseFloat(custom) || 0 : amount;
-  const isApple = /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent);
 
   const handleFund = () => {
     if (method === "venmo") {
       const note = encodeURIComponent("Fund the Mission ⚡ XCOMS.Space");
       window.open(`${VENMO_URL}?txn=pay&amount=${finalAmount}&note=${note}`, "_blank", "noopener,noreferrer");
       onClose();
+    } else if (method === "cashapp") {
+      window.open(`${CASHAPP_URL}?amount=${finalAmount}`, "_blank", "noopener,noreferrer");
+      onClose();
     }
+    // paypal shows QR inline, no button action needed
   };
 
-  const methods = [
-    { id: "venmo" as const, label: "Venmo", icon: <VenmoIcon />, color: "hsl(210 100% 60%)" },
-    ...(isApple ? [{ id: "apple" as const, label: "Apple Pay", icon: <ApplePayIcon />, color: "white" }] : []),
-    { id: "card" as const, label: "Credit / Debit Card", icon: <CardIcon />, color: "hsl(290 90% 70%)" },
+  const methods: { id: Method; label: string; icon: React.ReactNode; color: string; sub?: string }[] = [
+    { id: "venmo",   label: "Venmo",    icon: <VenmoIcon />,   color: "hsl(210 100% 60%)" },
+    { id: "cashapp", label: "Cash App", icon: <CashAppIcon />, color: "hsl(142 70% 45%)" },
+    { id: "paypal",  label: "PayPal",   icon: <PayPalIcon />,  color: "hsl(214 89% 52%)", sub: "scan QR code" },
   ];
+
+  const ctaLabel = method === "venmo"
+    ? `Send $${finalAmount || "—"} via Venmo`
+    : method === "cashapp"
+    ? `Send $${finalAmount || "—"} via Cash App`
+    : "Scan QR below to pay";
 
   return (
     <>
@@ -66,9 +83,10 @@ export function DonationModal({ onClose }: DonationModalProps) {
           to   { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1); }
         }
         .dm-panel { animation: dm-in 0.35s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .dm-method-btn:hover { opacity: 1 !important; }
         .dm-fund-btn:hover { background: linear-gradient(135deg, hsl(195 100% 50% / 0.28), hsl(290 90% 62% / 0.2)) !important; }
         .dm-amount-btn:hover { border-color: hsl(195 100% 50% / 0.4) !important; color: hsl(195 100% 65%) !important; }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
       `}</style>
 
       {/* Backdrop */}
@@ -92,6 +110,8 @@ export function DonationModal({ onClose }: DonationModalProps) {
           transform: "translateX(-50%) translateY(-50%)",
           zIndex: 120,
           width: "min(420px, calc(100vw - 24px))",
+          maxHeight: "90vh",
+          overflowY: "auto",
           background: "linear-gradient(160deg, hsl(222 55% 8%) 0%, hsl(222 50% 6%) 100%)",
           border: "1px solid hsl(195 100% 50% / 0.15)",
           borderRadius: 20,
@@ -184,33 +204,29 @@ export function DonationModal({ onClose }: DonationModalProps) {
             Pay with
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            {methods.map(({ id, label, icon, color }) => (
+            {methods.map(({ id, label, icon, color, sub }) => (
               <button
                 key={id}
-                className="dm-method-btn"
                 onClick={() => setMethod(id)}
                 style={{
                   display: "flex", alignItems: "center", gap: 11,
                   padding: "0.7rem 0.9rem",
                   borderRadius: 12,
                   border: method === id ? `1px solid ${color}55` : "1px solid hsl(195 100% 50% / 0.09)",
-                  background: method === id ? `${color}10` : "transparent",
+                  background: method === id ? `${color}12` : "transparent",
                   color: method === id ? color : "rgba(255,255,255,0.42)",
                   cursor: "pointer", textAlign: "left", width: "100%",
                   transition: "all 0.15s",
                   boxShadow: method === id ? `0 0 16px ${color}18` : "none",
-                  opacity: id !== "venmo" && method !== id ? 0.65 : 1,
                 }}
               >
                 <span style={{ opacity: method === id ? 1 : 0.6, display: "flex", alignItems: "center" }}>{icon}</span>
                 <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>{label}</span>
-                {id !== "venmo" && (
-                  <span style={{ marginLeft: "auto", fontSize: "0.55rem", fontFamily: "monospace", letterSpacing: "0.1em", opacity: 0.5, textTransform: "uppercase" }}>
-                    Soon
-                  </span>
+                {sub && (
+                  <span style={{ fontSize: "0.6rem", fontFamily: "monospace", opacity: 0.5, marginLeft: 4 }}>· {sub}</span>
                 )}
                 <span style={{
-                  marginLeft: id === "venmo" ? "auto" : "0",
+                  marginLeft: "auto",
                   width: 15, height: 15, borderRadius: "50%",
                   border: method === id ? `5px solid ${color}` : "2px solid rgba(255,255,255,0.2)",
                   background: "transparent", flexShrink: 0, transition: "all 0.15s",
@@ -220,28 +236,59 @@ export function DonationModal({ onClose }: DonationModalProps) {
           </div>
         </div>
 
-        {/* CTA */}
-        <button
-          className="dm-fund-btn"
-          onClick={handleFund}
-          style={{
-            width: "100%", padding: "0.85rem",
-            borderRadius: 12,
-            border: "1px solid hsl(195 100% 50% / 0.4)",
-            background: "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))",
-            color: "hsl(195 100% 70%)",
-            fontFamily: "monospace", fontWeight: 700, fontSize: "0.82rem",
-            letterSpacing: "0.15em", textTransform: "uppercase",
-            cursor: "pointer",
-            boxShadow: "0 0 24px hsl(195 100% 50% / 0.15)",
-            transition: "background 0.2s",
-          }}
-        >
-          ⚡ Send ${finalAmount || "—"} via {method === "venmo" ? "Venmo" : method === "apple" ? "Apple Pay" : "Card"}
-        </button>
+        {/* PayPal QR */}
+        {method === "paypal" && (
+          <div style={{
+            borderRadius: 14,
+            border: "1px solid hsl(214 89% 52% / 0.2)",
+            background: "hsl(214 89% 52% / 0.06)",
+            padding: "1.25rem",
+            display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem",
+          }}>
+            {PAYPAL_QR ? (
+              <>
+                <img src={PAYPAL_QR} alt="PayPal QR Code" style={{ width: 180, height: 180, borderRadius: 10, background: "white", padding: 8 }} />
+                <p style={{ margin: 0, fontSize: "0.65rem", fontFamily: "monospace", color: "rgba(255,255,255,0.4)", textAlign: "center", letterSpacing: "0.05em" }}>
+                  Open your camera or PayPal app · scan to pay
+                </p>
+              </>
+            ) : (
+              <>
+                <div style={{ width: 80, height: 80, display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(214 89% 52% / 0.4)" }}>
+                  <QRIcon />
+                </div>
+                <p style={{ margin: 0, fontSize: "0.65rem", fontFamily: "monospace", color: "rgba(255,255,255,0.3)", textAlign: "center" }}>
+                  QR code coming soon
+                </p>
+              </>
+            )}
+          </div>
+        )}
 
-        <p style={{ textAlign: "center", fontSize: "0.58rem", fontFamily: "monospace", color: "rgba(255,255,255,0.18)", letterSpacing: "0.1em" }}>
-          Secured · No account needed for Venmo link
+        {/* CTA */}
+        {method !== "paypal" && (
+          <button
+            className="dm-fund-btn"
+            onClick={handleFund}
+            style={{
+              width: "100%", padding: "0.85rem",
+              borderRadius: 12,
+              border: "1px solid hsl(195 100% 50% / 0.4)",
+              background: "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))",
+              color: "hsl(195 100% 70%)",
+              fontFamily: "monospace", fontWeight: 700, fontSize: "0.82rem",
+              letterSpacing: "0.15em", textTransform: "uppercase",
+              cursor: "pointer",
+              boxShadow: "0 0 24px hsl(195 100% 50% / 0.15)",
+              transition: "background 0.2s",
+            }}
+          >
+            ⚡ {ctaLabel}
+          </button>
+        )}
+
+        <p style={{ textAlign: "center", fontSize: "0.58rem", fontFamily: "monospace", color: "rgba(255,255,255,0.18)", letterSpacing: "0.1em", margin: 0 }}>
+          Secured · Opens your payment app
         </p>
       </div>
     </>
