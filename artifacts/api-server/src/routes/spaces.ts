@@ -30,7 +30,9 @@ function isSpaceForFollowing(space: typeof spacesTable.$inferSelect, following: 
 }
 
 function formatSpace(space: typeof spacesTable.$inferSelect, following?: Set<string>, viewerUsername?: string) {
-  const effectiveFollowing = following ?? getFollowingUsernamesCache();
+  // Only use owner cache when a real viewer is logged in (following lookup succeeded).
+  // Anonymous / failed-lookup visitors get an empty set so they don't inherit the owner's quadrant.
+  const effectiveFollowing = following ?? (viewerUsername ? getFollowingUsernamesCache() : new Set<string>());
   return {
     id: space.id,
     title: space.title,
