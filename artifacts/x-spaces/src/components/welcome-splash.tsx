@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUsername } from "@/hooks/use-username";
 
 const X_LOGO = (
-  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.261 5.632 5.903-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
 );
@@ -136,7 +136,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                 type="button"
                 onClick={handleXSignIn}
                 disabled={xPending || isPending}
-                className="w-full h-13 py-3.5 rounded-xl font-black tracking-[0.12em] uppercase text-sm transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                className="w-full h-13 py-3.5 rounded-xl transition-all flex items-center justify-center disabled:opacity-50"
                 style={{
                   background: xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)",
                   color: xPending ? "hsl(210 20% 96% / 0.5)" : "hsl(222 47% 6%)",
@@ -144,9 +144,10 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                 }}
                 onMouseEnter={e => { if (!xPending && !isPending) (e.currentTarget as HTMLButtonElement).style.background = "hsl(195 100% 90%)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)"; }}
+                title={xPending ? "Awaiting Authorization…" : "Sign in with X"}
+                aria-label={xPending ? "Awaiting Authorization…" : "Sign in with X"}
               >
                 {X_LOGO}
-                {xPending ? "Awaiting Authorization..." : "Sign in with X"}
               </button>
 
               {xError && (
