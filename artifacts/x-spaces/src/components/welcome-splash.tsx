@@ -30,13 +30,13 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       setXPending(true);
       setXError(null);
       localStorage.setItem("xcoms_auth_method", "x");
-      await saveUsername(e.data.username);
-      // Open pending space now while still in the message event chain (popup flow)
+      // Open pending space BEFORE any await so browser allows the popup
       const pending = localStorage.getItem("xcoms_pending_url");
       if (pending) {
         localStorage.removeItem("xcoms_pending_url");
         window.open(pending, "_blank");
       }
+      await saveUsername(e.data.username);
       finish();
     } else if (e.data?.type === "x-auth-error") {
       setXError(e.data.error ?? "Sign-in failed — please try again");
