@@ -118,6 +118,7 @@ export function FaqSection() {
             textTransform: "uppercase",
             color: "#00e5f5",
             textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4",
+            animation: "neonFlicker 3s infinite",
           }}>
             MISSION BRIEF
           </span>
