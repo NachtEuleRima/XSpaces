@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "xcoms_support_popup_seen";
-const DELAY_MS = 3 * 60 * 1000;
+const DELAY_MS = 5 * 1000; // 5s for preview — change back to 3 * 60 * 1000
 
 function CommanderIcon() {
   return (
