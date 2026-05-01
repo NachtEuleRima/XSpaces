@@ -120,12 +120,21 @@ export function SpaceCard({ space }: { space: Space }) {
                           border: "1px solid hsl(290 90% 62% / 0.25)",
                         }}
                       >
-                        {new Date(space.scheduledAt).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {(() => {
+                          const d = new Date(space.scheduledAt);
+                          const day = d.toLocaleDateString(undefined, { weekday: "short" }).toUpperCase();
+                          const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" }).toUpperCase();
+                          const time = d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+                          return (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                              <span style={{ color: "hsl(290 90% 80%)", fontWeight: 700 }}>{day}</span>
+                              <span style={{ color: "hsl(290 90% 50% / 0.5)" }}>|</span>
+                              <span>{date}</span>
+                              <span style={{ color: "hsl(290 90% 50% / 0.5)" }}>|</span>
+                              <span style={{ color: "hsl(290 90% 85%)" }}>{time}</span>
+                            </span>
+                          );
+                        })()}
                       </div>
                     ) : null}
                   </div>
