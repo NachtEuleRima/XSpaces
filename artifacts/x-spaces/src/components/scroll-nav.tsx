@@ -41,32 +41,21 @@ export function ScrollNav() {
   });
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        right: 16,
-        top: "50%",
-        transform: "translateY(-50%)",
-        zIndex: 50,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-      }}
-    >
+    <>
       <button
         onClick={() => !atTop && scrollTo("top")}
-        style={btnStyle(atTop)}
+        style={{ ...btnStyle(atTop), position: "fixed", right: 16, top: 16, zIndex: 50 }}
         aria-label="Scroll to top"
       >
         ▲
       </button>
       <button
         onClick={() => !atBottom && scrollTo("bottom")}
-        style={btnStyle(atBottom)}
+        style={{ ...btnStyle(atBottom), position: "fixed", right: 16, bottom: 16, zIndex: 50 }}
         aria-label="Scroll to bottom"
       >
         ▼
       </button>
-    </div>
+    </>
   );
 }
