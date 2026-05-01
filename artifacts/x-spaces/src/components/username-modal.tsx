@@ -90,7 +90,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
           style={{ background: "linear-gradient(to right, transparent, hsl(195 100% 50% / 0.9), hsl(290 90% 62% / 0.6), transparent)" }}
         />
 
-        <DialogHeader className="mb-2">
+        <DialogHeader className="mb-2 flex flex-col items-center text-center">
           <div className="flex justify-center mb-4">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center"
@@ -118,12 +118,12 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             </div>
           </div>
           <DialogTitle
-            className="text-2xl font-black uppercase tracking-[0.15em] mb-2"
+            className="text-2xl font-black uppercase tracking-[0.15em] mb-2 text-center"
             style={{ color: "hsl(195 100% 65%)" }}
           >
             STATE YOUR DESIGNATION
           </DialogTitle>
-          <DialogDescription className="text-foreground/60 font-mono text-sm leading-relaxed">
+          <DialogDescription className="text-foreground/60 font-mono text-sm leading-relaxed text-center">
             Identify yourself to XFleet Command · Your callsign will be logged on this vessel
           </DialogDescription>
         </DialogHeader>
