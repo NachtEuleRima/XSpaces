@@ -2,6 +2,8 @@ import { useGetLiveSpaces, useGetUpcomingSpaces, getGetLiveSpacesQueryKey, getGe
 import { SpaceCard } from "@/components/space-card";
 import { StatsTicker } from "@/components/stats-ticker";
 import { UsernameCapture } from "@/components/username-capture";
+import { TechSupport } from "@/components/tech-support";
+import { ScrollNav } from "@/components/scroll-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useUsername } from "@/hooks/use-username";
@@ -285,7 +287,9 @@ export default function Home() {
 
       </main>
 
+      <TechSupport />
       <UsernameCapture />
+      <ScrollNav />
     </div>
   );
 }
