@@ -69,7 +69,8 @@ router.get("/spaces", async (req, res) => {
 router.get("/spaces/live", async (req, res) => {
   await withSync(async () => {
     const viewerUsername = typeof req.query["viewerUsername"] === "string" ? req.query["viewerUsername"] : undefined;
-    const viewerFollowing = viewerUsername ? await getViewerFollowing(viewerUsername) : undefined;
+    // If viewerUsername given but lookup fails, use empty set — don't fall back to owner cache
+    const viewerFollowing = viewerUsername ? (await getViewerFollowing(viewerUsername) ?? new Set<string>()) : undefined;
 
     const spaces = await db
       .select()
@@ -83,7 +84,8 @@ router.get("/spaces/live", async (req, res) => {
 router.get("/spaces/upcoming", async (req, res) => {
   await withSync(async () => {
     const viewerUsername = typeof req.query["viewerUsername"] === "string" ? req.query["viewerUsername"] : undefined;
-    const viewerFollowing = viewerUsername ? await getViewerFollowing(viewerUsername) : undefined;
+    // If viewerUsername given but lookup fails, use empty set — don't fall back to owner cache
+    const viewerFollowing = viewerUsername ? (await getViewerFollowing(viewerUsername) ?? new Set<string>()) : undefined;
 
     const spaces = await db
       .select()
