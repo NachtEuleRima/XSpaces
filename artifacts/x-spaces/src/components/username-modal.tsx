@@ -141,19 +141,22 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             type="button"
             onClick={handleXSignIn}
             disabled={xPending}
-            className="w-full h-12 rounded-lg font-black tracking-[0.12em] uppercase text-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
+            className="w-full h-14 rounded-xl font-black tracking-[0.12em] uppercase text-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
             style={{
-              background: "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))",
-              color: xPending ? "hsl(195 100% 65% / 0.5)" : "hsl(195 100% 65%)",
-              border: "1px solid hsl(195 100% 50% / 0.5)",
-              boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)",
+              background: "linear-gradient(to right, hsl(222 47% 7%), hsl(270 35% 10%))",
+              color: xPending ? "hsl(195 100% 65% / 0.4)" : "hsl(195 100% 70%)",
+              border: "1px solid hsl(195 100% 55% / 0.6)",
+              boxShadow: "0 0 18px hsl(195 100% 50% / 0.25), inset 0 0 30px hsl(195 100% 50% / 0.04)",
             }}
             onMouseEnter={e => {
-              if (!xPending)
-                (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.3), hsl(290 90% 62% / 0.25))";
+              if (!xPending) {
+                (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(to right, hsl(222 47% 10%), hsl(270 35% 14%))";
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 28px hsl(195 100% 50% / 0.4), inset 0 0 30px hsl(195 100% 50% / 0.06)";
+              }
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))";
+              (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(to right, hsl(222 47% 7%), hsl(270 35% 10%))";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 18px hsl(195 100% 50% / 0.25), inset 0 0 30px hsl(195 100% 50% / 0.04)";
             }}
           >
             {xPending ? "AWAITING CONFIRMATION..." : <>AUTHORIZE WITH {X_LOGO}</>}
