@@ -31,10 +31,13 @@ export function SpaceCard({ space }: { space: Space }) {
   const primaryColorBorder = isLive ? "hsl(195 100% 50% / 0.3)" : "hsl(290 90% 62% / 0.3)";
 
   // Co-hosts + speakers only — host is already shown top-left
-  const allParticipants: SpaceParticipant[] = [
-    ...space.coHosts,
-    ...space.speakers,
-  ].filter(Boolean);
+  // Deduplicate by userId in case the API returns the same person in multiple roles
+  const seen = new Set<string>();
+  const allParticipants: SpaceParticipant[] = [...space.coHosts, ...space.speakers].filter(p => {
+    if (!p || seen.has(p.userId)) return false;
+    seen.add(p.userId);
+    return true;
+  });
 
   // Audience = total participants minus everyone on stage (host + co-hosts + speakers)
   const onStageCount = 1 + space.coHosts.length + space.speakers.length;
