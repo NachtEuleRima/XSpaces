@@ -29,7 +29,7 @@ export function TechSupport() {
         }
       `}</style>
 
-      <div style={{ borderTop: "1px solid rgba(210,140,10,0.35)", boxShadow: "0 -1px 8px rgba(210,140,10,0.15)", paddingTop: "2rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
 
         {/* Header */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
