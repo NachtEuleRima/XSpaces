@@ -51,27 +51,20 @@ export function DonateFloat() {
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", onChange);
 
-    const checkOverCard = () => {
-      // Button fixed position: left 16px, top 59vh, size ~40px
-      const btnX = 16 + 20; // center x
-      const btnY = window.innerHeight * 0.59; // center y
-      const elements = document.elementsFromPoint(btnX, btnY);
-      const hit = elements.some(el => el.closest("[data-space-card]"));
-      setOverCard(hit);
+    const flash = () => {
+      setTooltipVisible(true);
+      flashTimer.current = setTimeout(() => setTooltipVisible(false), 2000);
     };
 
-    const onScroll = () => {
-      checkOverCard();
-      setIsScrolling(true);
-      if (scrollTimer.current) clearTimeout(scrollTimer.current);
-      scrollTimer.current = setTimeout(() => setIsScrolling(false), 800);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const interval = setInterval(flash, 15000);
+    flash(); // show once on mount after a short delay
+    const initDelay = setTimeout(() => flash(), 3000);
 
     return () => {
       mq.removeEventListener("change", onChange);
-      window.removeEventListener("scroll", onScroll);
-      if (scrollTimer.current) clearTimeout(scrollTimer.current);
+      clearInterval(interval);
+      clearTimeout(initDelay);
+      if (flashTimer.current) clearTimeout(flashTimer.current);
     };
   }, []);
 
@@ -114,8 +107,8 @@ export function DonateFloat() {
         {/* Hover tooltip — desktop only */}
         {!isMobile && hovered && <DonateTooltip />}
 
-        {/* Scroll-triggered tooltip — mobile only, hidden when over a space card */}
-        {isMobile && isScrolling && !overCard && <DonateTooltip />}
+        {/* Auto-flash tooltip — mobile only, every 15 seconds */}
+        {isMobile && tooltipVisible && <DonateTooltip />}
 
         {/* FAB */}
         <button
