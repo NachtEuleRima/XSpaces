@@ -139,10 +139,10 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               <div className="flex flex-col items-center gap-2">
                 <div className="flex flex-col items-center leading-none font-black uppercase">
                   <span className="text-5xl tracking-tight" style={{ color: "hsl(195 100% 55%)", textShadow: "0 0 40px hsl(195 100% 50% / 0.5)" }}>
-                    XCOMS
+                    X
                   </span>
                   <span className="text-3xl tracking-tight" style={{ color: "hsl(290 90% 62%)", textShadow: "0 0 30px hsl(290 90% 62% / 0.5)" }}>
-                    .SPACE
+                    Spaces
                   </span>
                 </div>
                 <p className="text-xs font-mono tracking-[0.3em] text-foreground/40 uppercase mt-1">
