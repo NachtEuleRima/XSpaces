@@ -192,7 +192,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                   State Your Designation
                 </h2>
                 <p className="text-sm font-mono text-foreground/50 leading-relaxed">
-                  Lock in your quantum signature to calibrate your quadrant
+                  Calibrate your sensors and tune your feed to your corner of the galaxy
                 </p>
               </div>
 
