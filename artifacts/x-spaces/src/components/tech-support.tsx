@@ -25,7 +25,12 @@ export function TechSupport() {
 
         {/* Header */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-          <span style={{ fontSize: "1.5rem", color: "#ea8e2a", animation: "neonFlickerGold 3s infinite" }}>⚡</span>
+          <span style={{
+            fontSize: "1.5rem",
+            color: "#ea8e2a",
+            textShadow: "0 0 4px #ea8e2a, 0 0 11px #ea8e2a, 0 0 19px #ea8e2a, 0 0 40px #c47020",
+            animation: "neonFlickerGold 3s infinite",
+          }}>⚡</span>
           <span style={{
             fontSize: "clamp(1.25rem, 4vw, 1.75rem)",
             fontWeight: 900,
@@ -33,11 +38,17 @@ export function TechSupport() {
             letterSpacing: "0.25em",
             textTransform: "uppercase",
             color: "#00e5f5",
+            textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4, 0 0 80px #00b8c4",
             animation: "neonFlicker 3s infinite",
           }}>
             TECH SUPPORT
           </span>
-          <span style={{ fontSize: "1.5rem", color: "#ea8e2a", animation: "neonFlickerGold 3s infinite" }}>⚡</span>
+          <span style={{
+            fontSize: "1.5rem",
+            color: "#ea8e2a",
+            textShadow: "0 0 4px #ea8e2a, 0 0 11px #ea8e2a, 0 0 19px #ea8e2a, 0 0 40px #c47020",
+            animation: "neonFlickerGold 3s infinite",
+          }}>⚡</span>
         </div>
 
         <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem", marginBottom: "1.25rem" }}>
