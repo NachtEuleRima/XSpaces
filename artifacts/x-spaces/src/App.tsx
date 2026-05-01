@@ -51,6 +51,11 @@ function AppShell() {
     return () => window.removeEventListener("xcoms:donate", handler);
   }, []);
 
+  // Hide donate button while welcome splash is visible
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent(showSplash ? "xcoms:auth-open" : "xcoms:auth-close"));
+  }, [showSplash]);
+
   return (
     <>
       <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
