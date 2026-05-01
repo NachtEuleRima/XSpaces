@@ -135,24 +135,21 @@ export function SpaceCard({ space }: { space: Space }) {
                       </div>
                     ) : space.scheduledAt ? (
                       <div
-                        className="text-[10px] font-mono tracking-[0.05em] px-2 py-1 rounded-full whitespace-nowrap"
+                        className="text-[8px] font-mono tracking-[0.04em] px-1.5 py-0.5 rounded-full whitespace-nowrap"
                         style={{
                           color: "hsl(290 90% 75%)",
-                          background: "hsl(290 90% 62% / 0.1)",
-                          border: "1px solid hsl(290 90% 62% / 0.25)",
+                          background: "hsl(290 90% 62% / 0.08)",
+                          border: "1px solid hsl(290 90% 62% / 0.2)",
                         }}
                       >
                         {(() => {
                           const d = new Date(space.scheduledAt);
-                          const day = d.toLocaleDateString(undefined, { weekday: "short" }).toUpperCase();
-                          const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" }).toUpperCase();
+                          const date = d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }).toUpperCase();
                           const time = d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
                           return (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-                              <span style={{ color: "hsl(290 90% 80%)", fontWeight: 700 }}>{day}</span>
-                              <span style={{ color: "hsl(290 90% 50% / 0.5)" }}>|</span>
-                              <span>{date}</span>
-                              <span style={{ color: "hsl(290 90% 50% / 0.5)" }}>|</span>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                              <span style={{ color: "hsl(290 90% 80%)", fontWeight: 700 }}>{date}</span>
+                              <span style={{ color: "hsl(290 90% 50% / 0.4)" }}>·</span>
                               <span style={{ color: "hsl(290 90% 85%)" }}>{time}</span>
                             </span>
                           );

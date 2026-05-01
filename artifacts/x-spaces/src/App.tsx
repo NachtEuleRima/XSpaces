@@ -12,6 +12,7 @@ import { DonateFloat } from "@/components/donate-float";
 import { UsernameProvider } from "@/context/username-context";
 import { useUsername } from "@/hooks/use-username";
 import { UsernameCapture } from "@/components/username-capture";
+import { DonationModal } from "@/components/donation-modal";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ function Router() {
 
 function AppShell() {
   const [showSplash, setShowSplash] = useState(() => !localStorage.getItem("xcoms_username"));
+  const [showDonation, setShowDonation] = useState(false);
   const { clearUsername } = useUsername();
   const qc = useQueryClient();
 
@@ -43,6 +45,12 @@ function AppShell() {
     return () => window.removeEventListener("xcoms:signout", handler);
   }, [clearUsername, qc]);
 
+  useEffect(() => {
+    const handler = () => setShowDonation(true);
+    window.addEventListener("xcoms:donate", handler);
+    return () => window.removeEventListener("xcoms:donate", handler);
+  }, []);
+
   return (
     <>
       <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
@@ -51,6 +59,7 @@ function AppShell() {
       <Toaster />
       {showSplash && <WelcomeSplash onDone={() => setShowSplash(false)} />}
       {!showSplash && <UsernameCapture />}
+      {showDonation && <DonationModal onClose={() => setShowDonation(false)} />}
       <SupportPopup />
       <DonateFloat />
     </>

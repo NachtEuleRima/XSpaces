@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 
 function DonateTooltip() {
   return (
@@ -110,7 +109,7 @@ export function DonateFloat() {
         {/* FAB */}
         <button
           className="donate-fab"
-          onClick={() => window.open(VENMO_URL, "_blank", "noopener,noreferrer")}
+          onClick={() => window.dispatchEvent(new Event("xcoms:donate"))}
           aria-label="Support — Fund the mission on Venmo"
           style={{
             position: "relative",

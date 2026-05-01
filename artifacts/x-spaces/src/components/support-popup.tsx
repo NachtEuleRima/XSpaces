@@ -20,8 +20,8 @@ export function SupportPopup() {
   };
 
   const fund = () => {
-    window.open("https://venmo.com/u/Rima-Sukhadia", "_blank", "noopener,noreferrer");
     dismiss();
+    window.dispatchEvent(new Event("xcoms:donate"));
   };
 
   if (!visible) return null;
