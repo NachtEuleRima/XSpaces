@@ -88,10 +88,16 @@ export function DonateFloat() {
         .heart-ping {
           animation: heart-ping 1.4s ease-out infinite;
         }
+        .donate-wrapper {
+          position: fixed; left: 16px; top: 59%; transform: translateY(-50%); z-index: 80; display: inline-flex; align-items: center;
+        }
+        @media (min-width: 768px) {
+          .donate-wrapper { top: 65%; }
+        }
       `}</style>
 
       <div
-        style={{ position: "fixed", left: 16, top: "59%", transform: "translateY(-50%)", zIndex: 80, display: "inline-flex", alignItems: "center" }}
+        className="donate-wrapper"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
