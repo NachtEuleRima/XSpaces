@@ -207,7 +207,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="pt-20 pb-10 px-6 text-center z-10 relative">
-        <div className="absolute top-4 left-0">
+        <div className="absolute top-4 left-4">
           <FeedbackFloat />
         </div>
         <motion.div
