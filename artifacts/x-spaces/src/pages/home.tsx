@@ -211,9 +211,11 @@ export default function Home() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8 flex items-center justify-center gap-4"
+          className="mb-8 relative flex justify-center items-center w-full"
         >
-          <FeedbackFloat />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2">
+            <FeedbackFloat />
+          </div>
           <div
             className="badge-float inline-flex items-center gap-2 border border-primary/40 rounded-full px-4 py-1.5 text-xs font-mono tracking-[0.2em] text-primary uppercase"
             style={{ boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)" }}
