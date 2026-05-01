@@ -8,6 +8,8 @@ import { eq, inArray } from "drizzle-orm";
 import {
   searchSpacesByState,
   getSpacesByCreatorIds,
+  getFollowing,
+  chunk,
   buildUserMap,
   upgradeAvatarUrl,
   type XSpace,
@@ -18,6 +20,14 @@ import {
 import { logger } from "./logger.js";
 
 const OWNER_USER_ID = process.env["OWNER_X_USER_ID"] ?? "";
+
+// In-memory cache of followed usernames (lowercased) — populated during sync
+let followingUsernamesCache: Set<string> = new Set();
+
+/** Returns the cached set of usernames the owner follows. */
+export function getFollowingUsernamesCache(): Set<string> {
+  return followingUsernamesCache;
+}
 
 // How stale (in ms) synced data can be before we re-fetch
 const SYNC_TTL_MS = 3 * 60 * 1000; // 3 minutes
@@ -95,37 +105,76 @@ export async function syncSpacesFromX(): Promise<SyncResult> {
   let markedEnded = 0;
 
   try {
-    // Fetch live, scheduled, and owner's own spaces in parallel
-    const fetches: Promise<XSpacesResponse>[] = [
+    // Step 1: fetch following list + broad keyword search + owner spaces in parallel
+    const [followingList, liveRes, scheduledRes] = await Promise.all([
+      OWNER_USER_ID ? getFollowing(OWNER_USER_ID) : Promise.resolve([]),
       searchSpacesByState("live"),
       searchSpacesByState("scheduled"),
-    ];
-    if (OWNER_USER_ID) {
-      fetches.push(getSpacesByCreatorIds([OWNER_USER_ID]));
-    }
+    ]);
 
-    const [liveRes, scheduledRes, ownerRes = {}] = await Promise.all(fetches);
+    // Update following cache
+    followingUsernamesCache = new Set(followingList.map(f => f.username.toLowerCase()));
+    logger.info({ count: followingList.length }, "Following list refreshed");
 
-    // Deduplicate spaces by ID across all sources
-    const seenSpaceIds = new Set<string>();
-    const allSpaces: XSpace[] = [];
-    for (const space of [
-      ...(liveRes.data ?? []),
-      ...(scheduledRes.data ?? []),
-      ...(ownerRes.data ?? []),
-    ]) {
-      if (!seenSpaceIds.has(space.id)) {
-        seenSpaceIds.add(space.id);
-        allSpaces.push(space);
+    // Step 2: fetch spaces from network (everyone the owner follows) in batches of 100
+    // Throttle to avoid rate limits — run at most 3 batches concurrently
+    const followingIds = followingList.map(f => f.id);
+    const networkBatches = chunk(followingIds, 100);
+    const networkResults: PromiseSettledResult<XSpacesResponse>[] = [];
+
+    // Run batches sequentially with a delay to stay under the creator_ids rate limit
+    for (let i = 0; i < networkBatches.length; i++) {
+      if (i > 0) await new Promise(resolve => setTimeout(resolve, 600));
+
+      const result = await getSpacesByCreatorIds(networkBatches[i]!).then(
+        v => ({ status: "fulfilled" as const, value: v }),
+        e => ({ status: "rejected" as const, reason: e })
+      );
+      networkResults.push(result);
+
+      if (result.status === "rejected") {
+        const reason = String(result.reason);
+        // Log 429s at debug level (expected), other errors at warn
+        if (reason.includes("429")) {
+          logger.debug({ batchIndex: i }, "Network batch rate-limited, skipping");
+        } else {
+          logger.warn({ batchIndex: i, reason }, "Network batch failed");
+        }
+      } else {
+        const spacesFound = result.value.data?.length ?? 0;
+        if (spacesFound > 0) {
+          logger.info({ batchIndex: i, spacesFound }, "Network batch found spaces");
+        }
       }
     }
 
-    // Merge user maps from all responses
-    const allUsers = [
-      ...(liveRes.includes?.users ?? []),
-      ...(scheduledRes.includes?.users ?? []),
-      ...(ownerRes.includes?.users ?? []),
-    ];
+    // Step 3: also fetch owner's own spaces
+    const ownerRes = OWNER_USER_ID
+      ? await getSpacesByCreatorIds([OWNER_USER_ID]).catch(() => ({} as XSpacesResponse))
+      : {} as XSpacesResponse;
+
+    // Step 4: merge and deduplicate all spaces
+    const seenSpaceIds = new Set<string>();
+    const allSpaces: XSpace[] = [];
+    const allUsers: XUser[] = [];
+
+    const addFromResponse = (res: XSpacesResponse) => {
+      for (const space of res.data ?? []) {
+        if (!seenSpaceIds.has(space.id)) {
+          seenSpaceIds.add(space.id);
+          allSpaces.push(space);
+        }
+      }
+      for (const user of res.includes?.users ?? []) allUsers.push(user);
+    };
+
+    addFromResponse(liveRes);
+    addFromResponse(scheduledRes);
+    addFromResponse(ownerRes);
+    for (const r of networkResults) {
+      if (r.status === "fulfilled") addFromResponse(r.value);
+    }
+
     const userMap = buildUserMap(allUsers);
 
     const seenXIds: string[] = [];

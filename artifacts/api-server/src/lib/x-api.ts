@@ -165,7 +165,7 @@ export async function getSpacesByIds(ids: string[]): Promise<XSpacesResponse> {
 }
 
 /**
- * Get active spaces created by a specific user ID.
+ * Get active spaces created by specific user IDs (max 100 per call).
  */
 export async function getSpacesByCreatorIds(userIds: string[]): Promise<XSpacesResponse> {
   if (userIds.length === 0) return {};
@@ -176,6 +176,41 @@ export async function getSpacesByCreatorIds(userIds: string[]): Promise<XSpacesR
     expansions: EXPANSIONS,
   });
   return xFetch(`/spaces/by/creator_ids?${params.toString()}`) as Promise<XSpacesResponse>;
+}
+
+export interface FollowingEntry { id: string; username: string }
+
+/**
+ * Fetch all accounts a user follows (handles pagination).
+ * Returns array of {id, username} for the full following list.
+ */
+export async function getFollowing(userId: string): Promise<FollowingEntry[]> {
+  const all: FollowingEntry[] = [];
+  let nextToken: string | undefined;
+
+  do {
+    const params = new URLSearchParams({ max_results: "1000", "user.fields": "username" });
+    if (nextToken) params.set("pagination_token", nextToken);
+
+    const res = await xFetch(`/users/${userId}/following?${params.toString()}`) as {
+      data?: FollowingEntry[];
+      meta?: { next_token?: string };
+    };
+
+    for (const user of res.data ?? []) all.push(user);
+    nextToken = res.meta?.next_token;
+  } while (nextToken);
+
+  return all;
+}
+
+/**
+ * Chunk an array into sub-arrays of at most `size` elements.
+ */
+export function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
 }
 
 /**

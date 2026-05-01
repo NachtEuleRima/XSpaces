@@ -2,7 +2,7 @@ import { Router } from "express";
 import { db, spacesTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { GetSpaceParams } from "@workspace/api-zod";
-import { syncIfStale, syncSpacesFromX } from "../lib/sync.js";
+import { syncIfStale, syncSpacesFromX, getFollowingUsernamesCache } from "../lib/sync.js";
 
 const router = Router();
 
@@ -11,12 +11,18 @@ const OWNER_USERNAME = (process.env["OWNER_X_USERNAME"] ?? "").toLowerCase();
 type Participant = { username?: string };
 
 function isOwnerSpace(space: typeof spacesTable.$inferSelect): boolean {
-  if (!OWNER_USERNAME) return false;
   const host = space.host as Participant | null;
   const coHosts = space.coHosts as Participant[];
   const speakers = space.speakers as Participant[];
   const all = [host, ...coHosts, ...speakers].filter(Boolean) as Participant[];
-  return all.some(p => p.username?.toLowerCase() === OWNER_USERNAME);
+  const allUsernames = all.map(p => p.username?.toLowerCase() ?? "");
+
+  // True if the owner is a participant OR the host is someone the owner follows
+  if (OWNER_USERNAME && allUsernames.includes(OWNER_USERNAME)) return true;
+
+  const following = getFollowingUsernamesCache();
+  const hostUsername = (host?.username ?? "").toLowerCase();
+  return following.size > 0 && following.has(hostUsername);
 }
 
 function formatSpace(space: typeof spacesTable.$inferSelect) {
