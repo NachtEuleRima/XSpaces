@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "xcoms_support_popup_seen";
-const DELAY_MS = 5 * 1000; // 5s for preview — change back to 3 * 60 * 1000
+const DELAY_MS = 3 * 60 * 1000;
 
 function CommanderIcon() {
   return (
@@ -63,10 +63,18 @@ export function SupportPopup() {
   const [status, setStatus] = useState<Status>("idle");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const open = () => { setClosing(false); setText(""); setStatus("idle"); setVisible(true); };
+
   useEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) return;
-    const timer = setTimeout(() => setVisible(true), DELAY_MS);
+    const timer = setTimeout(open, DELAY_MS);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => open();
+    window.addEventListener("xcoms:feedback", handler);
+    return () => window.removeEventListener("xcoms:feedback", handler);
   }, []);
 
   const dismiss = () => {
