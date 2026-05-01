@@ -43,6 +43,11 @@ interface DonationModalProps {
 }
 
 export function DonationModal({ onClose }: DonationModalProps) {
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("xcoms:auth-open"));
+    return () => { window.dispatchEvent(new CustomEvent("xcoms:auth-close")); };
+  }, []);
+
   const [amount, setAmount] = useState(4.2);
   const [custom, setCustom] = useState("");
   const [method, setMethod] = useState<Method>("venmo");

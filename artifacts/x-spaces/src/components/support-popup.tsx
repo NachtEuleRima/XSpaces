@@ -63,7 +63,7 @@ export function SupportPopup() {
   const [status, setStatus] = useState<Status>("idle");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const open = () => { setClosing(false); setText(""); setStatus("idle"); setVisible(true); };
+  const open = () => { setClosing(false); setText(""); setStatus("idle"); setVisible(true); window.dispatchEvent(new CustomEvent("xcoms:auth-open")); };
 
   useEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) return;
@@ -80,6 +80,7 @@ export function SupportPopup() {
   const dismiss = () => {
     setClosing(true);
     sessionStorage.setItem(STORAGE_KEY, "1");
+    window.dispatchEvent(new CustomEvent("xcoms:auth-close"));
     setTimeout(() => setVisible(false), 400);
   };
 
