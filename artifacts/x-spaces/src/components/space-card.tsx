@@ -10,8 +10,16 @@ export function SpaceCard({ space }: { space: Space }) {
   const isLive = space.status === "live";
   const { username, saveUsername } = useUsername();
 
+  const isXAuthorized = localStorage.getItem("xcoms_auth_method") === "x";
+
   const handleActionClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!isXAuthorized) {
+      // Prompt sign-in — clear any prior choice so splash re-appears
+      localStorage.removeItem("xcoms_auth_method");
+      window.dispatchEvent(new Event("xcoms:signout"));
+      return;
+    }
     // Track the space visit fire-and-forget if identified
     if (username) {
       saveUsername(username, space.id).catch(() => {});
