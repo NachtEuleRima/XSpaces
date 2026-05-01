@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 export function ScrollNav() {
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 
   useEffect(() => {
     const onScroll = () => {
@@ -14,16 +15,27 @@ export function ScrollNav() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onResize = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onResize);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      mq.removeEventListener("change", onResize);
+    };
   }, []);
 
   const scrollTo = (target: "top" | "bottom") => {
     window.scrollTo({ top: target === "top" ? 0 : document.documentElement.scrollHeight, behavior: "smooth" });
   };
 
+  const size = isMobile ? 28 : 40;
+  const fontSize = isMobile ? 10 : 14;
+
   const btnStyle = (disabled: boolean): React.CSSProperties => ({
-    width: 40,
-    height: 40,
+    width: size,
+    height: size,
     borderRadius: "50%",
     border: "1px solid hsl(195 100% 50% / 0.3)",
     background: disabled ? "hsl(195 100% 50% / 0.03)" : "hsl(195 100% 50% / 0.08)",
@@ -36,7 +48,7 @@ export function ScrollNav() {
     transition: "all 0.2s ease",
     backdropFilter: "blur(8px)",
     WebkitBackdropFilter: "blur(8px)",
-    fontSize: 14,
+    fontSize,
     fontWeight: 700,
   });
 
