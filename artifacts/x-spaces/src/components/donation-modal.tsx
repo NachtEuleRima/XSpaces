@@ -61,6 +61,8 @@ export function DonationModal({ onClose }: DonationModalProps) {
       body: JSON.stringify({ username: user, amount: finalAmount, method }),
     }).catch(() => {});
 
+    sessionStorage.setItem("xcoms_payment_pending", "1");
+
     if (method === "venmo") {
       const note = encodeURIComponent("Fund the Mission ⚡ XCOMS.Space");
       window.open(`${VENMO_URL}?txn=pay&amount=${finalAmount}&note=${note}`, "_blank", "noopener,noreferrer");

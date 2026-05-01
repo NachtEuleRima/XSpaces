@@ -13,6 +13,7 @@ import { UsernameProvider } from "@/context/username-context";
 import { useUsername } from "@/hooks/use-username";
 import { UsernameCapture } from "@/components/username-capture";
 import { DonationModal } from "@/components/donation-modal";
+import { PostDonationToast } from "@/components/post-donation-toast";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ function AppShell() {
       {showDonation && <DonationModal onClose={() => setShowDonation(false)} />}
       <SupportPopup />
       <DonateFloat />
+      <PostDonationToast />
     </>
   );
 }
