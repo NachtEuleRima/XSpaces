@@ -3,7 +3,7 @@ import { useState } from "react";
 const AMOUNTS = [4.2, 6.9, 42, 69];
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 const CASHAPP_URL = "https://cash.app/$RSukhi";
-const PAYPAL_QR: string | null = null; // drop your PayPal QR image in public/ and set path here e.g. "/paypal-qr.png"
+const PAYPAL_QR = "https://www.paypal.com/qrcodes/p2pqrc/Y6FMFFN58N6RW";
 
 function VenmoIcon() {
   return (
