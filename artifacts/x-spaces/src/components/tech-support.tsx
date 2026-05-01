@@ -1,6 +1,6 @@
 export function TechSupport() {
   const contacts = [
-    { username: "RimaSukhadia", display: "📐_Cyber_Owl_🦉", role: "Chief Engineer — Starfleet Tech Command" },
+    { username: "RimaSukhadia", display: "📐_Cyber_Owl_🦉", role: "Chief Engineer — XFleet Tech Command" },
   ];
 
   return (
