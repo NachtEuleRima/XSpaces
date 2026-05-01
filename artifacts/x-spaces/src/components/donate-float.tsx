@@ -2,6 +2,33 @@ import { useEffect, useRef, useState } from "react";
 
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 
+function DonateTooltip() {
+  return (
+    <div style={{
+      position: "absolute",
+      top: "50%",
+      left: "calc(100% + 8px)",
+      transform: "translateY(-50%)",
+      background: "hsl(222 60% 7%)",
+      border: "1px solid hsl(290 90% 62% / 0.35)",
+      borderRadius: 6,
+      padding: "0.25rem 0.5rem",
+      fontFamily: "monospace",
+      fontSize: "0.5rem",
+      letterSpacing: "0.12em",
+      textTransform: "uppercase",
+      color: "hsl(290 90% 75%)",
+      boxShadow: "0 0 12px hsl(290 90% 62% / 0.2)",
+      pointerEvents: "none",
+      lineHeight: 1.6,
+      textAlign: "center",
+    }}>
+      <div>Fund</div>
+      <div style={{ opacity: 0.65 }}>mission</div>
+    </div>
+  );
+}
+
 export function DonateFloat() {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -59,52 +86,10 @@ export function DonateFloat() {
         onMouseLeave={() => setHovered(false)}
       >
         {/* Hover tooltip — desktop only */}
-        {!isMobile && hovered && (
-          <div style={{
-            position: "absolute",
-            top: "50%",
-            right: "calc(100% + 10px)",
-            transform: "translateY(-50%)",
-            whiteSpace: "nowrap",
-            background: "hsl(222 60% 7%)",
-            border: "1px solid hsl(290 90% 62% / 0.35)",
-            borderRadius: 8,
-            padding: "0.35rem 0.75rem",
-            fontFamily: "monospace",
-            fontSize: "0.6rem",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "hsl(290 90% 75%)",
-            boxShadow: "0 0 16px hsl(290 90% 62% / 0.2)",
-            pointerEvents: "none",
-          }}>
-            Fund the mission
-          </div>
-        )}
+        {!isMobile && hovered && <DonateTooltip />}
 
         {/* Scroll-triggered tooltip — mobile only */}
-        {isMobile && isScrolling && (
-          <div style={{
-            position: "absolute",
-            top: "50%",
-            right: "calc(100% + 10px)",
-            transform: "translateY(-50%)",
-            whiteSpace: "nowrap",
-            background: "hsl(222 60% 7%)",
-            border: "1px solid hsl(290 90% 62% / 0.35)",
-            borderRadius: 8,
-            padding: "0.35rem 0.75rem",
-            fontFamily: "monospace",
-            fontSize: "0.6rem",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "hsl(290 90% 75%)",
-            boxShadow: "0 0 16px hsl(290 90% 62% / 0.2)",
-            pointerEvents: "none",
-          }}>
-            Fund the mission
-          </div>
-        )}
+        {isMobile && isScrolling && <DonateTooltip />}
 
         {/* FAB */}
         <button

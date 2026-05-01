@@ -266,7 +266,7 @@ export default function Home() {
       <main className="flex-1 container mx-auto px-6 pt-16 pb-0 z-10">
 
         {/* Donate float — sticky, pinned above main bridge */}
-        <div style={{ height: 0, overflow: "visible", position: "sticky", top: 16, zIndex: 50, display: "flex", justifyContent: "flex-end", paddingRight: 56 }}>
+        <div style={{ height: 0, overflow: "visible", position: "sticky", top: 16, zIndex: 50, display: "flex", justifyContent: "flex-start" }}>
           <DonateFloat />
         </div>
 
