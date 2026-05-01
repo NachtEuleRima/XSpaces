@@ -227,12 +227,13 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                   disabled={!val.trim() || isPending || xPending}
                   className="w-full h-12 rounded-xl font-black tracking-[0.2em] uppercase text-sm transition-all disabled:opacity-40"
                   style={{
-                    background: "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))",
-                    border: "1px solid hsl(195 100% 50% / 0.4)",
-                    color: "hsl(195 100% 65%)",
+                    background: "linear-gradient(135deg, hsl(290 80% 45%), hsl(270 70% 38%))",
+                    border: "1px solid hsl(290 90% 62% / 0.5)",
+                    color: "hsl(290 100% 92%)",
+                    boxShadow: "0 0 18px hsl(290 90% 55% / 0.3)",
                   }}
-                  onMouseEnter={e => { if (!isPending) (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.28), hsl(290 90% 62% / 0.2))"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))"; }}
+                  onMouseEnter={e => { if (!isPending) { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(290 80% 52%), hsl(270 70% 45%))"; (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 28px hsl(290 90% 55% / 0.5)"; } }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(290 80% 45%), hsl(270 70% 38%))"; (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 18px hsl(290 90% 55% / 0.3)"; }}
                 >
                   {isPending ? "Transmitting..." : "Open Channel"}
                 </button>
