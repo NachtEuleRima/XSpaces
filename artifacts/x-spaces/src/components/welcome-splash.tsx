@@ -100,150 +100,183 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
     if (ok) finish();
   };
 
+  const [authMode, setAuthMode] = useState<"x" | "callsign" | null>(null);
+
   return (
     <AnimatePresence>
       {!exiting && (
         <motion.div
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ background: "hsl(222 47% 4%)" }}
+          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
         >
-          {/* Ambient glows */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[600px] h-[400px] rounded-full opacity-10"
-              style={{ background: "radial-gradient(ellipse, hsl(195 100% 50%), transparent 70%)" }} />
-            <div className="absolute bottom-0 right-1/4 w-[500px] h-[300px] rounded-full opacity-8"
-              style={{ background: "radial-gradient(ellipse, hsl(290 90% 62%), transparent 70%)" }} />
-          </div>
-
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="relative w-full max-w-md"
+            initial={{ opacity: 0, y: 20, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              background: "hsl(222 47% 6%)",
-              border: "1px solid hsl(195 100% 50% / 0.35)",
-              borderRadius: "1.25rem",
-              boxShadow: "0 0 0 1px hsl(195 100% 50% / 0.08), 0 30px 100px hsl(195 100% 50% / 0.12), 0 0 160px hsl(290 90% 62% / 0.08)",
+              width: "min(420px, calc(100vw - 24px))",
+              background: "linear-gradient(160deg, hsl(222 55% 8%) 0%, hsl(222 50% 6%) 100%)",
+              border: "1px solid hsl(195 100% 50% / 0.15)",
+              borderRadius: 20,
+              padding: "1.75rem 1.5rem 1.5rem",
+              boxShadow: "0 0 80px hsl(195 100% 50% / 0.07), 0 32px 64px rgba(0,0,0,0.6)",
+              display: "flex", flexDirection: "column", gap: "1.25rem",
             }}
           >
-            {/* Top beam */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-[1.25rem]"
-              style={{ background: "linear-gradient(to right, transparent, hsl(195 100% 50% / 0.9), hsl(290 90% 62% / 0.6), transparent)" }} />
-
-            <div className="p-8 flex flex-col items-center gap-6">
-              {/* Branding */}
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex flex-col items-center leading-none font-black uppercase">
-                  <span className="text-5xl tracking-tight" style={{ color: "hsl(195 100% 55%)", textShadow: "0 0 40px hsl(195 100% 50% / 0.5)" }}>
-                    XCOMS
-                  </span>
-                  <span className="text-3xl tracking-tight" style={{ color: "hsl(290 90% 62%)", textShadow: "0 0 30px hsl(290 90% 62% / 0.5)" }}>
-                    .SPACE
-                  </span>
-                </div>
-                <p className="text-xs font-mono tracking-[0.3em] text-foreground/40 uppercase mt-1">
-                  Hailing Frequencies Open
-                </p>
+            {/* Header */}
+            <div style={{ textAlign: "center" }}>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontFamily: "monospace", fontSize: "0.55rem", letterSpacing: "0.3em",
+                textTransform: "uppercase", color: "hsl(195 100% 55%)",
+                border: "1px solid hsl(195 100% 50% / 0.25)",
+                borderRadius: 99, padding: "0.25rem 0.7rem", marginBottom: "0.8rem",
+              }}>
+                <span style={{ width: 5, height: 5, borderRadius: "50%", background: "hsl(195 100% 55%)", boxShadow: "0 0 6px hsl(195 100% 55%)" }} />
+                XFLEET COMMAND
               </div>
-
-              {/* Divider */}
-              <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, hsl(195 100% 50% / 0.2), transparent)" }} />
-
-              {/* Identity prompt */}
-              <div className="text-center">
-                <h2 className="text-xl font-black uppercase tracking-[0.15em] mb-1" style={{ color: "hsl(195 100% 65%)" }}>
-                  State Your Designation
-                </h2>
-                <p className="text-sm font-mono text-foreground/50 leading-relaxed">
-                  Identify yourself to personalize your quadrant.
-                </p>
+              <div style={{ lineHeight: 1.1, marginBottom: "0.35rem" }}>
+                <p style={{ fontSize: "2rem", fontWeight: 900, color: "hsl(195 100% 60%)", margin: 0, letterSpacing: "-0.03em", textShadow: "0 0 30px hsl(195 100% 50% / 0.5)" }}>X</p>
+                <p style={{ fontSize: "1.3rem", fontWeight: 800, color: "white", margin: 0, letterSpacing: "-0.02em" }}>Spaces</p>
               </div>
+              <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.35)", fontFamily: "monospace", letterSpacing: "0.08em", margin: 0 }}>
+                Identify yourself to XFleet Command
+              </p>
+            </div>
 
+            {/* Auth options */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
               {/* Sign in with X */}
               <button
                 type="button"
-                onClick={handleXSignIn}
+                onClick={() => { setAuthMode("x"); handleXSignIn(); }}
                 disabled={xPending || isPending}
-                className="w-full h-13 py-3.5 rounded-xl transition-all flex items-center justify-center disabled:opacity-50"
                 style={{
-                  background: xPending ? "hsl(210 15% 22% / 0.4)" : "hsl(210 15% 28%)",
-                  color: xPending ? "hsl(210 20% 70% / 0.5)" : "hsl(210 20% 88%)",
-                  border: "1px solid hsl(210 20% 45% / 0.35)",
+                  display: "flex", alignItems: "center", gap: 11,
+                  padding: "0.7rem 0.9rem",
+                  borderRadius: 12,
+                  border: authMode === "x" ? "1px solid rgba(255,255,255,0.35)" : "1px solid hsl(195 100% 50% / 0.09)",
+                  background: authMode === "x" ? "rgba(255,255,255,0.08)" : "transparent",
+                  color: authMode === "x" ? "white" : "rgba(255,255,255,0.42)",
+                  cursor: "pointer", textAlign: "left", width: "100%",
+                  transition: "all 0.15s",
+                  opacity: (isPending && authMode !== "x") ? 0.5 : 1,
                 }}
-                onMouseEnter={e => { if (!xPending && !isPending) (e.currentTarget as HTMLButtonElement).style.background = "hsl(210 15% 35%)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 15% 22% / 0.4)" : "hsl(210 15% 28%)"; }}
               >
-                {xPending ? "Awaiting Authorization…" : (
-                  <span className="flex items-center gap-2 font-black tracking-[0.12em] uppercase text-sm">
-                    Sign in with {X_LOGO}
-                  </span>
-                )}
+                <span style={{ display: "flex", alignItems: "center", opacity: authMode === "x" ? 1 : 0.6 }}>{X_LOGO}</span>
+                <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>
+                  {xPending ? "Awaiting Authorization…" : "Sign in with X"}
+                </span>
+                <span style={{
+                  marginLeft: "auto",
+                  width: 15, height: 15, borderRadius: "50%",
+                  border: authMode === "x" ? "5px solid white" : "2px solid rgba(255,255,255,0.2)",
+                  flexShrink: 0, transition: "all 0.15s",
+                }} />
               </button>
 
-              {xError && (
-                <p className="text-xs font-mono text-center -mt-2" style={{ color: "hsl(0 80% 65%)" }}>{xError}</p>
-              )}
-
-              {/* Divider */}
-              <div className="flex items-center gap-3 w-full">
-                <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
-                <span className="text-[10px] font-mono tracking-[0.3em] text-foreground/25 uppercase">or</span>
-                <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
-              </div>
-
-              {/* Manual callsign */}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold font-mono text-lg" style={{ color: "hsl(195 100% 50%)" }}>@</span>
-                  <input
-                    className="w-full h-12 pl-10 pr-4 font-mono rounded-xl outline-none transition-all text-center uppercase tracking-widest text-base"
-                    style={{
-                      background: "hsl(222 40% 9%)",
-                      border: "1px solid hsl(195 100% 50% / 0.25)",
-                      color: "hsl(195 100% 70%)",
-                    }}
-                    placeholder="YOUR CALLSIGN"
-                    value={val}
-                    onChange={e => setVal(e.target.value)}
-                    onFocus={e => {
-                      (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.6)";
-                      (e.target as HTMLInputElement).style.boxShadow = "0 0 20px hsl(195 100% 50% / 0.15)";
-                    }}
-                    onBlur={e => {
-                      (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.25)";
-                      (e.target as HTMLInputElement).style.boxShadow = "none";
-                    }}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={!val.trim() || isPending || xPending}
-                  className="w-full h-12 rounded-xl font-black tracking-[0.2em] uppercase text-sm transition-all disabled:opacity-40"
-                  style={{
-                    background: "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))",
-                    border: "1px solid hsl(195 100% 50% / 0.4)",
-                    color: "hsl(195 100% 65%)",
-                  }}
-                  onMouseEnter={e => { if (!isPending) (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.28), hsl(290 90% 62% / 0.2))"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))"; }}
-                >
-                  {isPending ? "Transmitting..." : "Open Channel"}
-                </button>
-              </form>
-
-              {/* Skip */}
+              {/* Enter callsign */}
               <button
                 type="button"
-                onClick={() => { localStorage.setItem("xcoms_auth_method", "skip"); finish(); }}
-                className="text-[10px] font-mono tracking-[0.2em] text-foreground/25 hover:text-foreground/40 uppercase transition-colors"
+                onClick={() => setAuthMode("callsign")}
+                disabled={xPending}
+                style={{
+                  display: "flex", alignItems: "center", gap: 11,
+                  padding: "0.7rem 0.9rem",
+                  borderRadius: 12,
+                  border: authMode === "callsign" ? "1px solid hsl(195 100% 50% / 0.55)" : "1px solid hsl(195 100% 50% / 0.09)",
+                  background: authMode === "callsign" ? "hsl(195 100% 50% / 0.08)" : "transparent",
+                  color: authMode === "callsign" ? "hsl(195 100% 65%)" : "rgba(255,255,255,0.42)",
+                  cursor: "pointer", textAlign: "left", width: "100%",
+                  transition: "all 0.15s",
+                }}
               >
-                Skip — browse without personalization
+                <span style={{ display: "flex", alignItems: "center", opacity: authMode === "callsign" ? 1 : 0.6, fontSize: 18 }}>@</span>
+                <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Enter callsign manually</span>
+                <span style={{
+                  marginLeft: "auto",
+                  width: 15, height: 15, borderRadius: "50%",
+                  border: authMode === "callsign" ? "5px solid hsl(195 100% 55%)" : "2px solid rgba(255,255,255,0.2)",
+                  flexShrink: 0, transition: "all 0.15s",
+                }} />
               </button>
             </div>
+
+            {/* Callsign input — expands when selected */}
+            <AnimatePresence>
+              {authMode === "callsign" && (
+                <motion.form
+                  key="callsign-form"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  onSubmit={handleSubmit}
+                  style={{ display: "flex", flexDirection: "column", gap: 8, overflow: "hidden" }}
+                >
+                  <div style={{ position: "relative" }}>
+                    <span style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", fontFamily: "monospace", fontWeight: 700, fontSize: "1rem", color: "hsl(195 100% 50%)" }}>@</span>
+                    <input
+                      autoFocus
+                      style={{
+                        width: "100%", boxSizing: "border-box",
+                        padding: "0.65rem 0.85rem 0.65rem 2rem",
+                        borderRadius: 10,
+                        border: "1px solid hsl(195 100% 50% / 0.3)",
+                        background: "hsl(222 40% 9%)",
+                        color: "hsl(195 100% 70%)", fontSize: "0.9rem", outline: "none",
+                        fontFamily: "monospace", letterSpacing: "0.12em", textTransform: "uppercase",
+                      }}
+                      placeholder="YOUR CALLSIGN"
+                      value={val}
+                      onChange={e => setVal(e.target.value)}
+                      onFocus={e => { (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.6)"; }}
+                      onBlur={e => { (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.3)"; }}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={!val.trim() || isPending}
+                    style={{
+                      width: "100%", padding: "0.75rem",
+                      borderRadius: 10,
+                      border: "1px solid hsl(195 100% 50% / 0.4)",
+                      background: "linear-gradient(135deg, hsl(195 100% 50% / 0.18), hsl(290 90% 62% / 0.12))",
+                      color: "hsl(195 100% 70%)",
+                      fontFamily: "monospace", fontWeight: 700, fontSize: "0.78rem",
+                      letterSpacing: "0.15em", textTransform: "uppercase",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ⚡ {isPending ? "Transmitting..." : "Open Channel"}
+                  </button>
+                </motion.form>
+              )}
+            </AnimatePresence>
+
+            {xError && (
+              <p style={{ textAlign: "center", fontSize: "0.65rem", fontFamily: "monospace", color: "hsl(0 80% 65%)", margin: 0 }}>{xError}</p>
+            )}
+
+            {/* Skip */}
+            <button
+              type="button"
+              onClick={() => { localStorage.setItem("xcoms_auth_method", "skip"); finish(); }}
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                textAlign: "center", fontSize: "0.58rem", fontFamily: "monospace",
+                color: "rgba(255,255,255,0.18)", letterSpacing: "0.15em", textTransform: "uppercase",
+                transition: "color 0.15s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.35)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.18)"; }}
+            >
+              Skip — browse without personalization
+            </button>
           </motion.div>
         </motion.div>
       )}
