@@ -1,7 +1,6 @@
 export function TechSupport() {
   const contacts = [
     { username: "RimaSukhadia", display: "📐_Cyber_Owl_🦉", role: "Technical Inquiries" },
-    { username: "Heike_Jost", display: "Hi🔑 Heike Jost 🇺🇸🇩🇪", role: "Event Inquiries" },
   ];
 
   return (
