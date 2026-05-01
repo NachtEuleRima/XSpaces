@@ -15,28 +15,6 @@ export function TechSupport() {
       }}
     >
       <style>{`
-        @keyframes neonFlicker {
-          0%, 18%, 22%, 25%, 53%, 57%, 100% {
-            text-shadow:
-              0 0 4px #00e5f5,
-              0 0 11px #00e5f5,
-              0 0 19px #00e5f5,
-              0 0 40px #00b8c4,
-              0 0 80px #00b8c4;
-          }
-          20%, 24%, 55% { text-shadow: none; }
-        }
-        @keyframes neonFlickerGold {
-          0%, 18%, 22%, 25%, 53%, 57%, 100% {
-            text-shadow:
-              0 0 4px #ea8e2a,
-              0 0 11px #ea8e2a,
-              0 0 19px #ea8e2a,
-              0 0 40px #c47020,
-              0 0 80px #c47020;
-          }
-          20%, 24%, 55% { text-shadow: none; }
-        }
         .ts-card:hover {
           border-color: rgba(0,229,245,0.6) !important;
           box-shadow: 0 0 32px rgba(0,255,255,0.35) !important;

@@ -387,3 +387,27 @@
 @media (max-width: 767px) {
   .ticker-track { animation-duration: 8s; }
 }
+
+@keyframes neonFlicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+      0 0 4px #00e5f5,
+      0 0 11px #00e5f5,
+      0 0 19px #00e5f5,
+      0 0 40px #00b8c4,
+      0 0 80px #00b8c4;
+  }
+  20%, 24%, 55% { text-shadow: none; }
+}
+
+@keyframes neonFlickerGold {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+      0 0 4px #ea8e2a,
+      0 0 11px #ea8e2a,
+      0 0 19px #ea8e2a,
+      0 0 40px #c47020,
+      0 0 80px #c47020;
+  }
+  20%, 24%, 55% { text-shadow: none; }
+}
