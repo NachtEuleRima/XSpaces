@@ -30,6 +30,20 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
   const popupRef = useRef<Window | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Locked returning-user state
+  const [lockedUsername] = useState<string | null>(() => localStorage.getItem("xcoms_username"));
+  const [lockedAvatar, setLockedAvatar] = useState<string | null>(null);
+  const [switchMode, setSwitchMode] = useState(false);
+
+  // Fetch avatar for returning user
+  useEffect(() => {
+    if (!lockedUsername) return;
+    fetch(`/api/users/search?q=${encodeURIComponent(lockedUsername)}`)
+      .then(r => r.json())
+      .then((d: { user: XUser | null }) => { if (d.user?.avatar) setLockedAvatar(d.user.avatar); })
+      .catch(() => {});
+  }, [lockedUsername]);
+
   const finish = useCallback((openPending = false) => {
     setExiting(true);
     setTimeout(() => {
@@ -176,6 +190,54 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               {/* Divider */}
               <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, hsl(195 100% 50% / 0.2), transparent)" }} />
 
+              {/* ── Returning-user locked view ── */}
+              {lockedUsername && !switchMode ? (<>
+                <div className="text-center">
+                  <h2 className="text-xl font-black uppercase tracking-[0.15em] mb-1" style={{ color: "hsl(195 100% 65%)" }}>
+                    Welcome Back
+                  </h2>
+                  <p className="text-sm font-mono text-foreground/50">Identity confirmed</p>
+                </div>
+
+                {/* Avatar + handle */}
+                <div className="flex flex-col items-center gap-3">
+                  {lockedAvatar
+                    ? <img src={lockedAvatar} alt="" style={{ width: 72, height: 72, borderRadius: "50%", border: "2px solid hsl(195 100% 50% / 0.5)", boxShadow: "0 0 20px hsl(195 100% 50% / 0.2)" }} />
+                    : <div style={{ width: 72, height: 72, borderRadius: "50%", background: "hsl(195 100% 50% / 0.12)", border: "2px solid hsl(195 100% 50% / 0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, color: "hsl(195 100% 55%)" }}>@</div>
+                  }
+                  <div className="font-mono font-bold tracking-widest uppercase" style={{ color: "hsl(195 100% 70%)", fontSize: "1rem" }}>
+                    @{lockedUsername}
+                  </div>
+                </div>
+
+                {/* Continue button */}
+                <button
+                  type="button"
+                  onClick={() => finish()}
+                  className="w-full h-12 rounded-lg font-black tracking-[0.15em] uppercase text-sm"
+                  style={{
+                    background: "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))",
+                    border: "1px solid hsl(195 100% 50% / 0.5)",
+                    color: "hsl(195 100% 70%)",
+                    boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)",
+                  }}
+                >
+                  ⚡ Open Channel
+                </button>
+
+                {/* Switch account */}
+                <button
+                  type="button"
+                  onClick={() => setSwitchMode(true)}
+                  className="text-[10px] font-mono tracking-[0.2em] uppercase"
+                  style={{ color: "rgba(255,255,255,0.2)" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.45)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.2)"; }}
+                >
+                  Not you? Switch account
+                </button>
+              </>) : (<>
+
               {/* Identity prompt */}
               <div className="text-center">
                 <h2 className="text-xl font-black uppercase tracking-[0.15em] mb-1" style={{ color: "hsl(195 100% 65%)" }}>
@@ -316,6 +378,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               >
                 Skip — browse without personalization
               </button>
+              </>)}
             </div>
           </motion.div>
         </motion.div>
