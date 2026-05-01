@@ -17,6 +17,8 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  GetLiveSpacesParams,
+  GetUpcomingSpacesParams,
   HealthStatus,
   Space,
   SpaceStats,
@@ -188,41 +190,57 @@ export function useListSpaces<
  * Returns only currently live X Spaces
  * @summary Get live spaces
  */
-export const getGetLiveSpacesUrl = () => {
-  return `/api/spaces/live`;
+export const getGetLiveSpacesUrl = (params?: GetLiveSpacesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/spaces/live?${stringifiedParams}`
+    : `/api/spaces/live`;
 };
 
 export const getLiveSpaces = async (
+  params?: GetLiveSpacesParams,
   options?: RequestInit,
 ): Promise<Space[]> => {
-  return customFetch<Space[]>(getGetLiveSpacesUrl(), {
+  return customFetch<Space[]>(getGetLiveSpacesUrl(params), {
     ...options,
     method: "GET",
   });
 };
 
-export const getGetLiveSpacesQueryKey = () => {
-  return [`/api/spaces/live`] as const;
+export const getGetLiveSpacesQueryKey = (params?: GetLiveSpacesParams) => {
+  return [`/api/spaces/live`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetLiveSpacesQueryOptions = <
   TData = Awaited<ReturnType<typeof getLiveSpaces>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getLiveSpaces>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
+>(
+  params?: GetLiveSpacesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getLiveSpaces>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetLiveSpacesQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getGetLiveSpacesQueryKey(params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof getLiveSpaces>>> = ({
     signal,
-  }) => getLiveSpaces({ signal, ...requestOptions });
+  }) => getLiveSpaces(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getLiveSpaces>>,
@@ -243,15 +261,18 @@ export type GetLiveSpacesQueryError = ErrorType<unknown>;
 export function useGetLiveSpaces<
   TData = Awaited<ReturnType<typeof getLiveSpaces>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getLiveSpaces>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetLiveSpacesQueryOptions(options);
+>(
+  params?: GetLiveSpacesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getLiveSpaces>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetLiveSpacesQueryOptions(params, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -264,41 +285,60 @@ export function useGetLiveSpaces<
  * Returns scheduled/upcoming X Spaces
  * @summary Get upcoming spaces
  */
-export const getGetUpcomingSpacesUrl = () => {
-  return `/api/spaces/upcoming`;
+export const getGetUpcomingSpacesUrl = (params?: GetUpcomingSpacesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/spaces/upcoming?${stringifiedParams}`
+    : `/api/spaces/upcoming`;
 };
 
 export const getUpcomingSpaces = async (
+  params?: GetUpcomingSpacesParams,
   options?: RequestInit,
 ): Promise<Space[]> => {
-  return customFetch<Space[]>(getGetUpcomingSpacesUrl(), {
+  return customFetch<Space[]>(getGetUpcomingSpacesUrl(params), {
     ...options,
     method: "GET",
   });
 };
 
-export const getGetUpcomingSpacesQueryKey = () => {
-  return [`/api/spaces/upcoming`] as const;
+export const getGetUpcomingSpacesQueryKey = (
+  params?: GetUpcomingSpacesParams,
+) => {
+  return [`/api/spaces/upcoming`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetUpcomingSpacesQueryOptions = <
   TData = Awaited<ReturnType<typeof getUpcomingSpaces>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getUpcomingSpaces>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
+>(
+  params?: GetUpcomingSpacesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getUpcomingSpaces>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetUpcomingSpacesQueryKey();
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUpcomingSpacesQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getUpcomingSpaces>>
-  > = ({ signal }) => getUpcomingSpaces({ signal, ...requestOptions });
+  > = ({ signal }) => getUpcomingSpaces(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getUpcomingSpaces>>,
@@ -319,15 +359,18 @@ export type GetUpcomingSpacesQueryError = ErrorType<unknown>;
 export function useGetUpcomingSpaces<
   TData = Awaited<ReturnType<typeof getUpcomingSpaces>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getUpcomingSpaces>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetUpcomingSpacesQueryOptions(options);
+>(
+  params?: GetUpcomingSpacesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getUpcomingSpaces>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUpcomingSpacesQueryOptions(params, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

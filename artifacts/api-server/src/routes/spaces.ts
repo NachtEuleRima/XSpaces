@@ -3,6 +3,7 @@ import { db, spacesTable } from "@workspace/db";
 import { eq, desc, and, gt } from "drizzle-orm";
 import { GetSpaceParams } from "@workspace/api-zod";
 import { syncIfStale, syncSpacesFromX, getFollowingUsernamesCache } from "../lib/sync.js";
+import { getViewerFollowing } from "../lib/viewer.js";
 
 const router = Router();
 
@@ -10,23 +11,26 @@ const OWNER_USERNAME = (process.env["OWNER_X_USERNAME"] ?? "").toLowerCase();
 
 type Participant = { username?: string };
 
-function isOwnerSpace(space: typeof spacesTable.$inferSelect): boolean {
+function getParticipantUsernames(space: typeof spacesTable.$inferSelect): string[] {
   const host = space.host as Participant | null;
   const coHosts = space.coHosts as Participant[];
   const speakers = space.speakers as Participant[];
-  const all = [host, ...coHosts, ...speakers].filter(Boolean) as Participant[];
-  const allUsernames = all.map(p => p.username?.toLowerCase() ?? "").filter(Boolean);
-
-  // True if the owner themselves is a participant
-  if (OWNER_USERNAME && allUsernames.includes(OWNER_USERNAME)) return true;
-
-  // True if ANY participant (host, co-host, or speaker) is someone the owner follows
-  const following = getFollowingUsernamesCache();
-  if (following.size === 0) return false;
-  return allUsernames.some(u => following.has(u));
+  return [host, ...coHosts, ...speakers]
+    .filter(Boolean)
+    .map(p => (p as Participant).username?.toLowerCase() ?? "")
+    .filter(Boolean);
 }
 
-function formatSpace(space: typeof spacesTable.$inferSelect) {
+function isSpaceForFollowing(space: typeof spacesTable.$inferSelect, following: Set<string>, viewerUsername?: string): boolean {
+  const usernames = getParticipantUsernames(space);
+  if (viewerUsername && usernames.includes(viewerUsername.toLowerCase())) return true;
+  if (!viewerUsername && OWNER_USERNAME && usernames.includes(OWNER_USERNAME)) return true;
+  if (following.size === 0) return false;
+  return usernames.some(u => following.has(u));
+}
+
+function formatSpace(space: typeof spacesTable.$inferSelect, following?: Set<string>, viewerUsername?: string) {
+  const effectiveFollowing = following ?? getFollowingUsernamesCache();
   return {
     id: space.id,
     title: space.title,
@@ -40,7 +44,7 @@ function formatSpace(space: typeof spacesTable.$inferSelect) {
     coHosts: space.coHosts,
     speakers: space.speakers,
     topicTags: space.topicTags,
-    isMine: isOwnerSpace(space),
+    isMine: isSpaceForFollowing(space, effectiveFollowing, viewerUsername),
     createdAt: space.createdAt.toISOString(),
   };
 }
@@ -58,23 +62,29 @@ router.get("/spaces", async (req, res) => {
       .select()
       .from(spacesTable)
       .orderBy(desc(spacesTable.createdAt));
-    res.json(spaces.map(formatSpace));
+    res.json(spaces.map(s => formatSpace(s)));
   });
 });
 
 router.get("/spaces/live", async (req, res) => {
   await withSync(async () => {
+    const viewerUsername = typeof req.query["viewerUsername"] === "string" ? req.query["viewerUsername"] : undefined;
+    const viewerFollowing = viewerUsername ? await getViewerFollowing(viewerUsername) : undefined;
+
     const spaces = await db
       .select()
       .from(spacesTable)
       .where(eq(spacesTable.status, "live"))
       .orderBy(desc(spacesTable.listenerCount));
-    res.json(spaces.map(formatSpace));
+    res.json(spaces.map(s => formatSpace(s, viewerFollowing, viewerUsername)));
   });
 });
 
 router.get("/spaces/upcoming", async (req, res) => {
   await withSync(async () => {
+    const viewerUsername = typeof req.query["viewerUsername"] === "string" ? req.query["viewerUsername"] : undefined;
+    const viewerFollowing = viewerUsername ? await getViewerFollowing(viewerUsername) : undefined;
+
     const spaces = await db
       .select()
       .from(spacesTable)
@@ -85,7 +95,7 @@ router.get("/spaces/upcoming", async (req, res) => {
         )
       )
       .orderBy(spacesTable.scheduledAt);
-    res.json(spaces.map(formatSpace));
+    res.json(spaces.map(s => formatSpace(s, viewerFollowing, viewerUsername)));
   });
 });
 

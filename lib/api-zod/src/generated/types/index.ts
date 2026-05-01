@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./getLiveSpacesParams";
+export * from "./getUpcomingSpacesParams";
 export * from "./healthStatus";
 export * from "./space";
 export * from "./spaceParticipant";

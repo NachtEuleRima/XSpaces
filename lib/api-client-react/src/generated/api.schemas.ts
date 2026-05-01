@@ -73,3 +73,17 @@ export interface VisitorInput {
   username: string;
   spaceId?: number | null;
 }
+
+export type GetLiveSpacesParams = {
+  /**
+   * Personalize isMine based on this viewer's following list
+   */
+  viewerUsername?: string;
+};
+
+export type GetUpcomingSpacesParams = {
+  /**
+   * Personalize isMine based on this viewer's following list
+   */
+  viewerUsername?: string;
+};

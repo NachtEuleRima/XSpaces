@@ -1,9 +1,9 @@
-import { useGetSpaceStats, useGetVisitorCount } from "@workspace/api-client-react";
+import { useGetSpaceStats, useGetVisitorCount, getGetSpaceStatsQueryKey, getGetVisitorCountQueryKey } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
 
 export function StatsTicker() {
-  const { data: stats } = useGetSpaceStats({ query: { refetchInterval: 30000 } });
-  const { data: visitors } = useGetVisitorCount({ query: { refetchInterval: 30000 } });
+  const { data: stats } = useGetSpaceStats({ query: { queryKey: getGetSpaceStatsQueryKey(), refetchInterval: 30000 } });
+  const { data: visitors } = useGetVisitorCount({ query: { queryKey: getGetVisitorCountQueryKey(), refetchInterval: 30000 } });
 
   const items = [
     { label: "ACTIVE CHANNELS", value: stats?.totalSpaces ?? 0, highlight: false },

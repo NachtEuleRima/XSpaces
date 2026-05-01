@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -5,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import SpaceDetail from "@/pages/space";
+import { WelcomeSplash } from "@/components/welcome-splash";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,20 @@ function Router() {
 }
 
 function App() {
+  // Show splash on first visit (no saved username)
+  const [showSplash, setShowSplash] = useState(() => {
+    return !localStorage.getItem("xcoms_username");
+  });
+
+  // Also re-check on storage changes (e.g. other tabs)
+  useEffect(() => {
+    const handler = () => {
+      if (localStorage.getItem("xcoms_username")) setShowSplash(false);
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -26,6 +42,7 @@ function App() {
           <Router />
         </WouterRouter>
         <Toaster />
+        {showSplash && <WelcomeSplash onDone={() => setShowSplash(false)} />}
       </TooltipProvider>
     </QueryClientProvider>
   );

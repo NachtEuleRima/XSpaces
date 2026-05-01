@@ -51,6 +51,13 @@ paths:
       tags: [spaces]
       summary: Get live spaces
       description: Returns only currently live X Spaces
+      parameters:
+        - name: viewerUsername
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Personalize isMine based on this viewer's following list
       responses:
         "200":
           description: Live spaces
@@ -67,6 +74,13 @@ paths:
       tags: [spaces]
       summary: Get upcoming spaces
       description: Returns scheduled/upcoming X Spaces
+      parameters:
+        - name: viewerUsername
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Personalize isMine based on this viewer's following list
       responses:
         "200":
           description: Upcoming spaces

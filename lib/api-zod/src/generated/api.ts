@@ -60,6 +60,13 @@ export const ListSpacesResponse = zod.array(ListSpacesResponseItem);
  * Returns only currently live X Spaces
  * @summary Get live spaces
  */
+export const GetLiveSpacesQueryParams = zod.object({
+  viewerUsername: zod.coerce
+    .string()
+    .optional()
+    .describe("Personalize isMine based on this viewer's following list"),
+});
+
 export const GetLiveSpacesResponseItem = zod.object({
   id: zod.number(),
   title: zod.string(),
@@ -101,6 +108,13 @@ export const GetLiveSpacesResponse = zod.array(GetLiveSpacesResponseItem);
  * Returns scheduled/upcoming X Spaces
  * @summary Get upcoming spaces
  */
+export const GetUpcomingSpacesQueryParams = zod.object({
+  viewerUsername: zod.coerce
+    .string()
+    .optional()
+    .describe("Personalize isMine based on this viewer's following list"),
+});
+
 export const GetUpcomingSpacesResponseItem = zod.object({
   id: zod.number(),
   title: zod.string(),

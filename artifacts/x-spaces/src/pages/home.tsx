@@ -1,17 +1,10 @@
-import { useGetLiveSpaces, useGetUpcomingSpaces } from "@workspace/api-client-react";
+import { useGetLiveSpaces, useGetUpcomingSpaces, getGetLiveSpacesQueryKey, getGetUpcomingSpacesQueryKey, Space } from "@workspace/api-client-react";
 import { SpaceCard } from "@/components/space-card";
 import { StatsTicker } from "@/components/stats-ticker";
 import { UsernameCapture } from "@/components/username-capture";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-
-type Space = {
-  id: number;
-  title: string;
-  status: string;
-  isMine: boolean;
-  [key: string]: unknown;
-};
+import { useUsername } from "@/hooks/use-username";
 
 function SectionHeader({ color, label, pulse }: { color: string; label: string; pulse?: boolean }) {
   return (
@@ -49,7 +42,7 @@ function SpaceGrid({ spaces, delay = 0 }: { spaces: Space[]; delay?: number }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: delay + i * 0.06 }}
         >
-          <SpaceCard space={space as Parameters<typeof SpaceCard>[0]["space"]} />
+          <SpaceCard space={space} />
         </motion.div>
       ))}
     </div>
@@ -125,13 +118,16 @@ function EmptyState({ color, message }: { color: string; message: string }) {
 }
 
 export default function Home() {
-  const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces({ query: { refetchInterval: 30000 } });
-  const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces({ query: { refetchInterval: 30000 } });
+  const { username } = useUsername();
+  const params = username ? { viewerUsername: username } : undefined;
 
-  const myLive = (liveSpaces ?? []).filter(s => s.isMine) as Space[];
-  const moreLive = (liveSpaces ?? []).filter(s => !s.isMine) as Space[];
-  const myUpcoming = (upcomingSpaces ?? []).filter(s => s.isMine) as Space[];
-  const moreUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine) as Space[];
+  const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces(params, { query: { queryKey: getGetLiveSpacesQueryKey(params), refetchInterval: 30000 } });
+  const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces(params, { query: { queryKey: getGetUpcomingSpacesQueryKey(params), refetchInterval: 30000 } });
+
+  const myLive = (liveSpaces ?? []).filter(s => s.isMine);
+  const moreLive = (liveSpaces ?? []).filter(s => !s.isMine);
+  const myUpcoming = (upcomingSpaces ?? []).filter(s => s.isMine);
+  const moreUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine);
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground flex flex-col relative overflow-hidden">

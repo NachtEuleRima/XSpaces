@@ -1,30 +1,24 @@
-import { useState } from "react";
 import { Link } from "wouter";
 import { Space, SpaceParticipant } from "@workspace/api-client-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
-import { UsernameModal } from "./username-modal";
 import { useUsername } from "@/hooks/use-username";
 
 const MAX_AVATARS = 5;
 
 export function SpaceCard({ space }: { space: Space }) {
   const isLive = space.status === "live";
-  const [modalOpen, setModalOpen] = useState(false);
-  const { username } = useUsername();
+  const { username, saveUsername } = useUsername();
 
   const handleActionClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!username) {
-      setModalOpen(true);
-    } else {
-      window.open(space.spaceUrl, "_blank");
+    // Track the space visit fire-and-forget if identified
+    if (username) {
+      saveUsername(username, space.id).catch(() => {});
     }
-  };
-
-  const handleModalSuccess = () => {
     window.open(space.spaceUrl, "_blank");
   };
+
 
   const primaryColor = isLive ? "hsl(195 100% 50%)" : "hsl(290 90% 62%)";
   const primaryColorFaded = isLive ? "hsl(195 100% 50% / 0.12)" : "hsl(290 90% 62% / 0.12)";
@@ -225,12 +219,6 @@ export function SpaceCard({ space }: { space: Space }) {
         </motion.div>
       </Link>
 
-      <UsernameModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        onSuccess={handleModalSuccess}
-        spaceId={space.id}
-      />
     </>
   );
 }
@@ -250,7 +238,6 @@ function ParticipantAvatar({
     <Avatar
       className="h-8 w-8 shrink-0 ring-2"
       style={{
-        ringColor: "hsl(222 40% 10%)",
         boxShadow: index === 0
           ? `0 0 0 2px hsl(222 40% 10%), 0 0 8px ${color}50`
           : "0 0 0 2px hsl(222 40% 10%)",
