@@ -136,16 +136,17 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             disabled={xPending}
             className="w-full h-12 rounded-lg font-black tracking-[0.12em] uppercase text-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
             style={{
-              background: xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)",
-              color: xPending ? "hsl(210 20% 96% / 0.5)" : "hsl(222 47% 6%)",
-              border: "1px solid hsl(210 20% 96% / 0.3)",
+              background: "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))",
+              color: xPending ? "hsl(195 100% 65% / 0.5)" : "hsl(195 100% 65%)",
+              border: "1px solid hsl(195 100% 50% / 0.5)",
+              boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)",
             }}
             onMouseEnter={e => {
               if (!xPending)
-                (e.currentTarget as HTMLButtonElement).style.background = "hsl(195 100% 90%)";
+                (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.3), hsl(290 90% 62% / 0.25))";
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)";
+              (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))";
             }}
           >
             {X_LOGO}
