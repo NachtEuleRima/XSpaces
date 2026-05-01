@@ -119,8 +119,17 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
     }, 500);
   };
 
+  const acceptSuggestion = useCallback(async (user: XUser) => {
+    setVal(user.username);
+    setSuggestion(null);
+    localStorage.setItem("xcoms_auth_method", "manual");
+    await saveUsername(user.username);
+    finish();
+  }, [saveUsername, finish]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (suggestion) { acceptSuggestion(suggestion); return; }
     if (!val.trim()) return;
     localStorage.setItem("xcoms_auth_method", "manual");
     const ok = await saveUsername(val.trim().replace(/^@/, ""));
@@ -244,6 +253,12 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                     placeholder="ENTER YOUR CALLSIGN"
                     value={val}
                     onChange={e => { setVal(e.target.value); setSuggestion(null); }}
+                    onKeyDown={e => {
+                      if (suggestion && (e.key === "Tab" || e.key === "ArrowRight" || e.key === "Enter")) {
+                        e.preventDefault();
+                        acceptSuggestion(suggestion);
+                      }
+                    }}
                     onFocus={e => {
                       (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.6)";
                       (e.target as HTMLInputElement).style.boxShadow = "0 0 20px hsl(195 100% 50% / 0.15)";
@@ -257,13 +272,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                   {suggestion && (
                     <button
                       type="button"
-                      onMouseDown={async () => {
-                        setVal(suggestion.username);
-                        setSuggestion(null);
-                        localStorage.setItem("xcoms_auth_method", "manual");
-                        await saveUsername(suggestion.username);
-                        finish();
-                      }}
+                      onMouseDown={() => acceptSuggestion(suggestion)}
                       style={{
                         position: "absolute", top: "100%", left: 0, right: 0,
                         background: "hsl(222 45% 11%)",
