@@ -9,7 +9,6 @@ const MESSAGES = [
   { headline: "Dilithium crystals recharged", sub: "Mission continues at full impulse ⚡" },
   { headline: "XFleet Command acknowledges your transmission", sub: "Signal received loud and clear" },
   { headline: "You have proven yourself a true ally", sub: "Of the Federation — and this quadrant" },
-  { headline: "May your spaces live long and prosper", sub: "🖖 Hailing frequencies forever open" },
 ];
 
 export function PostDonationToast() {
@@ -99,6 +98,13 @@ export function PostDonationToast() {
                 color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em",
               }}>
                 {msgRef.current.sub}
+              </span>
+              <span style={{
+                fontFamily: "monospace", fontSize: "0.62rem",
+                color: "hsl(195 100% 65% / 0.5)", letterSpacing: "0.06em",
+                marginTop: 2,
+              }}>
+                May your spaces live long and prosper
               </span>
             </div>
           </div>
