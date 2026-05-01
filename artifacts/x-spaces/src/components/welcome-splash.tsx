@@ -144,10 +144,12 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                 }}
                 onMouseEnter={e => { if (!xPending && !isPending) (e.currentTarget as HTMLButtonElement).style.background = "hsl(195 100% 90%)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)"; }}
-                title={xPending ? "Awaiting Authorization…" : "Sign in with X"}
-                aria-label={xPending ? "Awaiting Authorization…" : "Sign in with X"}
               >
-                {X_LOGO}
+                {xPending ? "Awaiting Authorization…" : (
+                  <span className="flex items-center gap-2 font-black tracking-[0.12em] uppercase text-sm">
+                    Sign in {X_LOGO}
+                  </span>
+                )}
               </button>
 
               {xError && (
