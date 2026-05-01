@@ -218,8 +218,21 @@ export default function Home() {
             style={{ boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)" }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            XCOMS //{" "}
-            {new Date().toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }).toUpperCase()}
+            {(() => {
+              const now = new Date();
+              const dayOfYear = Math.floor(
+                (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86_400_000
+              );
+              const stardate = `${now.getFullYear()}.${String(dayOfYear).padStart(3, "0")}`;
+              return (
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                  <span style={{ opacity: 0.55, fontSize: "0.9em" }}>XCOMS</span>
+                  <span style={{ opacity: 0.3 }}>//</span>
+                  <span style={{ opacity: 0.55, fontSize: "0.9em" }}>SD</span>
+                  <span style={{ fontWeight: 800, letterSpacing: "0.08em" }}>{stardate}</span>
+                </span>
+              );
+            })()}
           </div>
         </motion.div>
 
