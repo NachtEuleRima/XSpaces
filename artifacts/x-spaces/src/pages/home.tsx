@@ -4,6 +4,7 @@ import { StatsTicker } from "@/components/stats-ticker";
 import { UsernameCapture } from "@/components/username-capture";
 import { TechSupport } from "@/components/tech-support";
 import { ScrollNav } from "@/components/scroll-nav";
+import { DonateFloat } from "@/components/donate-float";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useUsername } from "@/hooks/use-username";
@@ -263,6 +264,11 @@ export default function Home() {
       <StatsTicker />
 
       <main className="flex-1 container mx-auto px-6 pt-16 pb-0 z-10">
+
+        {/* Donate float — sticky, pinned above main bridge */}
+        <div style={{ height: 0, overflow: "visible", position: "sticky", top: 16, zIndex: 50, display: "flex", justifyContent: "flex-end", paddingRight: 56 }}>
+          <DonateFloat />
+        </div>
 
         {/* ── LIVE NOW ── */}
         <section className="mb-24">

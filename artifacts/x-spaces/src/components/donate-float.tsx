@@ -52,13 +52,38 @@ export function DonateFloat() {
         }
       `}</style>
 
+      {/* Outer wrapper — caller controls fixed/sticky placement via a parent */}
       <div
-        style={{ position: "fixed", top: 64, right: 16, zIndex: 80, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}
+        style={{ position: "relative", display: "inline-flex", alignItems: "center" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
         {/* Hover tooltip — desktop only */}
         {!isMobile && hovered && (
+          <div style={{
+            position: "absolute",
+            top: "50%",
+            right: "calc(100% + 10px)",
+            transform: "translateY(-50%)",
+            whiteSpace: "nowrap",
+            background: "hsl(222 60% 7%)",
+            border: "1px solid hsl(290 90% 62% / 0.35)",
+            borderRadius: 8,
+            padding: "0.35rem 0.75rem",
+            fontFamily: "monospace",
+            fontSize: "0.6rem",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "hsl(290 90% 75%)",
+            boxShadow: "0 0 16px hsl(290 90% 62% / 0.2)",
+            pointerEvents: "none",
+          }}>
+            Fund the mission
+          </div>
+        )}
+
+        {/* Scroll-triggered tooltip — mobile only */}
+        {isMobile && isScrolling && (
           <div style={{
             position: "absolute",
             top: "50%",
@@ -104,8 +129,6 @@ export function DonateFloat() {
           }}
         >
           🖖
-
-          {/* Pulsing heart badge */}
           <span style={{
             position: "absolute",
             top: 2,
@@ -128,31 +151,6 @@ export function DonateFloat() {
             <span style={{ fontSize: 9, lineHeight: 1, position: "relative", zIndex: 1 }}>💜</span>
           </span>
         </button>
-
-        {/* Scroll-triggered tooltip — mobile only */}
-        {isMobile && isScrolling && (
-          <div style={{
-            position: "absolute",
-            top: "50%",
-            right: "calc(100% + 10px)",
-            transform: "translateY(-50%)",
-            whiteSpace: "nowrap",
-            background: "hsl(222 60% 7%)",
-            border: "1px solid hsl(290 90% 62% / 0.35)",
-            borderRadius: 8,
-            padding: "0.35rem 0.75rem",
-            fontFamily: "monospace",
-            fontSize: "0.6rem",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "hsl(290 90% 75%)",
-            boxShadow: "0 0 16px hsl(290 90% 62% / 0.2)",
-            pointerEvents: "none",
-            transition: "opacity 0.3s",
-          }}>
-            Fund the mission
-          </div>
-        )}
       </div>
     </>
   );
