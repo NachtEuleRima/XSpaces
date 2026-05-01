@@ -3,7 +3,7 @@ import { useState } from "react";
 const FAQS = [
   {
     q: "What is XCOMS.Space?",
-    a: "XCOMS.Space is a live mission control for X Spaces — a neon Star Trek-themed tracker that shows you who's broadcasting right now and what's coming up next across the quadrant.",
+    a: "XCOMS.Space is a live mission control for X Spaces — a tracker that shows you who's broadcasting right now and what's coming up next across the quadrant.",
   },
   {
     q: "How do I sign in?",
