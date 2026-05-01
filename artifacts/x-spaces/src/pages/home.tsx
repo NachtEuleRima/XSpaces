@@ -133,19 +133,6 @@ function EmptyState({ color, message }: { color: string; message: string }) {
 export default function Home() {
   const { username, clearUsername } = useUsername();
   const isMobile = useIsMobile();
-  const [authMethod, setAuthMethod] = useState(() => localStorage.getItem("xcoms_auth_method"));
-
-  useEffect(() => {
-    const onSignout = () => setAuthMethod(null);
-    const onSignin = () => setAuthMethod(localStorage.getItem("xcoms_auth_method"));
-    window.addEventListener("xcoms:signout", onSignout);
-    window.addEventListener("xcoms:signin", onSignin);
-    return () => {
-      window.removeEventListener("xcoms:signout", onSignout);
-      window.removeEventListener("xcoms:signin", onSignin);
-    };
-  }, []);
-
   const featuredCount = isMobile ? 3 : 6;
   const params = username ? { viewerUsername: username } : undefined;
 
@@ -327,7 +314,7 @@ export default function Home() {
 
       {/* Auth action — bottom of page */}
       <div style={{ textAlign: "center", paddingBottom: "1.25rem", marginTop: "-1.25rem", position: "relative", zIndex: 40 }}>
-        {authMethod === "x" ? (
+        {localStorage.getItem("xcoms_auth_method") === "x" ? (
           <button
             onClick={() => {
               clearUsername();
