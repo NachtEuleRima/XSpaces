@@ -13,6 +13,11 @@ function HeadsetOfficerIcon() {
           <stop offset="0%" stopColor="hsl(222 60% 22%)" />
           <stop offset="100%" stopColor="hsl(222 60% 12%)" />
         </linearGradient>
+        <linearGradient id="deltaGrad" x1="14" y1="20" x2="20" y2="29" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="hsl(48 100% 78%)" />
+          <stop offset="55%" stopColor="hsl(42 90% 58%)" />
+          <stop offset="100%" stopColor="hsl(36 80% 42%)" />
+        </linearGradient>
         <filter id="softGlow">
           <feGaussianBlur stdDeviation="0.8" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -23,8 +28,16 @@ function HeadsetOfficerIcon() {
       <path d="M4 34 C4 25 9 21 17 21 C25 21 30 25 30 34" fill="url(#uniformGrad)" />
       {/* Uniform collar trim — gold */}
       <path d="M12 21 L17 26 L22 21" fill="none" stroke="hsl(42 90% 65%)" strokeWidth="1.1" strokeLinejoin="round"/>
-      {/* Comm badge on chest */}
-      <path d="M17 23.5 L18.6 26 L17 25.1 L15.4 26 Z" fill="hsl(42 90% 70%)" opacity="0.9"/>
+      {/* Starfleet delta badge on chest — classic hollow arrowhead */}
+      {/* Outer gold delta */}
+      <path d="M17 20.5 L21.8 29 L17 26.8 L12.2 29 Z"
+        fill="url(#deltaGrad)" filter="url(#softGlow)" />
+      {/* Inner cutout — gives the hollow classic look */}
+      <path d="M17 22.8 L20.2 28 L17 26 L13.8 28 Z"
+        fill="hsl(222 60% 13%)" opacity="0.82" />
+      {/* Shine highlight on left face of delta */}
+      <path d="M17 21.5 L14.2 28 L17 26 Z"
+        fill="hsl(48 100% 85%)" opacity="0.18" />
 
       {/* Head */}
       <circle cx="17" cy="12" r="6.5" fill="url(#faceGrad)" filter="url(#softGlow)" />
