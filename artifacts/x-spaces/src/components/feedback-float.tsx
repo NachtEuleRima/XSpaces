@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 /* Trek officer bust wearing a headset with mic boom */
@@ -86,6 +86,18 @@ function HeadsetOfficerIcon() {
 
 export function FeedbackFloat() {
   const [hovered, setHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+    containerRef.current = el;
+    setMounted(true);
+    return () => { document.body.removeChild(el); };
+  }, []);
+
+  if (!mounted || !containerRef.current) return null;
 
   return createPortal(
     <>
@@ -217,6 +229,6 @@ export function FeedbackFloat() {
         <span className="feedback-label">feedback</span>
       </div>
     </>,
-    document.body
+    containerRef.current
   );
 }
