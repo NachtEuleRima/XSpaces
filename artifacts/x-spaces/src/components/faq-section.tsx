@@ -115,6 +115,7 @@ export function FaqSection() {
             fontWeight: 900,
             fontFamily: "monospace",
             letterSpacing: "0.25em",
+            marginRight: "-0.25em",
             textTransform: "uppercase",
             color: "#00e5f5",
             textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4",
