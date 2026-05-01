@@ -249,12 +249,9 @@ export default function Home() {
                 </div>
               )}
 
-              {/* All other live spaces — show first 6 always, rest collapsed */}
+              {/* All other live spaces — collapsed under HAIL MORE */}
               {moreLive.length > 0 && (
-                <>
-                  <SpaceGrid spaces={moreLive.slice(0, 6)} delay={myLive.length * 0.06} />
-                  <MoreSpacesToggle spaces={moreLive.slice(6)} status="live" />
-                </>
+                <MoreSpacesToggle spaces={moreLive} status="live" />
               )}
             </>
           )}
@@ -284,10 +281,7 @@ export default function Home() {
               )}
 
               {moreUpcoming.length > 0 && (
-                <>
-                  <SpaceGrid spaces={moreUpcoming.slice(0, 6)} delay={myUpcoming.length * 0.06} />
-                  <MoreSpacesToggle spaces={moreUpcoming.slice(6)} status="upcoming" />
-                </>
+                <MoreSpacesToggle spaces={moreUpcoming} status="upcoming" />
               )}
             </>
           )}
