@@ -2,6 +2,7 @@ import { useGetLiveSpaces, useGetUpcomingSpaces, getGetLiveSpacesQueryKey, getGe
 import { SpaceCard } from "@/components/space-card";
 import { StatsTicker } from "@/components/stats-ticker";
 import { TechSupport } from "@/components/tech-support";
+import { FaqSection } from "@/components/faq-section";
 import { ScrollNav } from "@/components/scroll-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -314,6 +315,8 @@ export default function Home() {
       </main>
 
       <TechSupport />
+
+      <FaqSection />
 
       {/* Auth action — bottom of page */}
       <div style={{ textAlign: "center", paddingBottom: "1.25rem", marginTop: "-1.25rem", position: "relative", zIndex: 40 }}>
