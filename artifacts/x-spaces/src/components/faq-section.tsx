@@ -37,6 +37,8 @@ const FAQS = [
 
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? FAQS : FAQS.slice(0, 2);
 
   return (
     <section style={{
@@ -132,7 +134,7 @@ export function FaqSection() {
 
       {/* Accordion */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-        {FAQS.map((faq, i) => (
+        {visible.map((faq, i) => (
           <div key={i} className={`faq-item${open === i ? " faq-open" : ""}`}>
             <button
               className="faq-btn"
@@ -147,6 +149,30 @@ export function FaqSection() {
             )}
           </div>
         ))}
+
+        <button
+          onClick={() => { setShowAll(v => !v); if (showAll) setOpen(null); }}
+          style={{
+            marginTop: "0.75rem",
+            width: "100%",
+            background: "none",
+            border: "1px solid rgba(0,229,245,0.2)",
+            borderRadius: 10,
+            padding: "0.55rem 1rem",
+            fontFamily: "monospace",
+            fontSize: "0.65rem",
+            fontWeight: 700,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "rgba(0,229,245,0.55)",
+            cursor: "pointer",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(0,229,245,0.5)")}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(0,229,245,0.2)")}
+        >
+          {showAll ? "▲ Show less" : `▼ Show ${FAQS.length - 2} more`}
+        </button>
       </div>
     </section>
   );
