@@ -3,7 +3,7 @@ import { useState } from "react";
 const AMOUNTS = [4.2, 6.9, 42, 69];
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 const CASHAPP_URL = "https://cash.app/$RSukhi";
-const PAYPAL_QR = "https://www.paypal.com/qrcodes/p2pqrc/Y6FMFFN58N6RW";
+const PAYPAL_URL = "https://www.paypal.com/qrcodes/p2pqrc/Y6FMFFN58N6RW";
 
 function VenmoIcon() {
   return (
@@ -29,14 +29,6 @@ function PayPalIcon() {
   );
 }
 
-function QRIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ width: 20, height: 20 }}>
-      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
-      <path d="M14 14h1v1h-1zM17 14h1v1h-1zM20 14h1v1h-1zM14 17h1v1h-1zM17 17h1v1h-1zM20 17h1v1h-1zM14 20h1v1h-1zM17 20h1v1h-1zM20 20h1v1h-1z"/>
-    </svg>
-  );
-}
 
 type Method = "venmo" | "cashapp" | "paypal";
 
@@ -59,21 +51,23 @@ export function DonationModal({ onClose }: DonationModalProps) {
     } else if (method === "cashapp") {
       window.open(`${CASHAPP_URL}?amount=${finalAmount}`, "_blank", "noopener,noreferrer");
       onClose();
+    } else if (method === "paypal") {
+      window.open(PAYPAL_URL, "_blank", "noopener,noreferrer");
+      onClose();
     }
-    // paypal shows QR inline, no button action needed
   };
 
-  const methods: { id: Method; label: string; icon: React.ReactNode; color: string; sub?: string }[] = [
+  const methods: { id: Method; label: string; icon: React.ReactNode; color: string }[] = [
     { id: "venmo",   label: "Venmo",    icon: <VenmoIcon />,   color: "hsl(210 100% 60%)" },
     { id: "cashapp", label: "Cash App", icon: <CashAppIcon />, color: "hsl(142 70% 45%)" },
-    { id: "paypal",  label: "PayPal",   icon: <PayPalIcon />,  color: "hsl(214 89% 52%)", sub: "scan QR code" },
+    { id: "paypal",  label: "PayPal",   icon: <PayPalIcon />,  color: "hsl(214 89% 52%)" },
   ];
 
   const ctaLabel = method === "venmo"
     ? `Send $${finalAmount || "—"} via Venmo`
     : method === "cashapp"
     ? `Send $${finalAmount || "—"} via Cash App`
-    : "Scan QR below to pay";
+    : `Send $${finalAmount || "—"} via PayPal`;
 
   return (
     <>
@@ -204,7 +198,7 @@ export function DonationModal({ onClose }: DonationModalProps) {
             Pay with
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            {methods.map(({ id, label, icon, color, sub }) => (
+            {methods.map(({ id, label, icon, color }) => (
               <button
                 key={id}
                 onClick={() => setMethod(id)}
@@ -222,9 +216,7 @@ export function DonationModal({ onClose }: DonationModalProps) {
               >
                 <span style={{ opacity: method === id ? 1 : 0.6, display: "flex", alignItems: "center" }}>{icon}</span>
                 <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>{label}</span>
-                {sub && (
-                  <span style={{ fontSize: "0.6rem", fontFamily: "monospace", opacity: 0.5, marginLeft: 4 }}>· {sub}</span>
-                )}
+
                 <span style={{
                   marginLeft: "auto",
                   width: 15, height: 15, borderRadius: "50%",
@@ -236,38 +228,8 @@ export function DonationModal({ onClose }: DonationModalProps) {
           </div>
         </div>
 
-        {/* PayPal QR */}
-        {method === "paypal" && (
-          <div style={{
-            borderRadius: 14,
-            border: "1px solid hsl(214 89% 52% / 0.2)",
-            background: "hsl(214 89% 52% / 0.06)",
-            padding: "1.25rem",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem",
-          }}>
-            {PAYPAL_QR ? (
-              <>
-                <img src={PAYPAL_QR} alt="PayPal QR Code" style={{ width: 180, height: 180, borderRadius: 10, background: "white", padding: 8 }} />
-                <p style={{ margin: 0, fontSize: "0.65rem", fontFamily: "monospace", color: "rgba(255,255,255,0.4)", textAlign: "center", letterSpacing: "0.05em" }}>
-                  Open your camera or PayPal app · scan to pay
-                </p>
-              </>
-            ) : (
-              <>
-                <div style={{ width: 80, height: 80, display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(214 89% 52% / 0.4)" }}>
-                  <QRIcon />
-                </div>
-                <p style={{ margin: 0, fontSize: "0.65rem", fontFamily: "monospace", color: "rgba(255,255,255,0.3)", textAlign: "center" }}>
-                  QR code coming soon
-                </p>
-              </>
-            )}
-          </div>
-        )}
-
         {/* CTA */}
-        {method !== "paypal" && (
-          <button
+        <button
             className="dm-fund-btn"
             onClick={handleFund}
             style={{
@@ -285,7 +247,6 @@ export function DonationModal({ onClose }: DonationModalProps) {
           >
             ⚡ {ctaLabel}
           </button>
-        )}
 
         <p style={{ textAlign: "center", fontSize: "0.58rem", fontFamily: "monospace", color: "rgba(255,255,255,0.18)", letterSpacing: "0.1em", margin: 0 }}>
           Secured · Opens your payment app
