@@ -46,6 +46,7 @@ export interface Space {
   coHosts: SpaceParticipant[];
   speakers: SpaceParticipant[];
   topicTags: string[];
+  isMine: boolean;
   createdAt: string;
 }
 

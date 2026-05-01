@@ -2,21 +2,143 @@ import { useGetLiveSpaces, useGetUpcomingSpaces } from "@workspace/api-client-re
 import { SpaceCard } from "@/components/space-card";
 import { StatsTicker } from "@/components/stats-ticker";
 import { UsernameCapture } from "@/components/username-capture";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+
+type Space = {
+  id: number;
+  title: string;
+  status: string;
+  isMine: boolean;
+  [key: string]: unknown;
+};
+
+function SectionHeader({ color, label, pulse }: { color: string; label: string; pulse?: boolean }) {
+  return (
+    <div className="flex items-center gap-4 mb-10">
+      <div className="flex items-center gap-3">
+        <span
+          className={`w-2 h-2 rounded-full ${pulse ? "animate-pulse" : ""}`}
+          style={{
+            background: color,
+            boxShadow: `0 0 10px ${color}`,
+          }}
+        />
+        <h2
+          className="text-xs font-mono tracking-[0.3em] uppercase"
+          style={{ color }}
+        >
+          {label}
+        </h2>
+      </div>
+      <div
+        className="h-px flex-1"
+        style={{ background: `linear-gradient(to right, ${color}40, transparent)` }}
+      />
+    </div>
+  );
+}
+
+function SpaceGrid({ spaces, delay = 0 }: { spaces: Space[]; delay?: number }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {spaces.map((space, i) => (
+        <motion.div
+          key={space.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: delay + i * 0.06 }}
+        >
+          <SpaceCard space={space as Parameters<typeof SpaceCard>[0]["space"]} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function MoreSpacesToggle({
+  spaces,
+  status,
+}: {
+  spaces: Space[];
+  status: "live" | "upcoming";
+}) {
+  const [open, setOpen] = useState(false);
+  if (spaces.length === 0) return null;
+
+  const color = status === "live" ? "hsl(195 100% 50%)" : "hsl(290 90% 62%)";
+
+  return (
+    <div className="mt-8">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-3 group w-full"
+      >
+        <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, ${color}30)` }} />
+        <span
+          className="text-xs font-mono tracking-[0.25em] uppercase px-4 py-2 rounded-full border transition-all"
+          style={{
+            color,
+            borderColor: `${color}40`,
+            background: open ? `${color}10` : "transparent",
+            boxShadow: open ? `0 0 20px ${color}20` : "none",
+          }}
+        >
+          {open ? "▲ HIDE" : "▼ MORE"} {status === "live" ? "LIVE" : "UPCOMING"} SPACES ({spaces.length})
+        </span>
+        <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${color}30)` }} />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="pt-8">
+              <SpaceGrid spaces={spaces} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function EmptyState({ color, message }: { color: string; message: string }) {
+  return (
+    <div
+      className="text-center py-16 border border-dashed rounded-xl"
+      style={{ borderColor: `${color}20` }}
+    >
+      <p
+        className="font-mono text-sm uppercase tracking-[0.2em]"
+        style={{ color: `${color}60` }}
+      >
+        {message}
+      </p>
+    </div>
+  );
+}
 
 export default function Home() {
   const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces({ query: { refetchInterval: 30000 } });
   const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces({ query: { refetchInterval: 30000 } });
 
+  const myLive = (liveSpaces ?? []).filter(s => s.isMine) as Space[];
+  const moreLive = (liveSpaces ?? []).filter(s => !s.isMine) as Space[];
+  const myUpcoming = (upcomingSpaces ?? []).filter(s => s.isMine) as Space[];
+  const moreUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine) as Space[];
+
   return (
     <div className="min-h-[100dvh] bg-background text-foreground flex flex-col relative overflow-hidden">
 
-      {/* Lightshow beam background — matches austinteslalight.show */}
+      {/* Lightshow beam background */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Deep navy radial center glow */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,hsl(222_60%_12%/0.8)_0%,transparent_70%)]" />
-
-        {/* Cyan beam — left */}
         <div
           className="absolute top-0 left-[28%] w-[2px] h-[75%] origin-top"
           style={{
@@ -26,7 +148,6 @@ export default function Home() {
             animation: "beam-sweep 7s ease-in-out infinite alternate",
           }}
         />
-        {/* Cyan beam spread */}
         <div
           className="absolute top-0 left-[27%] w-[3%] h-[60%] origin-top"
           style={{
@@ -35,8 +156,6 @@ export default function Home() {
             animation: "beam-sweep 7s ease-in-out infinite alternate",
           }}
         />
-
-        {/* Magenta beam — right */}
         <div
           className="absolute top-0 left-[66%] w-[2px] h-[75%] origin-top"
           style={{
@@ -46,7 +165,6 @@ export default function Home() {
             animation: "beam-sweep 9s ease-in-out infinite alternate-reverse",
           }}
         />
-        {/* Magenta beam spread */}
         <div
           className="absolute top-0 left-[64%] w-[4%] h-[60%] origin-top"
           style={{
@@ -55,8 +173,6 @@ export default function Home() {
             animation: "beam-sweep 9s ease-in-out infinite alternate-reverse",
           }}
         />
-
-        {/* Extra center beam — cyan subtle */}
         <div
           className="absolute top-0 left-[48%] w-[1px] h-[55%] origin-top opacity-60"
           style={{
@@ -65,14 +181,11 @@ export default function Home() {
             animation: "beam-sweep 11s ease-in-out infinite alternate",
           }}
         />
-
-        {/* Ground glow */}
         <div className="absolute bottom-0 left-0 right-0 h-48 bg-[radial-gradient(ellipse_70%_100%_at_50%_100%,hsl(195_100%_50%/0.06)_0%,transparent_70%)]" />
       </div>
 
       {/* Header */}
       <header className="pt-20 pb-10 px-6 text-center z-10 relative">
-        {/* Event date badge — like the Austin site */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -90,7 +203,7 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-7xl md:text-9xl font-black tracking-[-0.02em] uppercase leading-none mb-2"
         >
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(195_100%_75%)] to-[hsl(195_100%_50%)]" style={{ textShadow: "none", filter: "drop-shadow(0 0 30px hsl(195 100% 50% / 0.4))" }}>
+          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(195_100%_75%)] to-[hsl(195_100%_50%)]" style={{ filter: "drop-shadow(0 0 30px hsl(195 100% 50% / 0.4))" }}>
             XPACE
           </span>
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(290_90%_80%)] to-[hsl(290_90%_62%)]" style={{ filter: "drop-shadow(0 0 30px hsl(290 90% 62% / 0.4))" }}>
@@ -112,17 +225,9 @@ export default function Home() {
 
       <main className="flex-1 container mx-auto px-6 py-16 z-10">
 
-        {/* LIVE NOW section */}
+        {/* ── LIVE NOW ── */}
         <section className="mb-24">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ boxShadow: "0 0 10px hsl(195 100% 50%)" }} />
-              <h2 className="text-xs font-mono tracking-[0.3em] text-primary uppercase">
-                MAIN STAGE — LIVE NOW
-              </h2>
-            </div>
-            <div className="h-px bg-gradient-to-r from-primary/30 to-transparent flex-1" />
-          </div>
+          <SectionHeader color="hsl(195 100% 50%)" label="MAIN STAGE — LIVE NOW" pulse />
 
           {isLoadingLive ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -130,37 +235,34 @@ export default function Home() {
                 <div key={i} className="h-[320px] rounded-xl bg-card border border-primary/20 animate-pulse" />
               ))}
             </div>
-          ) : liveSpaces?.length === 0 ? (
-            <div className="text-center py-24 border border-dashed border-primary/20 rounded-xl">
-              <p className="font-mono text-primary/40 text-sm uppercase tracking-[0.2em]">Silence on the network.</p>
-            </div>
+          ) : (liveSpaces ?? []).length === 0 ? (
+            <EmptyState color="hsl(195 100% 50%)" message="Silence on the network." />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {liveSpaces?.map((space, i) => (
-                <motion.div
-                  key={space.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <SpaceCard space={space} />
-                </motion.div>
-              ))}
-            </div>
+            <>
+              {/* My live spaces — always shown */}
+              {myLive.length > 0 && (
+                <div className="mb-6">
+                  <div className="text-[10px] font-mono tracking-[0.3em] text-primary/50 uppercase mb-4 pl-1">
+                    YOUR SPACES
+                  </div>
+                  <SpaceGrid spaces={myLive} />
+                </div>
+              )}
+
+              {/* All other live spaces — show first 6 always, rest collapsed */}
+              {moreLive.length > 0 && (
+                <>
+                  <SpaceGrid spaces={moreLive.slice(0, 6)} delay={myLive.length * 0.06} />
+                  <MoreSpacesToggle spaces={moreLive.slice(6)} status="live" />
+                </>
+              )}
+            </>
           )}
         </section>
 
-        {/* UPCOMING section */}
+        {/* ── UPCOMING ── */}
         <section className="mb-16">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-secondary" style={{ boxShadow: "0 0 10px hsl(290 90% 62%)" }} />
-              <h2 className="text-xs font-mono tracking-[0.3em] text-secondary uppercase">
-                UPCOMING SPECTACLES
-              </h2>
-            </div>
-            <div className="h-px bg-gradient-to-r from-secondary/30 to-transparent flex-1" />
-          </div>
+          <SectionHeader color="hsl(290 90% 62%)" label="UPCOMING SPECTACLES" />
 
           {isLoadingUpcoming ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,23 +270,26 @@ export default function Home() {
                 <div key={i} className="h-[320px] rounded-xl bg-card border border-secondary/20 animate-pulse" />
               ))}
             </div>
-          ) : upcomingSpaces?.length === 0 ? (
-            <div className="text-center py-24 border border-dashed border-secondary/20 rounded-xl">
-              <p className="font-mono text-secondary/40 text-sm uppercase tracking-[0.2em]">Nothing scheduled. Create chaos.</p>
-            </div>
+          ) : (upcomingSpaces ?? []).length === 0 ? (
+            <EmptyState color="hsl(290 90% 62%)" message="Nothing scheduled. Create chaos." />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {upcomingSpaces?.map((space, i) => (
-                <motion.div
-                  key={space.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <SpaceCard space={space} />
-                </motion.div>
-              ))}
-            </div>
+            <>
+              {myUpcoming.length > 0 && (
+                <div className="mb-6">
+                  <div className="text-[10px] font-mono tracking-[0.3em] text-secondary/50 uppercase mb-4 pl-1">
+                    YOUR SPACES
+                  </div>
+                  <SpaceGrid spaces={myUpcoming} />
+                </div>
+              )}
+
+              {moreUpcoming.length > 0 && (
+                <>
+                  <SpaceGrid spaces={moreUpcoming.slice(0, 6)} delay={myUpcoming.length * 0.06} />
+                  <MoreSpacesToggle spaces={moreUpcoming.slice(6)} status="upcoming" />
+                </>
+              )}
+            </>
           )}
         </section>
 

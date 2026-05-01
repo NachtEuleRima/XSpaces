@@ -6,6 +6,19 @@ import { syncIfStale, syncSpacesFromX } from "../lib/sync.js";
 
 const router = Router();
 
+const OWNER_USERNAME = (process.env["OWNER_X_USERNAME"] ?? "").toLowerCase();
+
+type Participant = { username?: string };
+
+function isOwnerSpace(space: typeof spacesTable.$inferSelect): boolean {
+  if (!OWNER_USERNAME) return false;
+  const host = space.host as Participant | null;
+  const coHosts = space.coHosts as Participant[];
+  const speakers = space.speakers as Participant[];
+  const all = [host, ...coHosts, ...speakers].filter(Boolean) as Participant[];
+  return all.some(p => p.username?.toLowerCase() === OWNER_USERNAME);
+}
+
 function formatSpace(space: typeof spacesTable.$inferSelect) {
   return {
     id: space.id,
@@ -20,6 +33,7 @@ function formatSpace(space: typeof spacesTable.$inferSelect) {
     coHosts: space.coHosts,
     speakers: space.speakers,
     topicTags: space.topicTags,
+    isMine: isOwnerSpace(space),
     createdAt: space.createdAt.toISOString(),
   };
 }

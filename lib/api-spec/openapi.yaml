@@ -192,6 +192,8 @@ components:
           type: array
           items:
             type: string
+        isMine:
+          type: boolean
         createdAt:
           type: string
       required:
@@ -204,6 +206,7 @@ components:
         - coHosts
         - speakers
         - topicTags
+        - isMine
         - createdAt
 
     SpaceParticipant:

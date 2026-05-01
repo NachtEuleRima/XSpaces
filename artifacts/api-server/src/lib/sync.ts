@@ -7,12 +7,17 @@ import { db, spacesTable } from "@workspace/db";
 import { eq, inArray } from "drizzle-orm";
 import {
   searchSpacesByState,
+  getSpacesByCreatorIds,
   buildUserMap,
   upgradeAvatarUrl,
   type XSpace,
   type XUser,
+  type XSpacesResponse,
 } from "./x-api.js";
+
 import { logger } from "./logger.js";
+
+const OWNER_USER_ID = process.env["OWNER_X_USER_ID"] ?? "";
 
 // How stale (in ms) synced data can be before we re-fetch
 const SYNC_TTL_MS = 3 * 60 * 1000; // 3 minutes
@@ -90,21 +95,36 @@ export async function syncSpacesFromX(): Promise<SyncResult> {
   let markedEnded = 0;
 
   try {
-    // Fetch live and scheduled in parallel
-    const [liveRes, scheduledRes] = await Promise.all([
+    // Fetch live, scheduled, and owner's own spaces in parallel
+    const fetches: Promise<XSpacesResponse>[] = [
       searchSpacesByState("live"),
       searchSpacesByState("scheduled"),
-    ]);
+    ];
+    if (OWNER_USER_ID) {
+      fetches.push(getSpacesByCreatorIds([OWNER_USER_ID]));
+    }
 
-    const allSpaces: XSpace[] = [
+    const [liveRes, scheduledRes, ownerRes = {}] = await Promise.all(fetches);
+
+    // Deduplicate spaces by ID across all sources
+    const seenSpaceIds = new Set<string>();
+    const allSpaces: XSpace[] = [];
+    for (const space of [
       ...(liveRes.data ?? []),
       ...(scheduledRes.data ?? []),
-    ];
+      ...(ownerRes.data ?? []),
+    ]) {
+      if (!seenSpaceIds.has(space.id)) {
+        seenSpaceIds.add(space.id);
+        allSpaces.push(space);
+      }
+    }
 
-    // Merge user maps from both responses
+    // Merge user maps from all responses
     const allUsers = [
       ...(liveRes.includes?.users ?? []),
       ...(scheduledRes.includes?.users ?? []),
+      ...(ownerRes.includes?.users ?? []),
     ];
     const userMap = buildUserMap(allUsers);
 

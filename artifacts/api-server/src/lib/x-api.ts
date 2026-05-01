@@ -165,6 +165,20 @@ export async function getSpacesByIds(ids: string[]): Promise<XSpacesResponse> {
 }
 
 /**
+ * Get active spaces created by a specific user ID.
+ */
+export async function getSpacesByCreatorIds(userIds: string[]): Promise<XSpacesResponse> {
+  if (userIds.length === 0) return {};
+  const params = new URLSearchParams({
+    user_ids: userIds.join(","),
+    "space.fields": SPACE_FIELDS,
+    "user.fields": USER_FIELDS,
+    expansions: EXPANSIONS,
+  });
+  return xFetch(`/spaces/by/creator_ids?${params.toString()}`) as Promise<XSpacesResponse>;
+}
+
+/**
  * Build a user lookup map from the includes.users array.
  */
 export function buildUserMap(users?: XUser[]): Map<string, XUser> {

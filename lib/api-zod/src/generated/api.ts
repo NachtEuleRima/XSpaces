@@ -51,6 +51,7 @@ export const ListSpacesResponseItem = zod.object({
     }),
   ),
   topicTags: zod.array(zod.string()),
+  isMine: zod.boolean(),
   createdAt: zod.string(),
 });
 export const ListSpacesResponse = zod.array(ListSpacesResponseItem);
@@ -91,6 +92,7 @@ export const GetLiveSpacesResponseItem = zod.object({
     }),
   ),
   topicTags: zod.array(zod.string()),
+  isMine: zod.boolean(),
   createdAt: zod.string(),
 });
 export const GetLiveSpacesResponse = zod.array(GetLiveSpacesResponseItem);
@@ -131,6 +133,7 @@ export const GetUpcomingSpacesResponseItem = zod.object({
     }),
   ),
   topicTags: zod.array(zod.string()),
+  isMine: zod.boolean(),
   createdAt: zod.string(),
 });
 export const GetUpcomingSpacesResponse = zod.array(
@@ -188,6 +191,7 @@ export const GetSpaceResponse = zod.object({
     }),
   ),
   topicTags: zod.array(zod.string()),
+  isMine: zod.boolean(),
   createdAt: zod.string(),
 });
 
