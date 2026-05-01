@@ -312,9 +312,9 @@ export default function Home() {
 
       <TechSupport />
 
-      {/* TEMP — remove before launch */}
-      {localStorage.getItem("xcoms_auth_method") === "x" && (
-        <div style={{ textAlign: "center", paddingBottom: "2rem" }}>
+      {/* Auth action — bottom of page */}
+      <div style={{ textAlign: "center", paddingBottom: "2rem" }}>
+        {localStorage.getItem("xcoms_auth_method") === "x" ? (
           <button
             onClick={() => {
               localStorage.removeItem("xcoms_username");
@@ -325,8 +325,19 @@ export default function Home() {
           >
             SIGN OUT
           </button>
-        </div>
-      )}
+        ) : (
+          <button
+            onClick={() => {
+              localStorage.removeItem("xcoms_username");
+              localStorage.removeItem("xcoms_auth_method");
+              window.dispatchEvent(new Event("xcoms:signout"));
+            }}
+            style={{ background: "none", border: "1px solid rgba(0,229,245,0.2)", color: "rgba(0,229,245,0.45)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em" }}
+          >
+            SIGN IN WITH X
+          </button>
+        )}
+      </div>
 
       <UsernameCapture />
       <ScrollNav />
