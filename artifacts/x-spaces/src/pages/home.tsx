@@ -313,7 +313,7 @@ export default function Home() {
       <TechSupport />
 
       {/* Auth action — bottom of page */}
-      <div style={{ textAlign: "center", paddingBottom: "2rem" }}>
+      <div style={{ textAlign: "center", paddingBottom: "1.25rem", marginTop: "-1.25rem" }}>
         {localStorage.getItem("xcoms_auth_method") === "x" ? (
           <button
             onClick={() => {
