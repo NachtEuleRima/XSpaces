@@ -9,11 +9,12 @@ export function TechSupport() {
         position: "relative",
         zIndex: 10,
         padding: "4rem 1.5rem 5rem",
-        maxWidth: 480,
-        margin: "0 auto",
         width: "100%",
+        background: "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(234,142,42,0.06) 0%, #0a0a0b 60%)",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
       }}
     >
+      <div style={{ maxWidth: 480, margin: "0 auto" }}>
       <style>{`
         .ts-card:hover {
           border-color: rgba(0,229,245,0.6) !important;
@@ -120,6 +121,7 @@ export function TechSupport() {
             </a>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );
