@@ -80,7 +80,7 @@ export function DonateFloat() {
       `}</style>
 
       <div
-        style={{ position: "fixed", left: 16, top: "42%", transform: "translateY(-50%)", zIndex: 80, display: "inline-flex", alignItems: "center" }}
+        style={{ position: "fixed", left: 16, top: "56%", transform: "translateY(-50%)", zIndex: 80, display: "inline-flex", alignItems: "center" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
