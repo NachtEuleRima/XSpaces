@@ -12,7 +12,6 @@ export function TechSupport() {
         maxWidth: 480,
         margin: "0 auto",
         width: "100%",
-        background: "radial-gradient(ellipse 120% 80% at 50% 50%, #1a1206 0%, #0d0b08 50%, #080807 100%)",
       }}
     >
       <style>{`
