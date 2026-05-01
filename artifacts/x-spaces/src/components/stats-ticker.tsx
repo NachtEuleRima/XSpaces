@@ -43,7 +43,7 @@ export function StatsTicker() {
       <motion.div
         className="flex whitespace-nowrap items-center"
         animate={{ x: ["0%", "-25%"] }}
-        transition={{ duration: isMobile ? 12 : 28, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: isMobile ? 8 : 28, repeat: Infinity, ease: "linear" }}
       >
         {looped.map((item, i) => (
           <span key={i} className="flex items-center shrink-0">
