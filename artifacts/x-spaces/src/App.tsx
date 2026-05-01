@@ -11,6 +11,7 @@ import { SupportPopup } from "@/components/support-popup";
 import { DonateFloat } from "@/components/donate-float";
 import { UsernameProvider } from "@/context/username-context";
 import { useUsername } from "@/hooks/use-username";
+import { UsernameCapture } from "@/components/username-capture";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ function AppShell() {
       </WouterRouter>
       <Toaster />
       {showSplash && <WelcomeSplash onDone={() => setShowSplash(false)} />}
+      {!showSplash && <UsernameCapture />}
       <SupportPopup />
       <DonateFloat />
     </>

@@ -1,7 +1,6 @@
 import { useGetLiveSpaces, useGetUpcomingSpaces, getGetLiveSpacesQueryKey, getGetUpcomingSpacesQueryKey, Space } from "@workspace/api-client-react";
 import { SpaceCard } from "@/components/space-card";
 import { StatsTicker } from "@/components/stats-ticker";
-import { UsernameCapture } from "@/components/username-capture";
 import { TechSupport } from "@/components/tech-support";
 import { ScrollNav } from "@/components/scroll-nav";
 import { motion, AnimatePresence } from "framer-motion";
@@ -339,7 +338,6 @@ export default function Home() {
         )}
       </div>
 
-      <UsernameCapture />
       <ScrollNav />
     </div>
   );
