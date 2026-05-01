@@ -30,9 +30,8 @@ export function SpaceCard({ space }: { space: Space }) {
   const primaryColorFaded = isLive ? "hsl(195 100% 50% / 0.12)" : "hsl(290 90% 62% / 0.12)";
   const primaryColorBorder = isLive ? "hsl(195 100% 50% / 0.3)" : "hsl(290 90% 62% / 0.3)";
 
-  // Flatten all participants: host first, then co-hosts, then speakers
+  // Co-hosts + speakers only — host is already shown top-left
   const allParticipants: SpaceParticipant[] = [
-    space.host,
     ...space.coHosts,
     ...space.speakers,
   ].filter(Boolean);
