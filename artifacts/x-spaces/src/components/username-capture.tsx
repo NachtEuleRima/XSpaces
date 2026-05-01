@@ -7,7 +7,8 @@ export function UsernameCapture() {
   const [inputVal, setInputVal] = useState("");
   const [isOpen, setIsOpen] = useState(true);
 
-  if (username) return null;
+  // Hide if user already made an explicit choice on the splash (x, manual, or skip)
+  if (username || localStorage.getItem("xcoms_auth_method")) return null;
 
   return (
     <AnimatePresence>

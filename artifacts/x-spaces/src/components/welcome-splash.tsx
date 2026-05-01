@@ -203,7 +203,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               {/* Skip */}
               <button
                 type="button"
-                onClick={finish}
+                onClick={() => { localStorage.setItem("xcoms_auth_method", "skip"); finish(); }}
                 className="text-[10px] font-mono tracking-[0.2em] text-foreground/25 hover:text-foreground/40 uppercase transition-colors"
               >
                 Skip — browse without personalization
