@@ -1,0 +1,84 @@
+import { Router } from "express";
+import { db, spacesTable } from "@workspace/db";
+import { eq, desc } from "drizzle-orm";
+import { GetSpaceParams } from "@workspace/api-zod";
+
+const router = Router();
+
+function formatSpace(space: typeof spacesTable.$inferSelect) {
+  return {
+    id: space.id,
+    title: space.title,
+    description: space.description ?? undefined,
+    status: space.status,
+    spaceUrl: space.spaceUrl,
+    scheduledAt: space.scheduledAt?.toISOString() ?? null,
+    startedAt: space.startedAt?.toISOString() ?? null,
+    listenerCount: space.listenerCount,
+    host: space.host,
+    coHosts: space.coHosts,
+    speakers: space.speakers,
+    topicTags: space.topicTags,
+    createdAt: space.createdAt.toISOString(),
+  };
+}
+
+router.get("/spaces", async (req, res) => {
+  const spaces = await db.select().from(spacesTable).orderBy(desc(spacesTable.createdAt));
+  res.json(spaces.map(formatSpace));
+});
+
+router.get("/spaces/live", async (req, res) => {
+  const spaces = await db
+    .select()
+    .from(spacesTable)
+    .where(eq(spacesTable.status, "live"))
+    .orderBy(desc(spacesTable.listenerCount));
+  res.json(spaces.map(formatSpace));
+});
+
+router.get("/spaces/upcoming", async (req, res) => {
+  const spaces = await db
+    .select()
+    .from(spacesTable)
+    .where(eq(spacesTable.status, "upcoming"))
+    .orderBy(spacesTable.scheduledAt);
+  res.json(spaces.map(formatSpace));
+});
+
+router.get("/spaces/stats", async (req, res) => {
+  const { visitorsTable } = await import("@workspace/db");
+  const allSpaces = await db.select().from(spacesTable);
+  const allVisitors = await db.select().from(visitorsTable);
+
+  const liveCount = allSpaces.filter((s) => s.status === "live").length;
+  const upcomingCount = allSpaces.filter((s) => s.status === "upcoming").length;
+  const totalListeners = allSpaces.reduce((sum, s) => sum + s.listenerCount, 0);
+
+  res.json({
+    totalSpaces: allSpaces.length,
+    liveCount,
+    upcomingCount,
+    totalListeners,
+    totalVisitors: allVisitors.length,
+  });
+});
+
+router.get("/spaces/:id", async (req, res) => {
+  const parsed = GetSpaceParams.safeParse({ id: Number(req.params.id) });
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid space id" });
+    return;
+  }
+  const [space] = await db
+    .select()
+    .from(spacesTable)
+    .where(eq(spacesTable.id, parsed.data.id));
+  if (!space) {
+    res.status(404).json({ error: "Space not found" });
+    return;
+  }
+  res.json(formatSpace(space));
+});
+
+export default router;

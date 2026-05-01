@@ -3,13 +3,17 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: X Spaces Lightshow API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: spaces
+    description: X Spaces operations
+  - name: visitors
+    description: Visitor tracking operations
 paths:
   /healthz:
     get:
@@ -24,6 +28,124 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /spaces:
+    get:
+      operationId: listSpaces
+      tags: [spaces]
+      summary: List all spaces
+      description: Returns all current and scheduled X Spaces
+      responses:
+        "200":
+          description: List of spaces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Space"
+
+  /spaces/live:
+    get:
+      operationId: getLiveSpaces
+      tags: [spaces]
+      summary: Get live spaces
+      description: Returns only currently live X Spaces
+      responses:
+        "200":
+          description: Live spaces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Space"
+
+  /spaces/upcoming:
+    get:
+      operationId: getUpcomingSpaces
+      tags: [spaces]
+      summary: Get upcoming spaces
+      description: Returns scheduled/upcoming X Spaces
+      responses:
+        "200":
+          description: Upcoming spaces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Space"
+
+  /spaces/stats:
+    get:
+      operationId: getSpaceStats
+      tags: [spaces]
+      summary: Space statistics
+      description: Returns aggregate stats about spaces
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpaceStats"
+
+  /spaces/{id}:
+    get:
+      operationId: getSpace
+      tags: [spaces]
+      summary: Get a single space
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Space details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Space"
+        "404":
+          description: Not found
+
+  /visitors:
+    post:
+      operationId: upsertVisitor
+      tags: [visitors]
+      summary: Save or update visitor
+      description: Save a visitor's X username; updates last_visited_at if existing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VisitorInput"
+      responses:
+        "200":
+          description: Visitor saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Visitor"
+
+  /visitors/count:
+    get:
+      operationId: getVisitorCount
+      tags: [visitors]
+      summary: Get visitor count
+      description: Returns total number of unique visitors
+      responses:
+        "200":
+          description: Visitor count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitorCount"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +156,126 @@ components:
       required:
         - status
 
+    Space:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [live, upcoming, ended]
+        spaceUrl:
+          type: string
+        scheduledAt:
+          type: string
+          nullable: true
+        startedAt:
+          type: string
+          nullable: true
+        listenerCount:
+          type: integer
+        host:
+          $ref: "#/components/schemas/SpaceParticipant"
+        coHosts:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpaceParticipant"
+        speakers:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpaceParticipant"
+        topicTags:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - status
+        - spaceUrl
+        - listenerCount
+        - host
+        - coHosts
+        - speakers
+        - topicTags
+        - createdAt
+
+    SpaceParticipant:
+      type: object
+      properties:
+        username:
+          type: string
+        displayName:
+          type: string
+        avatarUrl:
+          type: string
+          nullable: true
+        role:
+          type: string
+          enum: [host, co-host, speaker]
+      required:
+        - username
+        - displayName
+        - role
+
+    SpaceStats:
+      type: object
+      properties:
+        totalSpaces:
+          type: integer
+        liveCount:
+          type: integer
+        upcomingCount:
+          type: integer
+        totalListeners:
+          type: integer
+        totalVisitors:
+          type: integer
+      required:
+        - totalSpaces
+        - liveCount
+        - upcomingCount
+        - totalListeners
+        - totalVisitors
+
+    Visitor:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        firstVisitedAt:
+          type: string
+        lastVisitedAt:
+          type: string
+      required:
+        - id
+        - username
+        - firstVisitedAt
+        - lastVisitedAt
+
+    VisitorCount:
+      type: object
+      properties:
+        count:
+          type: integer
+      required:
+        - count
+
+    VisitorInput:
+      type: object
+      properties:
+        username:
+          type: string
+        spaceId:
+          type: integer
+          nullable: true
+      required:
+        - username
