@@ -127,7 +127,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                   State Your Designation
                 </h2>
                 <p className="text-sm font-mono text-foreground/50 leading-relaxed">
-                  Identify yourself to personalize your quadrant — spaces from people you follow will appear first.
+                  Identify yourself to personalize your quadrant.
                 </p>
               </div>
 
