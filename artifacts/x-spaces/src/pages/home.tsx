@@ -230,7 +230,7 @@ export default function Home() {
               const stardate = `${now.getFullYear()}.${String(dayOfYear).padStart(3, "0")}`;
               return (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
-                  <span style={{ opacity: 0.55, fontSize: "0.9em" }}>XCOMS</span>
+                  <span style={{ opacity: 0.55, fontSize: "0.9em" }}>XSPACES</span>
                   <span style={{ opacity: 0.3 }}>//</span>
                   <span style={{ opacity: 0.55, fontSize: "0.9em" }}>SD</span>
                   <span style={{ fontWeight: 800, letterSpacing: "0.08em" }}>{stardate}</span>
