@@ -5,8 +5,19 @@ import { UsernameCapture } from "@/components/username-capture";
 import { TechSupport } from "@/components/tech-support";
 import { ScrollNav } from "@/components/scroll-nav";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUsername } from "@/hooks/use-username";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
+}
 
 function SectionHeader({ color, label, pulse }: { color: string; label: string; pulse?: boolean }) {
   return (
@@ -121,15 +132,21 @@ function EmptyState({ color, message }: { color: string; message: string }) {
 
 export default function Home() {
   const { username } = useUsername();
+  const isMobile = useIsMobile();
+  const featuredCount = isMobile ? 3 : 6;
   const params = username ? { viewerUsername: username } : undefined;
 
   const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces(params, { query: { queryKey: getGetLiveSpacesQueryKey(params), refetchInterval: 30000 } });
   const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces(params, { query: { queryKey: getGetUpcomingSpacesQueryKey(params), refetchInterval: 30000 } });
 
-  const myLive = (liveSpaces ?? []).filter(s => s.isMine);
-  const moreLive = (liveSpaces ?? []).filter(s => !s.isMine);
-  const myUpcoming = (upcomingSpaces ?? []).filter(s => s.isMine);
-  const moreUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine);
+  // Mine first, then others — slice into featured + overflow
+  const allLive = [...(liveSpaces ?? []).filter(s => s.isMine), ...(liveSpaces ?? []).filter(s => !s.isMine)];
+  const featuredLive = allLive.slice(0, featuredCount);
+  const hiddenLive = allLive.slice(featuredCount);
+
+  const allUpcoming = [...(upcomingSpaces ?? []).filter(s => s.isMine), ...(upcomingSpaces ?? []).filter(s => !s.isMine)];
+  const featuredUpcoming = allUpcoming.slice(0, featuredCount);
+  const hiddenUpcoming = allUpcoming.slice(featuredCount);
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground flex flex-col relative overflow-hidden">
@@ -233,23 +250,13 @@ export default function Home() {
                 <div key={i} className="h-[320px] rounded-xl bg-card border border-primary/20 animate-pulse" />
               ))}
             </div>
-          ) : (liveSpaces ?? []).length === 0 ? (
+          ) : allLive.length === 0 ? (
             <EmptyState color="hsl(195 100% 50%)" message="Silence on the network." />
           ) : (
             <>
-              {/* My live spaces — always shown */}
-              {myLive.length > 0 && (
-                <div className="mb-6">
-                  <div className="text-[10px] font-mono tracking-[0.3em] text-primary/50 uppercase mb-4 pl-1">
-                    YOUR QUADRANT
-                  </div>
-                  <SpaceGrid spaces={myLive} />
-                </div>
-              )}
-
-              {/* All other live spaces — collapsed under HAIL MORE */}
-              {moreLive.length > 0 && (
-                <MoreSpacesToggle spaces={moreLive} status="live" />
+              <SpaceGrid spaces={featuredLive} />
+              {hiddenLive.length > 0 && (
+                <MoreSpacesToggle spaces={hiddenLive} status="live" />
               )}
             </>
           )}
@@ -265,21 +272,13 @@ export default function Home() {
                 <div key={i} className="h-[320px] rounded-xl bg-card border border-secondary/20 animate-pulse" />
               ))}
             </div>
-          ) : (upcomingSpaces ?? []).length === 0 ? (
+          ) : allUpcoming.length === 0 ? (
             <EmptyState color="hsl(290 90% 62%)" message="No transmissions scheduled. The airwaves are silent." />
           ) : (
             <>
-              {myUpcoming.length > 0 && (
-                <div className="mb-6">
-                  <div className="text-[10px] font-mono tracking-[0.3em] text-secondary/50 uppercase mb-4 pl-1">
-                    YOUR QUADRANT
-                  </div>
-                  <SpaceGrid spaces={myUpcoming} />
-                </div>
-              )}
-
-              {moreUpcoming.length > 0 && (
-                <MoreSpacesToggle spaces={moreUpcoming} status="upcoming" />
+              <SpaceGrid spaces={featuredUpcoming} />
+              {hiddenUpcoming.length > 0 && (
+                <MoreSpacesToggle spaces={hiddenUpcoming} status="upcoming" />
               )}
             </>
           )}
