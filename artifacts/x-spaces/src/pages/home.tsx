@@ -194,7 +194,7 @@ export default function Home() {
           style={{ boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)" }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          X SPACES // LIVE NOW
+          XCOMS // LIVE NOW
         </motion.div>
 
         <motion.h1
@@ -204,7 +204,7 @@ export default function Home() {
           className="text-7xl md:text-9xl font-black tracking-[-0.02em] uppercase leading-none mb-2"
         >
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(195_100%_75%)] to-[hsl(195_100%_50%)]" style={{ filter: "drop-shadow(0 0 30px hsl(195 100% 50% / 0.4))" }}>
-            XPACE
+            XCOMS
           </span>
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(290_90%_80%)] to-[hsl(290_90%_62%)]" style={{ filter: "drop-shadow(0 0 30px hsl(290 90% 62% / 0.4))" }}>
             .LIVE
@@ -217,7 +217,7 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-sm md:text-base tracking-[0.3em] text-foreground/60 uppercase font-medium mt-6"
         >
-          THE ULTIMATE VENUE FOR DIGITAL LOUDMOUTHS
+          HAILING FREQUENCIES OPEN
         </motion.p>
       </header>
 

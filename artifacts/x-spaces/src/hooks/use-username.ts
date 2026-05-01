@@ -6,7 +6,7 @@ export function useUsername() {
   const upsertMutation = useUpsertVisitor();
 
   useEffect(() => {
-    const saved = localStorage.getItem("xpace_username");
+    const saved = localStorage.getItem("xcoms_username");
     if (saved) setUsername(saved);
   }, []);
 
@@ -18,7 +18,7 @@ export function useUsername() {
       await upsertMutation.mutateAsync({
         data: { username: cleanUsername, spaceId }
       });
-      localStorage.setItem("xpace_username", cleanUsername);
+      localStorage.setItem("xcoms_username", cleanUsername);
       setUsername(cleanUsername);
       return true;
     } catch (e) {
