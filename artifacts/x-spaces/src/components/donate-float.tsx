@@ -27,7 +27,11 @@ export function DonateFloat() {
         }
       `}</style>
 
-      <div style={{ position: "fixed", top: 64, right: 16, zIndex: 80 }}>
+      <div
+        style={{ position: "fixed", top: 64, right: 16, zIndex: 80 }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
         {/* Tooltip */}
         {hovered && (
           <div style={{
@@ -56,8 +60,6 @@ export function DonateFloat() {
         <button
           className="donate-fab"
           onClick={() => window.open(VENMO_URL, "_blank", "noopener,noreferrer")}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
           aria-label="Support — Fund the mission on Venmo"
           style={{
             position: "relative",
