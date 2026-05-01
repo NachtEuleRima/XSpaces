@@ -265,13 +265,11 @@ export default function Home() {
 
       <main className="flex-1 container mx-auto px-6 pt-16 pb-0 z-10">
 
-        {/* Donate float — sticky, pinned above main bridge */}
-        <div style={{ height: 0, overflow: "visible", zIndex: 50, display: "flex", justifyContent: "flex-start" }}>
-          <DonateFloat />
-        </div>
-
         {/* ── LIVE NOW ── */}
         <section className="mb-24">
+          <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: 16 }}>
+            <DonateFloat />
+          </div>
           <SectionHeader color="hsl(195 100% 50%)" label="MAIN BRIDGE — LIVE TRANSMISSION" pulse />
 
           {isLoadingLive ? (
