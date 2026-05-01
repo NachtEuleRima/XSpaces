@@ -19,6 +19,14 @@ export function TechSupport() {
           border-color: rgba(0,229,245,0.6) !important;
           box-shadow: 0 0 32px rgba(0,255,255,0.35) !important;
         }
+        @media (max-width: 767px) {
+          .ts-card { padding: 0.65rem 0.85rem !important; gap: 0.65rem !important; border-radius: 12px !important; }
+          .ts-avatar { width: 40px !important; height: 40px !important; }
+          .ts-name { font-size: 0.8rem !important; }
+          .ts-handle { font-size: 0.65rem !important; }
+          .ts-role { font-size: 0.62rem !important; }
+          .ts-hail { font-size: 0.6rem !important; }
+        }
       `}</style>
 
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
@@ -82,7 +90,7 @@ export function TechSupport() {
               }}
             >
               {/* Avatar */}
-              <div style={{
+              <div className="ts-avatar" style={{
                 width: 56, height: 56, borderRadius: "50%",
                 border: "2px solid rgba(0,229,245,0.5)",
                 boxShadow: "0 0 12px rgba(0,229,245,0.4)",
@@ -108,13 +116,13 @@ export function TechSupport() {
 
               {/* Text */}
               <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0, textAlign: "left" }}>
-                <p style={{ fontWeight: 700, color: "white", fontSize: "1rem", lineHeight: 1.2 }}>{display}</p>
-                <p style={{ color: "#00e5f5", fontFamily: "monospace", fontSize: "0.75rem" }}>@{username}</p>
-                <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem", marginTop: 2 }}>{role}</p>
+                <p className="ts-name" style={{ fontWeight: 700, color: "white", fontSize: "1rem", lineHeight: 1.2 }}>{display}</p>
+                <p className="ts-handle" style={{ color: "#00e5f5", fontFamily: "monospace", fontSize: "0.75rem" }}>@{username}</p>
+                <p className="ts-role" style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem", marginTop: 2 }}>{role}</p>
               </div>
 
               {/* Arrow */}
-              <span style={{ color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.05em", fontSize: "0.7rem", marginLeft: "auto", flexShrink: 0, textAlign: "right" }}>
+              <span className="ts-hail" style={{ color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.05em", fontSize: "0.7rem", marginLeft: "auto", flexShrink: 0, textAlign: "right" }}>
                 Hail on X →
               </span>
             </a>
