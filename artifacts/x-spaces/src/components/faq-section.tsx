@@ -117,6 +117,7 @@ export function FaqSection() {
             letterSpacing: "0.25em",
             textTransform: "uppercase",
             color: "#00e5f5",
+            WebkitTextStroke: "1px rgba(210,140,10,0.7)",
             textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4",
           }}>
             MISSION BRIEF
