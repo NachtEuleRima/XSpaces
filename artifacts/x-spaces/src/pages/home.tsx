@@ -18,7 +18,7 @@ function SectionHeader({ color, label, pulse }: { color: string; label: string; 
           }}
         />
         <h2
-          className="text-xs font-mono tracking-[0.3em] uppercase"
+          className="text-xs font-mono tracking-[0.3em] uppercase whitespace-nowrap"
           style={{ color }}
         >
           {label}

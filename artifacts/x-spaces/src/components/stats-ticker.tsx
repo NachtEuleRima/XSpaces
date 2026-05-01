@@ -1,7 +1,20 @@
 import { useGetSpaceStats, useGetVisitorCount, getGetSpaceStatsQueryKey, getGetVisitorCountQueryKey } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return mobile;
+}
 
 export function StatsTicker() {
+  const isMobile = useIsMobile();
   const { data: stats } = useGetSpaceStats({ query: { queryKey: getGetSpaceStatsQueryKey(), refetchInterval: 30000 } });
   const { data: visitors } = useGetVisitorCount({ query: { queryKey: getGetVisitorCountQueryKey(), refetchInterval: 30000 } });
 
@@ -30,7 +43,7 @@ export function StatsTicker() {
       <motion.div
         className="flex whitespace-nowrap items-center"
         animate={{ x: ["0%", "-25%"] }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: isMobile ? 12 : 28, repeat: Infinity, ease: "linear" }}
       >
         {looped.map((item, i) => (
           <span key={i} className="flex items-center shrink-0">
