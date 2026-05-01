@@ -139,14 +139,20 @@ export default function Home() {
   const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces(params, { query: { queryKey: getGetLiveSpacesQueryKey(params), refetchInterval: 30000 } });
   const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces(params, { query: { queryKey: getGetUpcomingSpacesQueryKey(params), refetchInterval: 30000 } });
 
-  // Mine first, then others — slice into featured + overflow
-  const allLive = [...(liveSpaces ?? []).filter(s => s.isMine), ...(liveSpaces ?? []).filter(s => !s.isMine)];
-  const featuredLive = allLive.slice(0, featuredCount);
-  const hiddenLive = allLive.slice(featuredCount);
+  // Featured = spaces where someone you follow is speaking/cohosting (isMine), capped at limit.
+  // If no personalization, fall back to top N of everything.
+  // Everything else goes under HAIL MORE.
+  const myLive = (liveSpaces ?? []).filter(s => s.isMine);
+  const otherLive = (liveSpaces ?? []).filter(s => !s.isMine);
+  const allLive = [...myLive, ...otherLive];
+  const featuredLive = myLive.length > 0 ? myLive.slice(0, featuredCount) : allLive.slice(0, featuredCount);
+  const hiddenLive = myLive.length > 0 ? [...myLive.slice(featuredCount), ...otherLive] : allLive.slice(featuredCount);
 
-  const allUpcoming = [...(upcomingSpaces ?? []).filter(s => s.isMine), ...(upcomingSpaces ?? []).filter(s => !s.isMine)];
-  const featuredUpcoming = allUpcoming.slice(0, featuredCount);
-  const hiddenUpcoming = allUpcoming.slice(featuredCount);
+  const myUpcoming = (upcomingSpaces ?? []).filter(s => s.isMine);
+  const otherUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine);
+  const allUpcoming = [...myUpcoming, ...otherUpcoming];
+  const featuredUpcoming = myUpcoming.length > 0 ? myUpcoming.slice(0, featuredCount) : allUpcoming.slice(0, featuredCount);
+  const hiddenUpcoming = myUpcoming.length > 0 ? [...myUpcoming.slice(featuredCount), ...otherUpcoming] : allUpcoming.slice(featuredCount);
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground flex flex-col relative overflow-hidden">
