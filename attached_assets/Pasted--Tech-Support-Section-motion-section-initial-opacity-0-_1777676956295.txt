@@ -1,0 +1,95 @@
+{/* Tech Support Section */}
+<motion.section
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5 }}
+  className="mt-16 pt-12 border-t border-border"
+>
+  <style>{`
+    @keyframes neonFlicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 8px #ea8e2a, 0 0 20px #ea8e2a, 0 0 40px #ea8e2a;
+      }
+      20%, 24%, 55% {
+        opacity: 0.4;
+        text-shadow: none;
+      }
+    }
+  `}</style>
+
+  <div className="text-center mb-10">
+    <span
+      className="inline-block text-2xl md:text-3xl font-black font-mono tracking-[0.25em] uppercase text-primary"
+      style={{ animation: "neonFlicker 3s infinite" }}
+    >
+      ⚡ TECH SUPPORT ⚡
+    </span>
+    <p className="text-muted-foreground mt-3 text-sm font-sans">
+      Have a question? Reach out to the right person below.
+    </p>
+  </div>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+    {/* Card 1 — Rima */}
+    <a
+      href="#"
+      onClick={openContact("RimaSukhadia")}
+      className="group flex flex-col items-center gap-4 p-6 rounded-3xl bg-card border border-card-border hover:border-primary/40 hover:shadow-[0_0_24px_rgba(234,142,42,0.15)] transition-all duration-300"
+    >
+      <div className="w-16 h-16 rounded-full bg-secondary border-2 border-card-border group-hover:border-primary/50 transition-colors overflow-hidden relative flex items-center justify-center">
+        <img
+          src="https://unavatar.io/twitter/RimaSukhadia"
+          alt="RimaSukhadia"
+          className="w-full h-full object-cover absolute inset-0"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+            (e.currentTarget.nextSibling as HTMLElement).style.display = "block";
+          }}
+        />
+        <svg viewBox="0 0 24 24" className="hidden w-7 h-7 fill-muted-foreground group-hover:fill-primary transition-colors" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      </div>
+      <div className="text-center">
+        <p className="font-bold text-foreground font-sans text-lg">📐_Cyber_Owl_🦉</p>
+        <p className="text-sm text-primary font-mono">@RimaSukhadia</p>
+        <p className="text-xs text-muted-foreground mt-2 font-sans">Website &amp; technical inquiries</p>
+      </div>
+      <span className="text-xs text-muted-foreground/60 group-hover:text-primary font-mono transition-colors">
+        Message on X →
+      </span>
+    </a>
+
+    {/* Card 2 — Koby */}
+    <a
+      href="#"
+      onClick={openContact("koby_pierce")}
+      className="group flex flex-col items-center gap-4 p-6 rounded-3xl bg-card border border-card-border hover:border-primary/40 hover:shadow-[0_0_24px_rgba(234,142,42,0.15)] transition-all duration-300"
+    >
+      <div className="w-16 h-16 rounded-full bg-secondary border-2 border-card-border group-hover:border-primary/50 transition-colors overflow-hidden relative flex items-center justify-center">
+        <img
+          src="https://unavatar.io/twitter/koby_pierce"
+          alt="koby_pierce"
+          className="w-full h-full object-cover absolute inset-0"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+            (e.currentTarget.nextSibling as HTMLElement).style.display = "block";
+          }}
+        />
+        <svg viewBox="0 0 24 24" className="hidden w-7 h-7 fill-muted-foreground group-hover:fill-primary transition-colors" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      </div>
+      <div className="text-center">
+        <p className="font-bold text-foreground font-sans text-lg">Koby Pierce</p>
+        <p className="text-sm text-primary font-mono">@koby_pierce</p>
+        <p className="text-xs text-muted-foreground mt-2 font-sans">NAS gift inquiries</p>
+      </div>
+      <span className="text-xs text-muted-foreground/60 group-hover:text-primary font-mono transition-colors">
+        Message on X →
+      </span>
+    </a>
+  </div>
+</motion.section>
