@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const MESSAGES = [
-  { headline: "Your contribution has been logged", sub: "In the ship's manifest — Starfleet thanks you" },
+  { headline: "Your contribution has been logged", sub: "In the ship's manifest — XFleet thanks you" },
   { headline: "The Federation thanks you for your service", sub: "Your dedication is noted at Command" },
   { headline: "You have acted with honor", sub: "The crew salutes you, warrior" },
   { headline: "This ship flies a little further because of you", sub: "Warp engines holding steady 🚀" },
   { headline: "Dilithium crystals recharged", sub: "Mission continues at full impulse ⚡" },
-  { headline: "Starfleet Command acknowledges your transmission", sub: "Signal received loud and clear" },
+  { headline: "XFleet Command acknowledges your transmission", sub: "Signal received loud and clear" },
   { headline: "You have proven yourself a true ally", sub: "Of the Federation — and this quadrant" },
+  { headline: "May your spaces live long and prosper", sub: "🖖 Hailing frequencies forever open" },
 ];
 
 export function PostDonationToast() {
