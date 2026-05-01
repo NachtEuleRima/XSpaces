@@ -100,18 +100,19 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
                 boxShadow: "0 0 20px hsl(195 100% 50% / 0.2)",
               }}
             >
-              {/* Starfleet delta arrowhead */}
-              <svg viewBox="0 0 80 96" fill="none" style={{ width: 28, height: 34 }}>
+              {/* Starfleet delta insignia — authentic V-notch arrowhead */}
+              <svg viewBox="0 0 64 80" fill="none" style={{ width: 26, height: 33 }}>
                 <path
-                  d="M40 4 L76 92 L40 74 L4 92 Z"
-                  fill="hsl(195 100% 55% / 0.2)"
+                  d="M32,2 L62,78 L40,64 L32,74 L24,64 L2,78 Z"
+                  fill="hsl(195 100% 55% / 0.18)"
                   stroke="hsl(195 100% 60%)"
-                  strokeWidth="3"
+                  strokeWidth="2.5"
                   strokeLinejoin="round"
                 />
+                {/* Right-side TNG inner highlight */}
                 <path
-                  d="M40 20 L64 82 L40 68 L16 82 Z"
-                  fill="hsl(195 100% 60% / 0.15)"
+                  d="M32,14 L56,72 L40,62 L32,70 Z"
+                  fill="hsl(195 100% 65% / 0.15)"
                 />
               </svg>
             </div>
