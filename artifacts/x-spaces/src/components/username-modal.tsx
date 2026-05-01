@@ -110,7 +110,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             XFLEET COMMAND
           </DialogTitle>
           <DialogDescription className="text-foreground/60 font-mono text-sm leading-relaxed">
-            Identify yourself to Starfleet Command. Your callsign will be logged on this vessel.
+            Identify yourself to Starfleet Command · Your callsign will be logged on this vessel
           </DialogDescription>
         </DialogHeader>
 
