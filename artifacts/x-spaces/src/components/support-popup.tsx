@@ -8,7 +8,7 @@ export function SupportPopup() {
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem(STORAGE_KEY)) return;
+    // PREVIEW: removed session guard — restore before launch
     const timer = setTimeout(() => setVisible(true), DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
@@ -30,12 +30,12 @@ export function SupportPopup() {
     <>
       <style>{`
         @keyframes popup-in {
-          from { opacity: 0; transform: translateY(24px) scale(0.96); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
+          from { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 24px)) scale(0.96); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1); }
         }
         @keyframes popup-out {
-          from { opacity: 1; transform: translateY(0) scale(1); }
-          to   { opacity: 0; transform: translateY(24px) scale(0.96); }
+          from { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1); }
+          to   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 24px)) scale(0.96); }
         }
         .support-popup {
           animation: popup-in 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
@@ -68,9 +68,9 @@ export function SupportPopup() {
         className={`support-popup${closing ? " closing" : ""}`}
         style={{
           position: "fixed",
-          bottom: 24,
+          top: "50%",
           left: "50%",
-          transform: "translateX(-50%)",
+          transform: "translateX(-50%) translateY(-50%)",
           zIndex: 100,
           width: "min(420px, calc(100vw - 32px))",
           background: "linear-gradient(135deg, hsl(222 60% 8%) 0%, hsl(222 60% 6%) 100%)",
