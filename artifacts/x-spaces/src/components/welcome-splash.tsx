@@ -20,18 +20,9 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
   const [exiting, setExiting] = useState(false);
   const popupRef = useRef<Window | null>(null);
 
-  const finish = useCallback((openPending = false) => {
+  const finish = useCallback(() => {
     setExiting(true);
-    setTimeout(() => {
-      onDone();
-      if (openPending) {
-        const pending = localStorage.getItem("xcoms_pending_url");
-        if (pending) {
-          localStorage.removeItem("xcoms_pending_url");
-          window.open(pending, "_blank");
-        }
-      }
-    }, 600);
+    setTimeout(onDone, 600);
   }, [onDone]);
 
   const handleXMessage = useCallback(async (e: MessageEvent) => {
@@ -40,7 +31,13 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       setXError(null);
       localStorage.setItem("xcoms_auth_method", "x");
       await saveUsername(e.data.username);
-      finish(true);
+      // Open pending space now while still in the message event chain (popup flow)
+      const pending = localStorage.getItem("xcoms_pending_url");
+      if (pending) {
+        localStorage.removeItem("xcoms_pending_url");
+        window.open(pending, "_blank");
+      }
+      finish();
     } else if (e.data?.type === "x-auth-error") {
       setXError(e.data.error ?? "Sign-in failed — please try again");
       setXPending(false);
@@ -62,7 +59,16 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       window.history.replaceState({}, "", window.location.pathname);
       setXPending(true);
       localStorage.setItem("xcoms_auth_method", "x");
-      saveUsername(redirectUser).then(() => finish(true));
+      saveUsername(redirectUser).then(() => {
+        const pending = localStorage.getItem("xcoms_pending_url");
+        if (pending) {
+          localStorage.removeItem("xcoms_pending_url");
+          // Mobile redirect flow — navigate directly (window.open is blocked without gesture)
+          window.location.href = pending;
+        } else {
+          finish();
+        }
+      });
     } else if (redirectError) {
       window.history.replaceState({}, "", window.location.pathname);
       setXError(redirectError);
