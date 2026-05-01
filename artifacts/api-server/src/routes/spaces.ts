@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db, spacesTable } from "@workspace/db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and, gt } from "drizzle-orm";
 import { GetSpaceParams } from "@workspace/api-zod";
 import { syncIfStale, syncSpacesFromX, getFollowingUsernamesCache } from "../lib/sync.js";
 
@@ -78,7 +78,12 @@ router.get("/spaces/upcoming", async (req, res) => {
     const spaces = await db
       .select()
       .from(spacesTable)
-      .where(eq(spacesTable.status, "upcoming"))
+      .where(
+        and(
+          eq(spacesTable.status, "upcoming"),
+          gt(spacesTable.scheduledAt, new Date())
+        )
+      )
       .orderBy(spacesTable.scheduledAt);
     res.json(spaces.map(formatSpace));
   });
