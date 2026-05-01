@@ -211,11 +211,16 @@ export default function Home() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 border border-primary/40 rounded-full px-4 py-1.5 mb-8 text-xs font-mono tracking-[0.2em] text-primary uppercase"
-          style={{ boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)" }}
+          className="mb-8"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          XCOMS // OPEN CHANNEL
+          <div
+            className="badge-float inline-flex items-center gap-2 border border-primary/40 rounded-full px-4 py-1.5 text-xs font-mono tracking-[0.2em] text-primary uppercase"
+            style={{ boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            XCOMS //{" "}
+            {new Date().toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }).toUpperCase()}
+          </div>
         </motion.div>
 
         <motion.h1
