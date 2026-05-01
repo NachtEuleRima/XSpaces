@@ -138,10 +138,13 @@ export function DonationModal({ onClose }: DonationModalProps) {
             XFLEET OPERATIONS
           </div>
           <p style={{ fontSize: "1.3rem", fontWeight: 800, color: "white", letterSpacing: "-0.02em", margin: 0, lineHeight: 1.2 }}>
-            Fund the Mission
+            Enjoying the{" "}
+            <span style={{ background: "linear-gradient(90deg, hsl(195 100% 65%), hsl(290 90% 70%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              open channel?
+            </span>
           </p>
           <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.38)", marginTop: "0.35rem", fontFamily: "monospace", lineHeight: 1.5 }}>
-            Keep the open channel alive
+            This vessel runs on dilithium crystals<br />and caffeine. Help keep the shields up.
           </p>
         </div>
 
