@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUsername } from "@/hooks/use-username";
-import { openSpaceUrl } from "@/lib/open-space";
 
 const X_LOGO = (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -31,13 +30,13 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       setXPending(true);
       setXError(null);
       localStorage.setItem("xcoms_auth_method", "x");
-      // Open pending space BEFORE any await so browser allows the popup
+      await saveUsername(e.data.username);
+      // Open pending space now while still in the message event chain (popup flow)
       const pending = localStorage.getItem("xcoms_pending_url");
       if (pending) {
         localStorage.removeItem("xcoms_pending_url");
-        openSpaceUrl(pending);
+        window.open(pending, "_blank");
       }
-      await saveUsername(e.data.username);
       finish();
     } else if (e.data?.type === "x-auth-error") {
       setXError(e.data.error ?? "Sign-in failed — please try again");
@@ -64,7 +63,8 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
         const pending = localStorage.getItem("xcoms_pending_url");
         if (pending) {
           localStorage.removeItem("xcoms_pending_url");
-          openSpaceUrl(pending);
+          // Mobile redirect flow — navigate directly (window.open is blocked without gesture)
+          window.location.href = pending;
         } else {
           finish();
         }

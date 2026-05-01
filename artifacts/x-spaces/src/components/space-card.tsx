@@ -3,7 +3,6 @@ import { Space, SpaceParticipant } from "@workspace/api-client-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import { useUsername } from "@/hooks/use-username";
-import { openSpaceUrl } from "@/lib/open-space";
 
 const MAX_AVATARS = 5;
 
@@ -26,7 +25,7 @@ export function SpaceCard({ space }: { space: Space }) {
     if (username) {
       saveUsername(username, space.id).catch(() => {});
     }
-    openSpaceUrl(space.spaceUrl);
+    window.open(space.spaceUrl, "_blank");
   };
 
 
