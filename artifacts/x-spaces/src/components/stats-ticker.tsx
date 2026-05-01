@@ -13,8 +13,8 @@ export function StatsTicker() {
     { label: "UNIQUE CREW", value: visitors?.count ?? 0, highlight: false },
   ];
 
-  // Duplicate for seamless loop
-  const doubled = [...items, ...items];
+  // Quadruple for extra-smooth seamless loop
+  const looped = [...items, ...items, ...items, ...items];
 
   return (
     <div
@@ -23,15 +23,18 @@ export function StatsTicker() {
         background: "linear-gradient(to right, hsl(195 100% 50% / 0.08), hsl(290 90% 62% / 0.08))",
         borderTop: "1px solid hsl(195 100% 50% / 0.2)",
         borderBottom: "1px solid hsl(195 100% 50% / 0.2)",
+        maskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
       }}
     >
-      <div
-        className="flex whitespace-nowrap gap-16 items-center"
-        style={{ animation: "ticker 30s linear infinite" }}
+      <motion.div
+        className="flex whitespace-nowrap items-center"
+        animate={{ x: ["0%", "-25%"] }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
       >
-        {doubled.map((item, i) => (
-          <span key={i} className="flex items-center gap-3 shrink-0">
-            <span className="text-foreground/40">{item.label}:</span>
+        {looped.map((item, i) => (
+          <span key={i} className="flex items-center shrink-0">
+            <span className="text-foreground/40 mr-3">{item.label}:</span>
             <span
               className={item.highlight ? "font-black" : "font-bold"}
               style={{
@@ -41,10 +44,10 @@ export function StatsTicker() {
             >
               {item.value.toLocaleString()}
             </span>
-            <span className="text-foreground/20 mx-4">—</span>
+            <span className="mx-8 text-foreground/20">◆</span>
           </span>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
