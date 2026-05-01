@@ -6,12 +6,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-function makeFloatHost(id: string): HTMLDivElement {
-  const el = document.createElement("div");
-  el.id = id;
-  document.body.appendChild(el);
-  return el;
-}
-
-createRoot(makeFloatHost("feedback-root")).render(<FeedbackFloat />);
-createRoot(makeFloatHost("donate-root")).render(<DonateFloat />);
+// These divs already exist in index.html with position:fixed inline styles.
+// React just mounts the visual content into them.
+createRoot(document.getElementById("feedback-root")!).render(<FeedbackFloat />);
+createRoot(document.getElementById("donate-root")!).render(<DonateFloat />);
