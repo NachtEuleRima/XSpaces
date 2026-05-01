@@ -30,6 +30,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       setXPending(true);
       setXError(null);
       localStorage.setItem("xcoms_auth_method", "x");
+      window.dispatchEvent(new Event("xcoms:signin"));
       await saveUsername(e.data.username);
       // Open pending space now while still in the message event chain (popup flow)
       const pending = localStorage.getItem("xcoms_pending_url");
@@ -59,6 +60,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       window.history.replaceState({}, "", window.location.pathname);
       setXPending(true);
       localStorage.setItem("xcoms_auth_method", "x");
+      window.dispatchEvent(new Event("xcoms:signin"));
       saveUsername(redirectUser).then(() => {
         const pending = localStorage.getItem("xcoms_pending_url");
         if (pending) {
