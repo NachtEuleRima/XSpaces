@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "xcoms_support_popup_seen";
-const DELAY_MS = 3000; // PREVIEW — change back to 3 * 60 * 1000
+const DELAY_MS = 3 * 60 * 1000; // 3 minutes
 
 export function SupportPopup() {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
-    // PREVIEW: removed session guard — restore before launch
+    if (sessionStorage.getItem(STORAGE_KEY)) return;
     const timer = setTimeout(() => setVisible(true), DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
