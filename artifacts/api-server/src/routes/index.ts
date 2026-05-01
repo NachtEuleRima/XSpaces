@@ -4,6 +4,7 @@ import spacesRouter from "./spaces";
 import visitorsRouter from "./visitors";
 import authRouter from "./auth";
 import donationsRouter from "./donations";
+import usersRouter from "./users";
 
 const router: IRouter = Router();
 
@@ -12,5 +13,6 @@ router.use(spacesRouter);
 router.use(visitorsRouter);
 router.use(authRouter);
 router.use(donationsRouter);
+router.use(usersRouter);
 
 export default router;

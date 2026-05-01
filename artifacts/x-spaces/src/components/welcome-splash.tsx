@@ -12,13 +12,23 @@ interface WelcomeSplashProps {
   onDone: () => void;
 }
 
+interface XUser {
+  id: string;
+  username: string;
+  name: string;
+  avatar: string | null;
+}
+
 export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
   const { saveUsername, isPending } = useUsername();
   const [val, setVal] = useState("");
   const [xPending, setXPending] = useState(false);
   const [xError, setXError] = useState<string | null>(null);
   const [exiting, setExiting] = useState(false);
+  const [suggestion, setSuggestion] = useState<XUser | null>(null);
+  const [searching, setSearching] = useState(false);
   const popupRef = useRef<Window | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const finish = useCallback((openPending = false) => {
     setExiting(true);
@@ -51,6 +61,22 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
     window.addEventListener("message", handleXMessage);
     return () => window.removeEventListener("message", handleXMessage);
   }, [handleXMessage]);
+
+  useEffect(() => {
+    const q = val.trim().replace(/^@/, "");
+    if (q.length < 2) { setSuggestion(null); setSearching(false); return; }
+    setSearching(true);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const r = await fetch(`/api/users/search?q=${encodeURIComponent(q)}`);
+        const data = await r.json() as { user: XUser | null };
+        setSuggestion(data.user);
+      } catch { setSuggestion(null); }
+      setSearching(false);
+    }, 400);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [val]);
 
   // Handle redirect-mode return: ?xcoms_user=USERNAME or ?xcoms_auth_error=...
   useEffect(() => {
@@ -202,25 +228,65 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold font-mono text-lg" style={{ color: "hsl(195 100% 50%)" }}>@</span>
+                  {searching && (
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2" style={{ color: "hsl(195 100% 50% / 0.5)", fontSize: 11, fontFamily: "monospace" }}>…</span>
+                  )}
                   <input
                     className="w-full h-12 pl-10 pr-4 font-mono rounded-xl outline-none transition-all text-center uppercase tracking-widest text-base"
                     style={{
                       background: "hsl(222 40% 9%)",
-                      border: "1px solid hsl(195 100% 50% / 0.25)",
+                      border: `1px solid ${suggestion ? "hsl(195 100% 50% / 0.55)" : "hsl(195 100% 50% / 0.25)"}`,
                       color: "hsl(195 100% 70%)",
+                      borderBottomLeftRadius: suggestion ? 0 : undefined,
+                      borderBottomRightRadius: suggestion ? 0 : undefined,
                     }}
                     placeholder="ENTER YOUR CALLSIGN"
                     value={val}
-                    onChange={e => setVal(e.target.value)}
+                    onChange={e => { setVal(e.target.value); setSuggestion(null); }}
                     onFocus={e => {
                       (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.6)";
                       (e.target as HTMLInputElement).style.boxShadow = "0 0 20px hsl(195 100% 50% / 0.15)";
                     }}
                     onBlur={e => {
-                      (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.25)";
+                      (e.target as HTMLInputElement).style.borderColor = suggestion ? "hsl(195 100% 50% / 0.55)" : "hsl(195 100% 50% / 0.25)";
                       (e.target as HTMLInputElement).style.boxShadow = "none";
                     }}
                   />
+                  {/* Suggestion card */}
+                  {suggestion && (
+                    <button
+                      type="button"
+                      onMouseDown={async () => {
+                        setVal(suggestion.username);
+                        setSuggestion(null);
+                        localStorage.setItem("xcoms_auth_method", "manual");
+                        await saveUsername(suggestion.username);
+                        finish();
+                      }}
+                      style={{
+                        position: "absolute", top: "100%", left: 0, right: 0,
+                        background: "hsl(222 45% 11%)",
+                        border: "1px solid hsl(195 100% 50% / 0.55)",
+                        borderTop: "none",
+                        borderBottomLeftRadius: 12, borderBottomRightRadius: 12,
+                        padding: "0.6rem 0.9rem",
+                        display: "flex", alignItems: "center", gap: 10,
+                        cursor: "pointer", width: "100%", textAlign: "left",
+                        boxShadow: "0 12px 32px hsl(195 100% 50% / 0.1)",
+                        zIndex: 10,
+                      }}
+                    >
+                      {suggestion.avatar
+                        ? <img src={suggestion.avatar} alt="" style={{ width: 32, height: 32, borderRadius: "50%", border: "1px solid hsl(195 100% 50% / 0.3)", flexShrink: 0 }} />
+                        : <div style={{ width: 32, height: 32, borderRadius: "50%", background: "hsl(195 100% 50% / 0.15)", flexShrink: 0 }} />
+                      }
+                      <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
+                        <span style={{ fontFamily: "monospace", fontSize: "0.78rem", fontWeight: 700, color: "hsl(195 100% 70%)", letterSpacing: "0.05em" }}>@{suggestion.username}</span>
+                        <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{suggestion.name}</span>
+                      </div>
+                      <span style={{ marginLeft: "auto", fontSize: "0.6rem", fontFamily: "monospace", letterSpacing: "0.15em", textTransform: "uppercase", color: "hsl(195 100% 55%)", flexShrink: 0 }}>tap to select</span>
+                    </button>
+                  )}
                 </div>
                 <button
                   type="submit"
