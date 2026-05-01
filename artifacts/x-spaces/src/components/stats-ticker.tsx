@@ -1,20 +1,6 @@
 import { useGetSpaceStats, useGetVisitorCount, getGetSpaceStatsQueryKey, getGetVisitorCountQueryKey } from "@workspace/api-client-react";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-
-function useIsMobile() {
-  const [mobile, setMobile] = useState(() => window.innerWidth < 768);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const handler = (e: MediaQueryListEvent) => setMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-  return mobile;
-}
 
 export function StatsTicker() {
-  const isMobile = useIsMobile();
   const { data: stats } = useGetSpaceStats({ query: { queryKey: getGetSpaceStatsQueryKey(), refetchInterval: 30000 } });
   const { data: visitors } = useGetVisitorCount({ query: { queryKey: getGetVisitorCountQueryKey(), refetchInterval: 30000 } });
 
@@ -26,8 +12,8 @@ export function StatsTicker() {
     { label: "UNIQUE CREW", value: visitors?.count ?? 0, highlight: false },
   ];
 
-  // Quadruple for extra-smooth seamless loop
-  const looped = [...items, ...items, ...items, ...items];
+  // Duplicate for seamless infinite loop — CSS animation scrolls exactly one copy width (-50%)
+  const looped = [...items, ...items];
 
   return (
     <div
@@ -40,11 +26,21 @@ export function StatsTicker() {
         WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
       }}
     >
-      <motion.div
-        className="flex whitespace-nowrap items-center"
-        animate={{ x: ["0%", "-25%"] }}
-        transition={{ duration: isMobile ? 8 : 28, repeat: Infinity, ease: "linear" }}
-      >
+      <style>{`
+        @keyframes ticker-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .ticker-track {
+          animation: ticker-scroll 28s linear infinite;
+        }
+        @media (max-width: 767px) {
+          .ticker-track {
+            animation-duration: 8s;
+          }
+        }
+      `}</style>
+      <div className="ticker-track flex whitespace-nowrap items-center">
         {looped.map((item, i) => (
           <span key={i} className="flex items-center shrink-0">
             <span className="text-foreground/40 mr-3">{item.label}:</span>
@@ -60,7 +56,7 @@ export function StatsTicker() {
             <span className="mx-8 text-foreground/20">◆</span>
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
