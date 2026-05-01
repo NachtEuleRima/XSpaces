@@ -36,19 +36,21 @@ export function PostDonationToast() {
   return (
     <AnimatePresence>
       {visible && (
+        <div style={{
+          position: "fixed",
+          bottom: "5rem",
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+          zIndex: 200,
+          pointerEvents: "none",
+        }}>
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.92 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={{ type: "spring", stiffness: 280, damping: 22 }}
-          style={{
-            position: "fixed",
-            bottom: "5rem",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 200,
-            pointerEvents: "none",
-          }}
         >
           <style>{`
             @keyframes xcoms-heartbeat {
@@ -100,6 +102,7 @@ export function PostDonationToast() {
             </div>
           </div>
         </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
