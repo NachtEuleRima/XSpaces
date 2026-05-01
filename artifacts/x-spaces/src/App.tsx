@@ -8,6 +8,7 @@ import Home from "@/pages/home";
 import SpaceDetail from "@/pages/space";
 import { WelcomeSplash } from "@/components/welcome-splash";
 import { SupportPopup } from "@/components/support-popup";
+import { DonateFloat } from "@/components/donate-float";
 import { UsernameProvider } from "@/context/username-context";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ function AppShell() {
       <Toaster />
       {showSplash && <WelcomeSplash onDone={() => setShowSplash(false)} />}
       <SupportPopup />
+      <DonateFloat />
     </>
   );
 }

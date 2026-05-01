@@ -79,9 +79,8 @@ export function DonateFloat() {
         }
       `}</style>
 
-      {/* Outer wrapper — caller controls fixed/sticky placement via a parent */}
       <div
-        style={{ position: "relative", display: "inline-flex", alignItems: "center" }}
+        style={{ position: "fixed", left: 16, top: "48%", transform: "translateY(-50%)", zIndex: 80, display: "inline-flex", alignItems: "center" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >

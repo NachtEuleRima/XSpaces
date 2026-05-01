@@ -4,7 +4,6 @@ import { StatsTicker } from "@/components/stats-ticker";
 import { UsernameCapture } from "@/components/username-capture";
 import { TechSupport } from "@/components/tech-support";
 import { ScrollNav } from "@/components/scroll-nav";
-import { DonateFloat } from "@/components/donate-float";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useUsername } from "@/hooks/use-username";
@@ -263,11 +262,7 @@ export default function Home() {
 
       <StatsTicker />
 
-      <div className="container mx-auto px-6 pt-4 pb-0 z-10 flex justify-start">
-        <DonateFloat />
-      </div>
-
-      <main className="flex-1 container mx-auto px-6 pt-2 pb-0 z-10">
+      <main className="flex-1 container mx-auto px-6 pt-16 pb-0 z-10">
 
         {/* ── LIVE NOW ── */}
         <section className="mb-24">
