@@ -147,7 +147,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               >
                 {xPending ? "Awaiting Authorization…" : (
                   <span className="flex items-center gap-2 font-black tracking-[0.12em] uppercase text-sm">
-                    Sign in {X_LOGO}
+                    Sign in with {X_LOGO}
                   </span>
                 )}
               </button>
