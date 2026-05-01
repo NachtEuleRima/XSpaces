@@ -9,8 +9,6 @@ createRoot(document.getElementById("root")!).render(<App />);
 function makeFloatHost(id: string): HTMLDivElement {
   const el = document.createElement("div");
   el.id = id;
-  el.style.cssText =
-    "position:fixed;top:0;left:0;width:0;height:0;overflow:visible;z-index:9999;pointer-events:none;";
   document.body.appendChild(el);
   return el;
 }

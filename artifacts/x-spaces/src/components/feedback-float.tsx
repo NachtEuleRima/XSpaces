@@ -112,7 +112,6 @@ export function FeedbackFloat() {
         .cb-ping2 { animation: cb-ping2 2.6s ease-out 1.3s infinite; }
         .mic-dot  { animation: mic-blink 2s ease-in-out infinite; }
         .feedback-wrapper {
-          position: absolute; left: 16px; top: 16px;
           display: flex; flex-direction: column; align-items: center; gap: 5px;
           pointer-events: auto;
         }
@@ -165,7 +164,7 @@ export function FeedbackFloat() {
         className="feedback-wrapper"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        style={{ position: "absolute", left: 16, top: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 5, pointerEvents: "auto" }}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, pointerEvents: "auto" }}
       >
         <div style={{ position: "relative" }}>
           {hovered && (
