@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AMOUNTS = [3, 5, 10, 25];
+const AMOUNTS = [4.2, 6.9, 42, 69];
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 
 function VenmoIcon() {
@@ -33,7 +33,7 @@ interface DonationModalProps {
 }
 
 export function DonationModal({ onClose }: DonationModalProps) {
-  const [amount, setAmount] = useState(5);
+  const [amount, setAmount] = useState(4.2);
   const [custom, setCustom] = useState("");
   const [method, setMethod] = useState<"venmo" | "apple" | "card">("venmo");
 
