@@ -6,12 +6,14 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-const feedbackEl = document.createElement("div");
-feedbackEl.id = "feedback-root";
-document.body.appendChild(feedbackEl);
-createRoot(feedbackEl).render(<FeedbackFloat />);
+function makeFloatHost(id: string): HTMLDivElement {
+  const el = document.createElement("div");
+  el.id = id;
+  el.style.cssText =
+    "position:fixed;top:0;left:0;width:0;height:0;overflow:visible;z-index:9999;pointer-events:none;";
+  document.body.appendChild(el);
+  return el;
+}
 
-const donateEl = document.createElement("div");
-donateEl.id = "donate-root";
-document.body.appendChild(donateEl);
-createRoot(donateEl).render(<DonateFloat />);
+createRoot(makeFloatHost("feedback-root")).render(<FeedbackFloat />);
+createRoot(makeFloatHost("donate-root")).render(<DonateFloat />);

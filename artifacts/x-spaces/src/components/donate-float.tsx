@@ -102,10 +102,11 @@ export function DonateFloat() {
           animation: heart-ping 1.4s ease-out infinite;
         }
         .donate-wrapper {
-          position: fixed; left: 16px; top: 59%; transform: translateY(-50%); z-index: 80; display: inline-flex; align-items: center;
+          position: absolute; left: 16px; top: 59dvh; transform: translateY(-50%);
+          display: inline-flex; align-items: center; pointer-events: auto;
         }
         @media (min-width: 768px) {
-          .donate-wrapper { top: 65%; }
+          .donate-wrapper { top: 65dvh; }
         }
       `}</style>
 
