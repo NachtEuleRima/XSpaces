@@ -230,7 +230,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               {/* Divider */}
               <div className="flex items-center gap-3 w-full">
                 <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
-                <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase whitespace-nowrap">or username</span>
+                <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase text-center leading-tight">or<br />enter username</span>
                 <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
               </div>
 
