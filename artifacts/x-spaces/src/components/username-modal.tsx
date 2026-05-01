@@ -100,20 +100,19 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
                 boxShadow: "0 0 20px hsl(195 100% 50% / 0.2)",
               }}
             >
-              {/* Starfleet delta insignia */}
-              <svg viewBox="0 0 100 120" fill="none" style={{ width: 28, height: 34 }}>
+              {/* Starfleet delta arrowhead */}
+              <svg viewBox="0 0 80 96" fill="none" style={{ width: 28, height: 34 }}>
                 <path
-                  d="M50 4 L96 108 L50 88 L4 108 Z"
-                  fill="hsl(195 100% 60% / 0.15)"
+                  d="M40 4 L76 92 L40 74 L4 92 Z"
+                  fill="hsl(195 100% 55% / 0.2)"
                   stroke="hsl(195 100% 60%)"
                   strokeWidth="3"
                   strokeLinejoin="round"
                 />
                 <path
-                  d="M50 18 L82 100 L50 83 L18 100 Z"
-                  fill="hsl(195 100% 60% / 0.2)"
+                  d="M40 20 L64 82 L40 68 L16 82 Z"
+                  fill="hsl(195 100% 60% / 0.15)"
                 />
-                <line x1="50" y1="4" x2="50" y2="88" stroke="hsl(195 100% 60% / 0.4)" strokeWidth="1.5" />
               </svg>
             </div>
           </div>
