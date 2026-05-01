@@ -206,7 +206,7 @@ export default function Home() {
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(195_100%_75%)] to-[hsl(195_100%_50%)]" style={{ filter: "drop-shadow(0 0 30px hsl(195 100% 50% / 0.4))" }}>
             XCOMS
           </span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(290_90%_80%)] to-[hsl(290_90%_62%)]" style={{ filter: "drop-shadow(0 0 30px hsl(290 90% 62% / 0.4))" }}>
+          <span className="block text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-b from-[hsl(290_90%_80%)] to-[hsl(290_90%_62%)]" style={{ filter: "drop-shadow(0 0 30px hsl(290 90% 62% / 0.4))" }}>
             .Space
           </span>
         </motion.h1>
