@@ -4,6 +4,8 @@ export function StatsTicker() {
   const { data: stats } = useGetSpaceStats({ query: { queryKey: getGetSpaceStatsQueryKey(), refetchInterval: 30000 } });
   const { data: visitors } = useGetVisitorCount({ query: { queryKey: getGetVisitorCountQueryKey(), refetchInterval: 30000 } });
 
+  const loaded = stats !== undefined && visitors !== undefined;
+
   const items = [
     { label: "ACTIVE CHANNELS", value: stats?.totalSpaces ?? 0, highlight: false },
     { label: "ON AIR", value: stats?.liveCount ?? 0, highlight: true },
@@ -26,20 +28,24 @@ export function StatsTicker() {
         WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
       }}
     >
-      <div className="ticker-track flex whitespace-nowrap items-center">
+      {/* Only animate once data is loaded so track width is stable */}
+      <div className={loaded ? "ticker-track" : ""} style={{ display: "flex", whiteSpace: "nowrap", alignItems: "center" }}>
         {looped.map((item, i) => (
-          <span key={i} className="flex items-center shrink-0">
-            <span className="text-foreground/40 mr-3">{item.label}:</span>
+          <span key={i} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+            <span style={{ color: "hsl(195 100% 50% / 0.4)", marginRight: "0.75rem" }}>{item.label}:</span>
             <span
-              className={item.highlight ? "font-black" : "font-bold"}
               style={{
+                fontWeight: item.highlight ? 900 : 700,
                 color: item.highlight ? "hsl(195 100% 65%)" : "hsl(195 100% 50%)",
                 textShadow: item.highlight ? "0 0 12px hsl(195 100% 50% / 0.8)" : "none",
+                minWidth: "4ch",
+                display: "inline-block",
+                fontVariantNumeric: "tabular-nums",
               }}
             >
               {item.value.toLocaleString()}
             </span>
-            <span className="mx-8 text-foreground/20">◆</span>
+            <span style={{ margin: "0 2rem", color: "hsl(195 100% 50% / 0.2)" }}>◆</span>
           </span>
         ))}
       </div>
