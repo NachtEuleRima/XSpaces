@@ -141,25 +141,20 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             type="button"
             onClick={handleXSignIn}
             disabled={xPending}
-            className="w-full h-14 rounded-xl font-black tracking-[0.12em] uppercase text-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
+            className="w-full h-13 py-3.5 rounded-2xl transition-all flex items-center justify-center disabled:opacity-50"
             style={{
-              background: "linear-gradient(to right, hsl(222 47% 7%), hsl(270 35% 10%))",
-              color: xPending ? "hsl(195 100% 65% / 0.4)" : "hsl(195 100% 70%)",
-              border: "1px solid hsl(195 100% 55% / 0.6)",
-              boxShadow: "0 0 18px hsl(195 100% 50% / 0.25), inset 0 0 30px hsl(195 100% 50% / 0.04)",
+              background: xPending ? "hsl(210 15% 22% / 0.4)" : "hsl(210 15% 28%)",
+              color: xPending ? "hsl(210 20% 70% / 0.5)" : "hsl(210 20% 88%)",
+              border: "1px solid hsl(210 20% 45% / 0.35)",
             }}
-            onMouseEnter={e => {
-              if (!xPending) {
-                (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(to right, hsl(222 47% 10%), hsl(270 35% 14%))";
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 28px hsl(195 100% 50% / 0.4), inset 0 0 30px hsl(195 100% 50% / 0.06)";
-              }
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(to right, hsl(222 47% 7%), hsl(270 35% 10%))";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 18px hsl(195 100% 50% / 0.25), inset 0 0 30px hsl(195 100% 50% / 0.04)";
-            }}
+            onMouseEnter={e => { if (!xPending) (e.currentTarget as HTMLButtonElement).style.background = "hsl(210 15% 35%)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 15% 22% / 0.4)" : "hsl(210 15% 28%)"; }}
           >
-            {xPending ? "AWAITING CONFIRMATION..." : <>AUTHORIZE WITH {X_LOGO}</>}
+            {xPending ? "Awaiting Authorization…" : (
+              <span className="flex items-center gap-2 font-black tracking-[0.12em] uppercase text-sm">
+                AUTHORIZE WITH {X_LOGO}
+              </span>
+            )}
           </button>
 
           {xError && (
