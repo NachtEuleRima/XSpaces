@@ -47,6 +47,16 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
     if (!open) popupRef.current?.close();
   }, [open]);
 
+  // Hide donate button while auth modal is open
+  useEffect(() => {
+    if (open) {
+      document.body.setAttribute("data-auth-modal", "true");
+    } else {
+      document.body.removeAttribute("data-auth-modal");
+    }
+    return () => document.body.removeAttribute("data-auth-modal");
+  }, [open]);
+
   const handleXSignIn = () => {
     setXError(null);
     const w = 600;

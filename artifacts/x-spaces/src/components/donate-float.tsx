@@ -33,7 +33,16 @@ export function DonateFloat() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [isScrolling, setIsScrolling] = useState(false);
   const [overCard, setOverCard] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const obs = new MutationObserver(() => {
+      setAuthModalOpen(document.body.hasAttribute("data-auth-modal"));
+    });
+    obs.observe(document.body, { attributes: true, attributeFilter: ["data-auth-modal"] });
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -66,6 +75,8 @@ export function DonateFloat() {
 
   const size = isMobile ? 40 : 52;
   const fontSize = isMobile ? 18 : 24;
+
+  if (authModalOpen) return null;
 
   return (
     <>
