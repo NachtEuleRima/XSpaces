@@ -36,6 +36,10 @@ export function SpaceCard({ space }: { space: Space }) {
     ...space.speakers,
   ].filter(Boolean);
 
+  // Audience = total participants minus everyone on stage (host + co-hosts + speakers)
+  const onStageCount = 1 + space.coHosts.length + space.speakers.length;
+  const audienceCount = Math.max(0, space.listenerCount - onStageCount);
+
   const visibleAvatars = allParticipants.slice(0, MAX_AVATARS);
   const overflow = allParticipants.length - MAX_AVATARS;
 
@@ -178,14 +182,14 @@ export function SpaceCard({ space }: { space: Space }) {
                 )}
               </div>
 
-              {/* Listener count */}
-              {isLive && space.listenerCount > 0 && (
+              {/* Audience count — participants minus on-stage speakers */}
+              {isLive && audienceCount > 0 && (
                 <div className="text-right">
                   <div
                     className="text-lg font-black tabular-nums leading-none"
                     style={{ color: primaryColor }}
                   >
-                    {space.listenerCount.toLocaleString()}
+                    {audienceCount.toLocaleString()}
                   </div>
                   <div className="text-[9px] font-mono tracking-[0.2em] text-muted-foreground uppercase mt-0.5">
                     listening
