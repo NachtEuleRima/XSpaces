@@ -1,100 +1,71 @@
 import { useState } from "react";
 
-function FeedbackTooltip() {
+/* Trek officer bust wearing a headset with mic boom */
+function HeadsetOfficerIcon() {
   return (
-    <div style={{
-      position: "absolute",
-      top: "50%",
-      right: "calc(100% + 10px)",
-      transform: "translateY(-50%)",
-      background: "hsl(222 60% 7%)",
-      border: "1px solid hsl(195 100% 50% / 0.35)",
-      borderRadius: 6,
-      padding: "0.25rem 0.6rem",
-      fontFamily: "monospace",
-      fontSize: "0.5rem",
-      letterSpacing: "0.15em",
-      textTransform: "uppercase",
-      color: "hsl(195 100% 70%)",
-      boxShadow: "0 0 14px hsl(195 100% 50% / 0.25)",
-      pointerEvents: "none",
-      lineHeight: 1.65,
-      textAlign: "center",
-      whiteSpace: "nowrap",
-    }}>
-      <div>Hail</div>
-      <div style={{ opacity: 0.55 }}>bridge</div>
-    </div>
-  );
-}
-
-/* Starfleet combadge — the classic TNG-era delta communication badge */
-function CombadgeIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="cbOuter" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="hsl(42 90% 65%)" />
-          <stop offset="100%" stopColor="hsl(35 80% 45%)" />
-        </linearGradient>
-        <linearGradient id="cbDelta" x1="8" y1="4" x2="24" y2="26" gradientUnits="userSpaceOnUse">
+        <linearGradient id="faceGrad" x1="11" y1="5" x2="23" y2="17" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="hsl(195 100% 80%)" />
-          <stop offset="100%" stopColor="hsl(220 90% 60%)" />
+          <stop offset="100%" stopColor="hsl(220 80% 65%)" />
         </linearGradient>
-        <filter id="cbGlow">
-          <feGaussianBlur stdDeviation="1.2" result="blur" />
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        <linearGradient id="uniformGrad" x1="4" y1="20" x2="30" y2="34" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="hsl(222 60% 22%)" />
+          <stop offset="100%" stopColor="hsl(222 60% 12%)" />
+        </linearGradient>
+        <filter id="softGlow">
+          <feGaussianBlur stdDeviation="0.8" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
 
-      {/* Outer badge oval — gold */}
-      <ellipse cx="16" cy="17" rx="13" ry="11.5"
-        fill="url(#cbOuter)"
-        stroke="hsl(42 90% 75%)"
-        strokeWidth="0.6"
-        filter="url(#cbGlow)"
-        opacity="0.95"
+      {/* Starfleet uniform / shoulders */}
+      <path d="M4 34 C4 25 9 21 17 21 C25 21 30 25 30 34" fill="url(#uniformGrad)" />
+      {/* Uniform collar trim — gold */}
+      <path d="M12 21 L17 26 L22 21" fill="none" stroke="hsl(42 90% 65%)" strokeWidth="1.1" strokeLinejoin="round"/>
+      {/* Comm badge on chest */}
+      <path d="M17 23.5 L18.6 26 L17 25.1 L15.4 26 Z" fill="hsl(42 90% 70%)" opacity="0.9"/>
+
+      {/* Head */}
+      <circle cx="17" cy="12" r="6.5" fill="url(#faceGrad)" filter="url(#softGlow)" />
+      {/* Face shadow / depth */}
+      <circle cx="17" cy="12" r="5.5" fill="hsl(215 70% 60%)" opacity="0.25" />
+
+      {/* Eyes — two small dots */}
+      <circle cx="14.8" cy="11.5" r="0.8" fill="hsl(222 60% 12%)" opacity="0.7"/>
+      <circle cx="19.2" cy="11.5" r="0.8" fill="hsl(222 60% 12%)" opacity="0.7"/>
+
+      {/* Headset band arc over head */}
+      <path d="M10 11.5 C10 5 24 5 24 11.5"
+        stroke="hsl(290 85% 70%)" strokeWidth="1.5" fill="none" strokeLinecap="round"
+        filter="url(#softGlow)"
+      />
+      {/* Left ear cup */}
+      <rect x="8" y="10.5" width="4" height="5.5" rx="2"
+        fill="hsl(290 85% 20%)" stroke="hsl(290 85% 70%)" strokeWidth="1"
+      />
+      {/* Right ear cup */}
+      <rect x="22" y="10.5" width="4" height="5.5" rx="2"
+        fill="hsl(290 85% 20%)" stroke="hsl(290 85% 70%)" strokeWidth="1"
       />
 
-      {/* Outer badge rim shadow */}
-      <ellipse cx="16" cy="17" rx="11.5" ry="10"
-        fill="hsl(222 60% 8%)"
-        opacity="0.85"
+      {/* Mic boom — curves down from right ear cup */}
+      <path d="M24 14.5 C26 16 25.5 18.5 23.5 19.5"
+        stroke="hsl(195 100% 65%)" strokeWidth="1" fill="none" strokeLinecap="round"
+        filter="url(#softGlow)"
       />
+      {/* Mic capsule at boom tip */}
+      <circle cx="23" cy="20" r="1.4"
+        fill="hsl(195 100% 50%)" filter="url(#softGlow)"
+      />
+      {/* Mic active dot */}
+      <circle cx="23" cy="20" r="0.6" fill="white" opacity="0.9"/>
 
-      {/* Delta / arrowhead pointing up — cyan */}
-      <path
-        d="M16 5 L26.5 24 L16 20 L5.5 24 Z"
-        fill="url(#cbDelta)"
-        filter="url(#cbGlow)"
-        opacity="0.97"
-      />
-
-      {/* Inner delta cutout — dark centre */}
-      <path
-        d="M16 9.5 L22.5 22 L16 18.5 L9.5 22 Z"
-        fill="hsl(222 60% 8%)"
-        opacity="0.7"
-      />
-
-      {/* Pip / comm-signal dot at delta tip */}
-      <circle cx="16" cy="7.5" r="1.4"
-        fill="hsl(195 100% 85%)"
-        filter="url(#cbGlow)"
-      />
-
-      {/* Horizontal rule separating delta from badge lower section */}
-      <line x1="6.5" y1="24.5" x2="25.5" y2="24.5"
-        stroke="hsl(42 90% 65%)"
-        strokeWidth="0.7"
-        opacity="0.6"
-      />
-
-      {/* Lower section — small oval detail */}
-      <ellipse cx="16" cy="27" rx="5.5" ry="1.6"
-        fill="hsl(42 90% 60%)"
-        opacity="0.55"
-      />
+      {/* Small sound-wave arcs left of mic — "listening/transmitting" */}
+      <path d="M20.5 18 C21.2 19 21.2 21 20.5 22"
+        stroke="hsl(195 100% 65% / 0.6)" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
+      <path d="M19 17 C20.2 18.5 20.2 21.5 19 23"
+        stroke="hsl(195 100% 65% / 0.35)" strokeWidth="0.7" fill="none" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -106,30 +77,77 @@ export function FeedbackFloat() {
     <>
       <style>{`
         @keyframes cb-float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          40%       { transform: translateY(-7px) rotate(1.5deg); }
-          70%       { transform: translateY(-3px) rotate(-1deg); }
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(-6px); }
         }
         @keyframes cb-ping {
-          0%   { transform: scale(1); opacity: 0.7; }
-          100% { transform: scale(2.6); opacity: 0; }
+          0%   { transform: scale(1); opacity: 0.65; }
+          100% { transform: scale(2.4); opacity: 0; }
         }
         @keyframes cb-ping2 {
-          0%   { transform: scale(1); opacity: 0.45; }
-          100% { transform: scale(2.1); opacity: 0; }
+          0%   { transform: scale(1); opacity: 0.4; }
+          100% { transform: scale(2.0); opacity: 0; }
         }
-        .cb-fab {
-          animation: cb-float 4.5s ease-in-out infinite;
+        @keyframes mic-blink {
+          0%, 80%, 100% { opacity: 1; }
+          90% { opacity: 0.15; }
         }
-        .cb-fab:hover { filter: drop-shadow(0 0 14px hsl(195 100% 60% / 0.95)) drop-shadow(0 0 28px hsl(42 90% 60% / 0.5)) !important; }
-        .cb-ping  { animation: cb-ping  2.4s ease-out infinite; }
-        .cb-ping2 { animation: cb-ping2 2.4s ease-out 1.2s infinite; }
+        .cb-fab { animation: cb-float 4s ease-in-out infinite; }
+        .cb-fab:hover {
+          filter: drop-shadow(0 0 16px hsl(195 100% 55% / 0.95)) drop-shadow(0 0 24px hsl(290 85% 65% / 0.5)) !important;
+        }
+        .cb-ping  { animation: cb-ping  2.6s ease-out infinite; }
+        .cb-ping2 { animation: cb-ping2 2.6s ease-out 1.3s infinite; }
+        .mic-dot  { animation: mic-blink 2s ease-in-out infinite; }
         .feedback-wrapper {
           position: fixed; right: 16px; top: 59%;
           transform: translateY(-50%); z-index: 80;
-          display: inline-flex; align-items: center;
+          display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
         @media (min-width: 768px) { .feedback-wrapper { top: 65%; } }
+
+        .feedback-label {
+          font-family: monospace;
+          font-size: 0.42rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: hsl(195 100% 60% / 0.6);
+          white-space: nowrap;
+          pointer-events: none;
+          transition: color 0.2s;
+        }
+        .feedback-wrapper:hover .feedback-label {
+          color: hsl(195 100% 70% / 0.9);
+        }
+
+        .tooltip-bubble {
+          position: absolute;
+          top: 50%;
+          right: calc(100% + 10px);
+          transform: translateY(-50%);
+          background: hsl(222 60% 7%);
+          border: 1px solid hsl(195 100% 50% / 0.4);
+          border-radius: 8px;
+          padding: 0.35rem 0.65rem;
+          font-family: monospace;
+          font-size: 0.52rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: hsl(195 100% 72%);
+          box-shadow: 0 0 16px hsl(195 100% 50% / 0.2);
+          pointer-events: none;
+          line-height: 1.7;
+          text-align: center;
+          white-space: nowrap;
+        }
+        .tooltip-bubble::after {
+          content: '';
+          position: absolute;
+          top: 50%; right: -5px;
+          transform: translateY(-50%);
+          border: 4px solid transparent;
+          border-left-color: hsl(195 100% 50% / 0.4);
+        }
       `}</style>
 
       <div
@@ -137,43 +155,52 @@ export function FeedbackFloat() {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {hovered && <FeedbackTooltip />}
+        <div style={{ position: "relative" }}>
+          {hovered && (
+            <div className="tooltip-bubble">
+              <div style={{ fontWeight: 800 }}>Open Channel</div>
+              <div style={{ opacity: 0.5, fontSize: "0.46rem" }}>Send feedback</div>
+            </div>
+          )}
 
-        <button
-          className="cb-fab"
-          onClick={() => window.dispatchEvent(new Event("xcoms:feedback"))}
-          aria-label="Hail the bridge crew — send feedback"
-          style={{
-            position: "relative",
-            width: 50,
-            height: 50,
-            borderRadius: "50%",
-            border: "1px solid hsl(42 90% 55% / 0.55)",
-            background: "radial-gradient(circle at 35% 35%, hsl(222 60% 14%), hsl(222 60% 7%))",
-            boxShadow: "0 0 20px hsl(42 90% 55% / 0.2), 0 0 40px hsl(195 100% 50% / 0.1), inset 0 0 14px hsl(42 90% 55% / 0.06)",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            filter: "drop-shadow(0 0 8px hsl(195 100% 55% / 0.5)) drop-shadow(0 0 6px hsl(42 90% 60% / 0.35))",
-            transition: "filter 0.2s",
-            padding: 0,
-          }}
-        >
-          <CombadgeIcon />
+          <button
+            className="cb-fab"
+            onClick={() => window.dispatchEvent(new Event("xcoms:feedback"))}
+            aria-label="Hail the bridge — send feedback"
+            style={{
+              position: "relative",
+              width: 52,
+              height: 52,
+              borderRadius: "50%",
+              border: "1.5px solid hsl(290 85% 65% / 0.5)",
+              background: "radial-gradient(circle at 38% 35%, hsl(222 60% 16%), hsl(222 60% 7%))",
+              boxShadow: "0 0 22px hsl(290 85% 55% / 0.2), 0 0 44px hsl(195 100% 50% / 0.08), inset 0 0 16px hsl(290 85% 55% / 0.06)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              filter: "drop-shadow(0 0 8px hsl(195 100% 55% / 0.5)) drop-shadow(0 0 5px hsl(290 85% 65% / 0.4))",
+              transition: "filter 0.2s",
+              padding: 0,
+            }}
+          >
+            <HeadsetOfficerIcon />
 
-          {/* Signal ripple rings */}
-          <span className="cb-ping" style={{
-            position: "absolute", inset: 0, borderRadius: "50%",
-            border: "1px solid hsl(195 100% 55% / 0.5)",
-            pointerEvents: "none",
-          }} />
-          <span className="cb-ping2" style={{
-            position: "absolute", inset: 0, borderRadius: "50%",
-            border: "1px solid hsl(42 90% 60% / 0.35)",
-            pointerEvents: "none",
-          }} />
-        </button>
+            <span className="cb-ping" style={{
+              position: "absolute", inset: 0, borderRadius: "50%",
+              border: "1px solid hsl(195 100% 55% / 0.5)",
+              pointerEvents: "none",
+            }} />
+            <span className="cb-ping2" style={{
+              position: "absolute", inset: 0, borderRadius: "50%",
+              border: "1px solid hsl(290 85% 65% / 0.35)",
+              pointerEvents: "none",
+            }} />
+          </button>
+        </div>
+
+        {/* Always-visible label below button */}
+        <span className="feedback-label">feedback</span>
       </div>
     </>
   );
