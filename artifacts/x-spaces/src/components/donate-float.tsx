@@ -33,6 +33,7 @@ export function DonateFloat() {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [nearTop, setNearTop] = useState(true);
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -41,6 +42,8 @@ export function DonateFloat() {
     mq.addEventListener("change", onChange);
 
     const onScroll = () => {
+      // Only show tooltip when near the top (before cards section ~350px in)
+      setNearTop(window.scrollY < 350);
       setIsScrolling(true);
       if (scrollTimer.current) clearTimeout(scrollTimer.current);
       scrollTimer.current = setTimeout(() => setIsScrolling(false), 800);
@@ -87,8 +90,8 @@ export function DonateFloat() {
         {/* Hover tooltip — desktop only */}
         {!isMobile && hovered && <DonateTooltip />}
 
-        {/* Scroll-triggered tooltip — mobile only */}
-        {isMobile && isScrolling && <DonateTooltip />}
+        {/* Scroll-triggered tooltip — mobile only, hidden when over cards */}
+        {isMobile && isScrolling && nearTop && <DonateTooltip />}
 
         {/* FAB */}
         <button
