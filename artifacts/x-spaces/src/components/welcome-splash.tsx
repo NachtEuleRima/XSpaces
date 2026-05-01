@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUsername } from "@/hooks/use-username";
+import { openSpaceUrl } from "@/lib/open-space";
 
 const X_LOGO = (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -34,7 +35,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       const pending = localStorage.getItem("xcoms_pending_url");
       if (pending) {
         localStorage.removeItem("xcoms_pending_url");
-        window.open(pending, "_blank");
+        openSpaceUrl(pending);
       }
       await saveUsername(e.data.username);
       finish();
@@ -63,8 +64,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
         const pending = localStorage.getItem("xcoms_pending_url");
         if (pending) {
           localStorage.removeItem("xcoms_pending_url");
-          // Mobile redirect flow — navigate directly (window.open is blocked without gesture)
-          window.location.href = pending;
+          openSpaceUrl(pending);
         } else {
           finish();
         }
