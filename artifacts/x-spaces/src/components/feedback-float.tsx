@@ -166,6 +166,7 @@ export function FeedbackFloat() {
         className="feedback-wrapper"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        style={{ position: "fixed", left: 16, top: 16, zIndex: 80, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}
       >
         <div style={{ position: "relative" }}>
           {hovered && (
