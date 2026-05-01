@@ -93,14 +93,28 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
         <DialogHeader className="mb-2">
           <div className="flex justify-center mb-4">
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center"
+              className="w-14 h-14 rounded-full flex items-center justify-center"
               style={{
                 background: "hsl(195 100% 50% / 0.1)",
                 border: "1px solid hsl(195 100% 50% / 0.4)",
                 boxShadow: "0 0 20px hsl(195 100% 50% / 0.2)",
               }}
             >
-              <span style={{ fontSize: "20px", color: "hsl(195 100% 60%)" }}>✦</span>
+              {/* Starfleet delta insignia */}
+              <svg viewBox="0 0 100 120" fill="none" style={{ width: 28, height: 34 }}>
+                <path
+                  d="M50 4 L96 108 L50 88 L4 108 Z"
+                  fill="hsl(195 100% 60% / 0.15)"
+                  stroke="hsl(195 100% 60%)"
+                  strokeWidth="3"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M50 18 L82 100 L50 83 L18 100 Z"
+                  fill="hsl(195 100% 60% / 0.2)"
+                />
+                <line x1="50" y1="4" x2="50" y2="88" stroke="hsl(195 100% 60% / 0.4)" strokeWidth="1.5" />
+              </svg>
             </div>
           </div>
           <DialogTitle
