@@ -84,7 +84,7 @@ function MoreSpacesToggle({
             boxShadow: open ? `0 0 20px ${color}20` : "none",
           }}
         >
-          {open ? "▲ HIDE" : "▼ MORE"} {status === "live" ? "LIVE" : "UPCOMING"} SPACES ({spaces.length})
+          {open ? "▲ CLOSE CHANNEL" : "▼ HAIL MORE"} {status === "live" ? "SIGNALS" : "INCOMING"} ({spaces.length})
         </span>
         <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${color}30)` }} />
       </button>
@@ -227,7 +227,7 @@ export default function Home() {
 
         {/* ── LIVE NOW ── */}
         <section className="mb-24">
-          <SectionHeader color="hsl(195 100% 50%)" label="MAIN STAGE — LIVE NOW" pulse />
+          <SectionHeader color="hsl(195 100% 50%)" label="MAIN BRIDGE — LIVE TRANSMISSION" pulse />
 
           {isLoadingLive ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -243,7 +243,7 @@ export default function Home() {
               {myLive.length > 0 && (
                 <div className="mb-6">
                   <div className="text-[10px] font-mono tracking-[0.3em] text-primary/50 uppercase mb-4 pl-1">
-                    YOUR SPACES
+                    YOUR QUADRANT
                   </div>
                   <SpaceGrid spaces={myLive} />
                 </div>
@@ -262,7 +262,7 @@ export default function Home() {
 
         {/* ── UPCOMING ── */}
         <section className="mb-16">
-          <SectionHeader color="hsl(290 90% 62%)" label="UPCOMING SPECTACLES" />
+          <SectionHeader color="hsl(290 90% 62%)" label="SCHEDULED TRANSMISSIONS" />
 
           {isLoadingUpcoming ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -271,13 +271,13 @@ export default function Home() {
               ))}
             </div>
           ) : (upcomingSpaces ?? []).length === 0 ? (
-            <EmptyState color="hsl(290 90% 62%)" message="Nothing scheduled. Create chaos." />
+            <EmptyState color="hsl(290 90% 62%)" message="No transmissions scheduled. The airwaves are silent." />
           ) : (
             <>
               {myUpcoming.length > 0 && (
                 <div className="mb-6">
                   <div className="text-[10px] font-mono tracking-[0.3em] text-secondary/50 uppercase mb-4 pl-1">
-                    YOUR SPACES
+                    YOUR QUADRANT
                   </div>
                   <SpaceGrid spaces={myUpcoming} />
                 </div>

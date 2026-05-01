@@ -6,11 +6,11 @@ export function StatsTicker() {
   const { data: visitors } = useGetVisitorCount({ query: { refetchInterval: 30000 } });
 
   const items = [
-    { label: "TOTAL SPACES", value: stats?.totalSpaces ?? 0, highlight: false },
-    { label: "LIVE NOW", value: stats?.liveCount ?? 0, highlight: true },
-    { label: "UPCOMING", value: stats?.upcomingCount ?? 0, highlight: false },
-    { label: "TOTAL LISTENERS", value: stats?.totalListeners ?? 0, highlight: false },
-    { label: "UNIQUE ATTENDEES", value: visitors?.count ?? 0, highlight: false },
+    { label: "ACTIVE CHANNELS", value: stats?.totalSpaces ?? 0, highlight: false },
+    { label: "ON AIR", value: stats?.liveCount ?? 0, highlight: true },
+    { label: "INCOMING", value: stats?.upcomingCount ?? 0, highlight: false },
+    { label: "CREW ABOARD", value: stats?.totalListeners ?? 0, highlight: false },
+    { label: "UNIQUE CREW", value: visitors?.count ?? 0, highlight: false },
   ];
 
   // Duplicate for seamless loop

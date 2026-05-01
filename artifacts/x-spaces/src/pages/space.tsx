@@ -52,7 +52,7 @@ export default function SpaceDetail() {
 
       <div className="container mx-auto px-4 py-8 relative z-10">
         <Link href="/" className={`inline-flex items-center gap-2 text-muted-foreground hover:text-${themeColor} font-mono text-sm uppercase tracking-wider mb-8 transition-colors`}>
-          <ArrowLeft size={16} /> BACK TO MAIN STAGE
+          <ArrowLeft size={16} /> BACK TO BRIDGE
         </Link>
 
         <div className="max-w-4xl mx-auto">
@@ -69,7 +69,7 @@ export default function SpaceDetail() {
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-6">
                   <Badge variant="outline" className={`bg-${themeColor}/10 text-${themeColor} border-${themeColor}/50 px-4 py-1 text-sm tracking-widest uppercase`}>
-                    {isLive ? <><Radio size={14} className="mr-2 animate-pulse" /> LIVE NOW</> : <><Clock size={14} className="mr-2" /> UPCOMING</>}
+                    {isLive ? <><Radio size={14} className="mr-2 animate-pulse" /> LIVE TRANSMISSION</> : <><Clock size={14} className="mr-2" /> INCOMING</>}
                   </Badge>
                   {space.scheduledAt && !isLive && (
                     <span className="font-mono text-sm text-muted-foreground">
@@ -129,7 +129,7 @@ export default function SpaceDetail() {
                   <div>
                     <div className="font-bold text-white truncate max-w-[150px]">{space.host.displayName}</div>
                     <div className="font-mono text-xs text-muted-foreground">@{space.host.username}</div>
-                    <div className={`text-[10px] font-bold text-${themeColor} uppercase tracking-widest mt-1`}>HOST</div>
+                    <div className={`text-[10px] font-bold text-${themeColor} uppercase tracking-widest mt-1`}>COMMANDER</div>
                   </div>
                 </div>
 
@@ -143,7 +143,7 @@ export default function SpaceDetail() {
                     <div>
                       <div className="font-bold text-white/90 truncate max-w-[150px]">{p.displayName}</div>
                       <div className="font-mono text-xs text-muted-foreground">@{p.username}</div>
-                      <div className={`text-[10px] font-bold text-${themeColor}/70 uppercase tracking-widest mt-1`}>CO-HOST</div>
+                      <div className={`text-[10px] font-bold text-${themeColor}/70 uppercase tracking-widest mt-1`}>FIRST OFFICER</div>
                     </div>
                   </div>
                 ))}
@@ -158,7 +158,7 @@ export default function SpaceDetail() {
                     <div>
                       <div className="font-bold text-white/70 truncate max-w-[150px]">{p.displayName}</div>
                       <div className="font-mono text-xs text-muted-foreground">@{p.username}</div>
-                      <div className={`text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1`}>SPEAKER</div>
+                      <div className={`text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1`}>CREW</div>
                     </div>
                   </div>
                 ))}

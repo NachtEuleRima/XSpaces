@@ -56,10 +56,10 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             className="text-2xl font-black uppercase tracking-[0.15em] mb-2"
             style={{ color: "hsl(195 100% 65%)" }}
           >
-            BEFORE YOU ENTER
+            STATE YOUR DESIGNATION
           </DialogTitle>
           <DialogDescription className="text-foreground/60 font-mono text-sm leading-relaxed">
-            Drop your X handle to join the space. We save it so we remember you next time.
+            Identify yourself to Starfleet Command. Your callsign will be logged on this vessel.
           </DialogDescription>
         </DialogHeader>
 
@@ -79,7 +79,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
                 border: "1px solid hsl(195 100% 50% / 0.3)",
                 color: "hsl(195 100% 70%)",
               }}
-              placeholder="YOURHANDLE"
+              placeholder="CALLSIGN"
               value={val}
               onChange={(e) => setVal(e.target.value)}
               onFocus={e => {
@@ -113,7 +113,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
               (e.target as HTMLButtonElement).style.boxShadow = "0 0 20px hsl(195 100% 50% / 0.15)";
             }}
           >
-            {isPending ? "SYNCING..." : "ENTER THE SPACE"}
+            {isPending ? "TRANSMITTING..." : "OPEN CHANNEL"}
           </button>
         </form>
       </DialogContent>
