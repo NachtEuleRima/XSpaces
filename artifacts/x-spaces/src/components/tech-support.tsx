@@ -114,8 +114,8 @@ export function TechSupport() {
               </div>
 
               {/* Arrow */}
-              <span style={{ color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.875rem", marginLeft: "auto", flexShrink: 0 }}>
-                → X
+              <span style={{ color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.05em", fontSize: "0.7rem", marginLeft: "auto", flexShrink: 0, textAlign: "right" }}>
+                Message on X →
               </span>
             </a>
           ))}
