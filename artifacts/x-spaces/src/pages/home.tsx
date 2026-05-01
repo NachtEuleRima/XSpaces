@@ -332,7 +332,7 @@ export default function Home() {
               localStorage.removeItem("xcoms_auth_method");
               window.dispatchEvent(new Event("xcoms:signout"));
             }}
-            style={{ background: "none", border: "1px solid rgba(234,142,42,0.45)", color: "rgba(234,142,42,0.75)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em", boxShadow: "0 0 8px rgba(234,142,42,0.2)" }}
+            style={{ background: "none", border: "1px solid rgba(234,142,42,0.45)", color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em", boxShadow: "0 0 8px rgba(234,142,42,0.2)" }}
           >
             SIGN IN WITH X
           </button>
