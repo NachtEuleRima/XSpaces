@@ -1,6 +1,6 @@
 export function TechSupport() {
   const contacts = [
-    { username: "RimaSukhadia", display: "📐_Cyber_Owl_🦉", role: "Technical Inquiries" },
+    { username: "RimaSukhadia", display: "📐_Cyber_Owl_🦉", role: "Chief Engineer — Starfleet Tech Command" },
   ];
 
   return (
@@ -52,7 +52,7 @@ export function TechSupport() {
         </div>
 
         <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem", marginBottom: "1.25rem" }}>
-          Have a question? Reach out below.
+          Experiencing a system anomaly? Open a channel.
         </p>
 
         {/* Contact cards */}
@@ -115,7 +115,7 @@ export function TechSupport() {
 
               {/* Arrow */}
               <span style={{ color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.05em", fontSize: "0.7rem", marginLeft: "auto", flexShrink: 0, textAlign: "right" }}>
-                Message on X →
+                Hail on X →
               </span>
             </a>
           ))}
