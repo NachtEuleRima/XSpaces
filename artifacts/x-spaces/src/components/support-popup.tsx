@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "xcoms_support_popup_seen";
-const DELAY_MS = 3 * 60 * 1000; // 3 minutes
+const DELAY_MS = 3000; // PREVIEW — change back to 3 * 60 * 1000
 
 export function SupportPopup() {
   const [visible, setVisible] = useState(false);
