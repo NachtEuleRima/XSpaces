@@ -192,7 +192,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                   State Your Designation
                 </h2>
                 <p className="text-sm font-mono text-foreground/50 leading-relaxed">
-                  Identify yourself to personalize your quadrant
+                  Lock in your quantum signature to calibrate your quadrant
                 </p>
               </div>
 
@@ -324,7 +324,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "hsl(0 0% 100%)"; (e.currentTarget as HTMLButtonElement).style.textShadow = "0 0 20px hsl(195 100% 50% / 0.9), 0 0 40px hsl(195 100% 50% / 0.5)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "hsl(195 80% 65%)"; (e.currentTarget as HTMLButtonElement).style.textShadow = "0 0 10px hsl(195 100% 50% / 0.4)"; }}
               >
-                Skip — browse without personalization
+                Skip — browse without quantum signature
               </button>
             </div>
           </motion.div>
