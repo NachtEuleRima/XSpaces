@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "wouter";
 import { useGetSpace } from "@workspace/api-client-react";
 import { getGetSpaceQueryKey } from "@workspace/api-client-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { UsernameModal } from "@/components/username-modal";
 import { useUsername } from "@/hooks/use-username";
 import { motion } from "framer-motion";
 import { ArrowLeft, Users, Clock, Radio, Play } from "lucide-react";
@@ -15,19 +14,12 @@ export default function SpaceDetail() {
   const id = Number(params.id);
   const { data: space, isLoading } = useGetSpace(id, { query: { enabled: !!id, queryKey: getGetSpaceQueryKey(id) } });
   
-  const [modalOpen, setModalOpen] = useState(false);
-  const { username } = useUsername();
+  const { username, saveUsername } = useUsername();
 
   const handleActionClick = () => {
-    if (!username) {
-      setModalOpen(true);
-    } else if (space) {
-      window.location.href = space.spaceUrl;
-    }
-  };
-
-  const handleModalSuccess = () => {
-    if (space) window.location.href = space.spaceUrl;
+    if (!space) return;
+    if (username) saveUsername(username, space.id).catch(() => {});
+    window.location.href = space.spaceUrl;
   };
 
   if (isLoading) {
@@ -169,12 +161,6 @@ export default function SpaceDetail() {
         </div>
       </div>
 
-      <UsernameModal 
-        open={modalOpen} 
-        onOpenChange={setModalOpen} 
-        onSuccess={handleModalSuccess} 
-        spaceId={space.id} 
-      />
     </div>
   );
 }
