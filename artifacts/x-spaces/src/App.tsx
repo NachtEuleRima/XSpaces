@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -24,8 +24,14 @@ function Router() {
 }
 
 function AppShell() {
-  // Show splash on first visit only (no saved username)
   const [showSplash, setShowSplash] = useState(() => !localStorage.getItem("xcoms_username"));
+
+  // Allow any child to re-trigger the splash by dispatching "xcoms:signout"
+  useEffect(() => {
+    const handler = () => setShowSplash(true);
+    window.addEventListener("xcoms:signout", handler);
+    return () => window.removeEventListener("xcoms:signout", handler);
+  }, []);
 
   return (
     <>

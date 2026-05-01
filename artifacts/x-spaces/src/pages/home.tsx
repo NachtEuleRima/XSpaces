@@ -316,7 +316,11 @@ export default function Home() {
       {localStorage.getItem("xcoms_auth_method") === "x" && (
         <div style={{ textAlign: "center", paddingBottom: "2rem" }}>
           <button
-            onClick={() => { localStorage.removeItem("xcoms_username"); localStorage.removeItem("xcoms_auth_method"); location.reload(); }}
+            onClick={() => {
+              localStorage.removeItem("xcoms_username");
+              localStorage.removeItem("xcoms_auth_method");
+              window.dispatchEvent(new Event("xcoms:signout"));
+            }}
             style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.25)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em" }}
           >
             SIGN OUT
