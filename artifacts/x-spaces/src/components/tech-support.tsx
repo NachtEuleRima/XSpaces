@@ -46,7 +46,7 @@ export function TechSupport() {
             letterSpacing: "0.25em",
             textTransform: "uppercase",
             color: "#00e5f5",
-            textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4, 0 0 80px #00b8c4, 0 3px 18px rgba(210, 140, 10, 0.55), 0 5px 40px rgba(180, 100, 0, 0.35)",
+            textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4, 0 0 80px #00b8c4",
             animation: "neonFlicker 3s infinite",
           }}>
             TECH SUPPORT
