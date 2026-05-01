@@ -8,7 +8,7 @@ export function TechSupport() {
       style={{
         position: "relative",
         zIndex: 10,
-        padding: "4rem 1.5rem 5rem",
+        padding: "2rem 1.5rem 4rem",
         maxWidth: 480,
         margin: "0 auto",
         width: "100%",

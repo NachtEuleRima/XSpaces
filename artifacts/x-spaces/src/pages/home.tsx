@@ -244,7 +244,7 @@ export default function Home() {
 
       <StatsTicker />
 
-      <main className="flex-1 container mx-auto px-6 py-16 z-10">
+      <main className="flex-1 container mx-auto px-6 pt-16 pb-0 z-10">
 
         {/* ── LIVE NOW ── */}
         <section className="mb-24">
@@ -269,7 +269,7 @@ export default function Home() {
         </section>
 
         {/* ── UPCOMING ── */}
-        <section className="mb-16">
+        <section className="mb-0">
           <SectionHeader color="hsl(290 90% 62%)" label="SCHEDULED TRANSMISSIONS" />
 
           {isLoadingUpcoming ? (
