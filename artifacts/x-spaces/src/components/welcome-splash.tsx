@@ -138,12 +138,12 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                 disabled={xPending || isPending}
                 className="w-full h-13 py-3.5 rounded-xl transition-all flex items-center justify-center disabled:opacity-50"
                 style={{
-                  background: xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)",
-                  color: xPending ? "hsl(210 20% 96% / 0.5)" : "hsl(222 47% 6%)",
-                  border: "1px solid hsl(210 20% 96% / 0.2)",
+                  background: xPending ? "hsl(210 15% 22% / 0.4)" : "hsl(210 15% 28%)",
+                  color: xPending ? "hsl(210 20% 70% / 0.5)" : "hsl(210 20% 88%)",
+                  border: "1px solid hsl(210 20% 45% / 0.35)",
                 }}
-                onMouseEnter={e => { if (!xPending && !isPending) (e.currentTarget as HTMLButtonElement).style.background = "hsl(195 100% 90%)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)"; }}
+                onMouseEnter={e => { if (!xPending && !isPending) (e.currentTarget as HTMLButtonElement).style.background = "hsl(210 15% 35%)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = xPending ? "hsl(210 15% 22% / 0.4)" : "hsl(210 15% 28%)"; }}
               >
                 {xPending ? "Awaiting Authorization…" : (
                   <span className="flex items-center gap-2 font-black tracking-[0.12em] uppercase text-sm">
