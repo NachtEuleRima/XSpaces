@@ -311,6 +311,17 @@ export default function Home() {
       </main>
 
       <TechSupport />
+
+      {/* TEMP — remove before launch */}
+      <div style={{ textAlign: "center", paddingBottom: "2rem" }}>
+        <button
+          onClick={() => { localStorage.removeItem("xcoms_username"); location.reload(); }}
+          style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.25)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em" }}
+        >
+          SIGN OUT
+        </button>
+      </div>
+
       <UsernameCapture />
       <ScrollNav />
     </div>
