@@ -250,7 +250,7 @@ export default function Home() {
             XCOMS
           </span>
           <span className="block text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-b from-[hsl(290_90%_80%)] to-[hsl(290_90%_62%)]" style={{ filter: "drop-shadow(0 0 30px hsl(290 90% 62% / 0.4))" }}>
-            .Space
+            Space
           </span>
         </motion.h1>
 
