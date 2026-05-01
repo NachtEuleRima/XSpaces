@@ -37,11 +37,14 @@ export function DonateFloat() {
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const obs = new MutationObserver(() => {
-      setAuthModalOpen(document.body.hasAttribute("data-auth-modal"));
-    });
-    obs.observe(document.body, { attributes: true, attributeFilter: ["data-auth-modal"] });
-    return () => obs.disconnect();
+    const open = () => setAuthModalOpen(true);
+    const close = () => setAuthModalOpen(false);
+    window.addEventListener("xcoms:auth-open", open);
+    window.addEventListener("xcoms:auth-close", close);
+    return () => {
+      window.removeEventListener("xcoms:auth-open", open);
+      window.removeEventListener("xcoms:auth-close", close);
+    };
   }, []);
 
   useEffect(() => {

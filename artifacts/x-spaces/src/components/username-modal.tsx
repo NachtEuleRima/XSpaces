@@ -49,12 +49,8 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
 
   // Hide donate button while auth modal is open
   useEffect(() => {
-    if (open) {
-      document.body.setAttribute("data-auth-modal", "true");
-    } else {
-      document.body.removeAttribute("data-auth-modal");
-    }
-    return () => document.body.removeAttribute("data-auth-modal");
+    window.dispatchEvent(new CustomEvent(open ? "xcoms:auth-open" : "xcoms:auth-close"));
+    return () => { window.dispatchEvent(new CustomEvent("xcoms:auth-close")); };
   }, [open]);
 
   const handleXSignIn = () => {
