@@ -3,7 +3,7 @@ import { useState } from "react";
 /* Trek officer bust wearing a headset with mic boom */
 function HeadsetOfficerIcon() {
   return (
-    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="22" height="22" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="faceGrad" x1="11" y1="5" x2="23" y2="17" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="hsl(195 100% 80%)" />
@@ -181,8 +181,8 @@ export function FeedbackFloat() {
             aria-label="Hail the bridge — send feedback"
             style={{
               position: "relative",
-              width: 52,
-              height: 52,
+              width: 36,
+              height: 36,
               borderRadius: "50%",
               border: "1.5px solid hsl(290 85% 65% / 0.5)",
               background: "radial-gradient(circle at 38% 35%, hsl(222 60% 16%), hsl(222 60% 7%))",
