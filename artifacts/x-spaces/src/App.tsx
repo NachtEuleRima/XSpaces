@@ -22,8 +22,8 @@ function Router() {
 }
 
 function AppShell() {
-  // Show splash on every page load (temporary — for testing)
-  const [showSplash, setShowSplash] = useState(true);
+  // Show splash on first visit only (no saved username)
+  const [showSplash, setShowSplash] = useState(() => !localStorage.getItem("xcoms_username"));
 
   return (
     <>
