@@ -137,8 +137,8 @@ export default function Home() {
   const featuredCount = isMobile ? 3 : 6;
   const params = username ? { viewerUsername: username } : undefined;
 
-  const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces(params, { query: { queryKey: getGetLiveSpacesQueryKey(params), refetchInterval: 60000 } });
-  const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces(params, { query: { queryKey: getGetUpcomingSpacesQueryKey(params), refetchInterval: 60000 } });
+  const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces(params, { query: { queryKey: getGetLiveSpacesQueryKey(params), refetchInterval: 180000 } });
+  const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces(params, { query: { queryKey: getGetUpcomingSpacesQueryKey(params), refetchInterval: 10800000 } });
 
   // Featured = spaces where someone you follow is speaking/cohosting (isMine), capped at limit.
   // If no personalization, fall back to top N of everything.
