@@ -84,7 +84,7 @@ export function PostDonationToast() {
 
             <span className="xcoms-spock" style={{ fontSize: "1.6rem", lineHeight: 1 }}>🖖</span>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "center", textAlign: "center" }}>
               <span style={{
                 fontFamily: "monospace", fontWeight: 800, fontSize: "0.78rem",
                 letterSpacing: "0.08em", textTransform: "uppercase",
