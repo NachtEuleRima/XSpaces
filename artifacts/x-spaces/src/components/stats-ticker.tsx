@@ -26,20 +26,6 @@ export function StatsTicker() {
         WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
       }}
     >
-      <style>{`
-        @keyframes ticker-scroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .ticker-track {
-          animation: ticker-scroll 28s linear infinite;
-        }
-        @media (max-width: 767px) {
-          .ticker-track {
-            animation-duration: 8s;
-          }
-        }
-      `}</style>
       <div className="ticker-track flex whitespace-nowrap items-center">
         {looped.map((item, i) => (
           <span key={i} className="flex items-center shrink-0">
