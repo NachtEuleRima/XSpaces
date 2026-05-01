@@ -46,6 +46,7 @@ export function SpaceCard({ space }: { space: Space }) {
         <motion.div
           whileHover={{ scale: 1.02, translateY: -4 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          data-space-card
           className="block group relative rounded-xl bg-card overflow-hidden cursor-pointer h-full"
           style={{
             border: `1px solid ${primaryColorBorder}`,

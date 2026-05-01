@@ -33,7 +33,7 @@ export function DonateFloat() {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [nearTop, setNearTop] = useState(true);
+  const [overCard, setOverCard] = useState(false);
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -41,9 +41,17 @@ export function DonateFloat() {
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", onChange);
 
+    const checkOverCard = () => {
+      // Button fixed position: left 16px, top 56vh, size ~40px
+      const btnX = 16 + 20; // center x
+      const btnY = window.innerHeight * 0.56; // center y
+      const elements = document.elementsFromPoint(btnX, btnY);
+      const hit = elements.some(el => el.closest("[data-space-card]"));
+      setOverCard(hit);
+    };
+
     const onScroll = () => {
-      // Only show tooltip when near the top (before cards section ~350px in)
-      setNearTop(window.scrollY < 350);
+      checkOverCard();
       setIsScrolling(true);
       if (scrollTimer.current) clearTimeout(scrollTimer.current);
       scrollTimer.current = setTimeout(() => setIsScrolling(false), 800);
@@ -90,8 +98,8 @@ export function DonateFloat() {
         {/* Hover tooltip — desktop only */}
         {!isMobile && hovered && <DonateTooltip />}
 
-        {/* Scroll-triggered tooltip — mobile only, hidden when over cards */}
-        {isMobile && isScrolling && nearTop && <DonateTooltip />}
+        {/* Scroll-triggered tooltip — mobile only, hidden when over a space card */}
+        {isMobile && isScrolling && !overCard && <DonateTooltip />}
 
         {/* FAB */}
         <button
