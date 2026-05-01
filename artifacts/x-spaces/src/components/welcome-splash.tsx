@@ -209,7 +209,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                       border: "1px solid hsl(195 100% 50% / 0.25)",
                       color: "hsl(195 100% 70%)",
                     }}
-                    placeholder="YOUR CALLSIGN"
+                    placeholder="ENTER YOUR CALLSIGN"
                     value={val}
                     onChange={e => setVal(e.target.value)}
                     onFocus={e => {
