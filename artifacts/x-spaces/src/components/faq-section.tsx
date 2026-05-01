@@ -103,7 +103,7 @@ export function FaqSection() {
       `}</style>
 
       {/* Header */}
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2rem", marginBottom: "1.25rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+      <div style={{ borderTop: "1px solid rgba(210,140,10,0.35)", boxShadow: "0 -1px 8px rgba(210,140,10,0.15)", paddingTop: "2rem", marginBottom: "1.25rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
           <span style={{
             fontSize: "1.5rem",
