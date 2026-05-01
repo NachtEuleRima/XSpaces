@@ -31,10 +31,9 @@ function DonateTooltip() {
 export function DonateFloat() {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [overCard, setOverCard] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(() => !!(window as any).__xcomsModalOpen);
-  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const open = () => setAuthModalOpen(true);
