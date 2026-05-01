@@ -1,13 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const MESSAGES = [
+  { headline: "Your contribution has been logged", sub: "In the ship's manifest — Starfleet thanks you" },
+  { headline: "The Federation thanks you for your service", sub: "Your dedication is noted at Command" },
+  { headline: "You have acted with honor", sub: "The crew salutes you, warrior" },
+  { headline: "This ship flies a little further because of you", sub: "Warp engines holding steady 🚀" },
+  { headline: "Dilithium crystals recharged", sub: "Mission continues at full impulse ⚡" },
+  { headline: "Starfleet Command acknowledges your transmission", sub: "Signal received loud and clear" },
+  { headline: "You have proven yourself a true ally", sub: "Of the Federation — and this quadrant" },
+];
 
 export function PostDonationToast() {
   const [visible, setVisible] = useState(false);
+  const msgRef = useRef(MESSAGES[0]);
 
   useEffect(() => {
     const handleVisibility = () => {
       if (document.visibilityState === "visible" && sessionStorage.getItem("xcoms_payment_pending")) {
         sessionStorage.removeItem("xcoms_payment_pending");
+        msgRef.current = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
         setVisible(true);
       }
     };
@@ -77,13 +89,13 @@ export function PostDonationToast() {
                 background: "linear-gradient(90deg, hsl(195 100% 65%), hsl(290 90% 70%))",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
               }}>
-                Live long and prosper
+                {msgRef.current.headline}
               </span>
               <span style={{
                 fontFamily: "monospace", fontSize: "0.62rem",
                 color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em",
               }}>
-                May your spaces always be live 🚀
+                {msgRef.current.sub}
               </span>
             </div>
           </div>
