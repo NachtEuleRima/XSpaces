@@ -332,12 +332,9 @@ export default function Home() {
               localStorage.removeItem("xcoms_auth_method");
               window.dispatchEvent(new Event("xcoms:signout"));
             }}
-            style={{ background: "none", border: "1px solid rgba(234,142,42,0.45)", color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em", boxShadow: "0 0 8px rgba(234,142,42,0.2)", display: "inline-flex", alignItems: "center", gap: 6 }}
+            style={{ background: "none", border: "1px solid rgba(234,142,42,0.45)", color: "rgba(0,229,245,0.6)", fontFamily: "monospace", fontSize: "0.65rem", padding: "4px 12px", borderRadius: 6, cursor: "pointer", letterSpacing: "0.1em", boxShadow: "0 0 8px rgba(234,142,42,0.2)" }}
           >
-            <svg viewBox="0 0 24 24" style={{ width: 11, height: 11, fill: "rgba(0,229,245,0.6)", flexShrink: 0 }} aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-            SIGN IN
+            SIGN IN WITH X
           </button>
         )}
       </div>
