@@ -15,7 +15,8 @@ export function SpaceCard({ space }: { space: Space }) {
   const handleActionClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!isXAuthorized) {
-      // Prompt sign-in — clear any prior choice so splash re-appears
+      // Remember where they wanted to go, then prompt sign-in
+      localStorage.setItem("xcoms_pending_url", space.spaceUrl);
       localStorage.removeItem("xcoms_auth_method");
       window.dispatchEvent(new Event("xcoms:signout"));
       return;

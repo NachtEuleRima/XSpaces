@@ -20,9 +20,18 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
   const [exiting, setExiting] = useState(false);
   const popupRef = useRef<Window | null>(null);
 
-  const finish = useCallback(() => {
+  const finish = useCallback((openPending = false) => {
     setExiting(true);
-    setTimeout(onDone, 600);
+    setTimeout(() => {
+      onDone();
+      if (openPending) {
+        const pending = localStorage.getItem("xcoms_pending_url");
+        if (pending) {
+          localStorage.removeItem("xcoms_pending_url");
+          window.open(pending, "_blank");
+        }
+      }
+    }, 600);
   }, [onDone]);
 
   const handleXMessage = useCallback(async (e: MessageEvent) => {
@@ -31,7 +40,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       setXError(null);
       localStorage.setItem("xcoms_auth_method", "x");
       await saveUsername(e.data.username);
-      finish();
+      finish(true);
     } else if (e.data?.type === "x-auth-error") {
       setXError(e.data.error ?? "Sign-in failed — please try again");
       setXPending(false);
@@ -53,7 +62,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
       window.history.replaceState({}, "", window.location.pathname);
       setXPending(true);
       localStorage.setItem("xcoms_auth_method", "x");
-      saveUsername(redirectUser).then(() => finish());
+      saveUsername(redirectUser).then(() => finish(true));
     } else if (redirectError) {
       window.history.replaceState({}, "", window.location.pathname);
       setXError(redirectError);
