@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
@@ -10,6 +10,7 @@ import { WelcomeSplash } from "@/components/welcome-splash";
 import { SupportPopup } from "@/components/support-popup";
 import { DonateFloat } from "@/components/donate-float";
 import { UsernameProvider } from "@/context/username-context";
+import { useUsername } from "@/hooks/use-username";
 
 const queryClient = new QueryClient();
 
@@ -25,13 +26,21 @@ function Router() {
 
 function AppShell() {
   const [showSplash, setShowSplash] = useState(() => !localStorage.getItem("xcoms_username"));
+  const { clearUsername } = useUsername();
+  const qc = useQueryClient();
 
   // Allow any child to re-trigger the splash by dispatching "xcoms:signout"
+  // Also immediately clear the username + cached space queries so the page
+  // doesn't show stale personalized data while the new user is signing in.
   useEffect(() => {
-    const handler = () => setShowSplash(true);
+    const handler = () => {
+      clearUsername();
+      qc.invalidateQueries();
+      setShowSplash(true);
+    };
     window.addEventListener("xcoms:signout", handler);
     return () => window.removeEventListener("xcoms:signout", handler);
-  }, []);
+  }, [clearUsername, qc]);
 
   return (
     <>
