@@ -52,14 +52,16 @@ export function SupportPopup() {
         }
       `}</style>
 
-      {/* Backdrop */}
+      {/* Backdrop — tap anywhere outside to dismiss */}
       <div
         onClick={dismiss}
+        onTouchEnd={dismiss}
         style={{
           position: "fixed", inset: 0, zIndex: 90,
           background: "rgba(0,0,0,0.55)",
           backdropFilter: "blur(4px)",
           WebkitBackdropFilter: "blur(4px)",
+          cursor: "pointer",
         }}
       />
 
