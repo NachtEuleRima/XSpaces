@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 
 export function DonateFloat() {
   const [hovered, setHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  const size = isMobile ? 40 : 52;
+  const fontSize = isMobile ? 18 : 24;
 
   return (
     <>
@@ -28,12 +39,12 @@ export function DonateFloat() {
       `}</style>
 
       <div
-        style={{ position: "fixed", top: 64, right: 16, zIndex: 80 }}
+        style={{ position: "fixed", top: 64, right: 16, zIndex: 80, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* Tooltip */}
-        {hovered && (
+        {/* Hover tooltip — desktop only */}
+        {!isMobile && hovered && (
           <div style={{
             position: "absolute",
             top: "50%",
@@ -63,8 +74,8 @@ export function DonateFloat() {
           aria-label="Support — Fund the mission on Venmo"
           style={{
             position: "relative",
-            width: 52,
-            height: 52,
+            width: size,
+            height: size,
             borderRadius: "50%",
             border: "1px solid hsl(290 90% 62% / 0.45)",
             background: "linear-gradient(135deg, hsl(222 60% 9%), hsl(290 90% 10%))",
@@ -73,7 +84,7 @@ export function DonateFloat() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: 24,
+            fontSize,
             filter: "drop-shadow(0 0 10px hsl(290 90% 62% / 0.5))",
             transition: "filter 0.2s",
           }}
@@ -91,7 +102,6 @@ export function DonateFloat() {
             alignItems: "center",
             justifyContent: "center",
           }}>
-            {/* Ping ring */}
             <span
               className="heart-ping"
               style={{
@@ -104,6 +114,21 @@ export function DonateFloat() {
             <span style={{ fontSize: 9, lineHeight: 1, position: "relative", zIndex: 1 }}>💜</span>
           </span>
         </button>
+
+        {/* Persistent label — mobile only */}
+        {isMobile && (
+          <span style={{
+            fontFamily: "monospace",
+            fontSize: "0.45rem",
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "hsl(290 90% 65% / 0.7)",
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}>
+            Fund
+          </span>
+        )}
       </div>
     </>
   );
