@@ -29,6 +29,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
     if (e.data?.type === "x-auth-success" && e.data.username) {
       setXPending(true);
       setXError(null);
+      localStorage.setItem("xcoms_auth_method", "x");
       await saveUsername(e.data.username);
       finish();
     } else if (e.data?.type === "x-auth-error") {
@@ -62,6 +63,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!val.trim()) return;
+    localStorage.setItem("xcoms_auth_method", "manual");
     const ok = await saveUsername(val.trim().replace(/^@/, ""));
     if (ok) finish();
   };
