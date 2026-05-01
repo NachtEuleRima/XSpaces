@@ -44,6 +44,14 @@ export function DonationModal({ onClose }: DonationModalProps) {
   const finalAmount = custom ? parseFloat(custom) || 0 : amount;
 
   const handleFund = () => {
+    // Record the donation attempt in the database
+    const username = localStorage.getItem("xcoms_username") ?? undefined;
+    fetch("/api/donations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, amount: finalAmount, method }),
+    }).catch(() => {/* non-blocking */});
+
     if (method === "venmo") {
       const note = encodeURIComponent("Fund the Mission ⚡ XCOMS.Space");
       window.open(`${VENMO_URL}?txn=pay&amount=${finalAmount}&note=${note}`, "_blank", "noopener,noreferrer");
