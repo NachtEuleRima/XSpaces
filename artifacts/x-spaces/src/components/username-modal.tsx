@@ -16,8 +16,7 @@ const X_LOGO = (
 );
 
 export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: UsernameModalProps) {
-  const { saveUsername, isPending } = useUsername();
-  const [val, setVal] = useState("");
+  const { saveUsername } = useUsername();
   const [xPending, setXPending] = useState(false);
   const [xError, setXError] = useState<string | null>(null);
   const popupRef = useRef<Window | null>(null);
@@ -75,16 +74,6 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
     }, 500);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!val.trim()) return;
-    const ok = await saveUsername(val.trim(), spaceId);
-    if (ok) {
-      onOpenChange(false);
-      onSuccess();
-    }
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -121,7 +110,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             STATE YOUR DESIGNATION
           </DialogTitle>
           <DialogDescription className="text-foreground/60 font-mono text-sm leading-relaxed">
-            Identify yourself to Starfleet Command. Your callsign will be logged on this vessel.
+            Identify yourself to Starfleet Command
           </DialogDescription>
         </DialogHeader>
 
@@ -131,7 +120,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
           <button
             type="button"
             onClick={handleXSignIn}
-            disabled={xPending || isPending}
+            disabled={xPending}
             className="w-full h-12 rounded-lg font-black tracking-[0.12em] uppercase text-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
             style={{
               background: xPending ? "hsl(210 20% 96% / 0.12)" : "hsl(210 20% 96%)",
@@ -139,7 +128,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
               border: "1px solid hsl(210 20% 96% / 0.3)",
             }}
             onMouseEnter={e => {
-              if (!xPending && !isPending)
+              if (!xPending)
                 (e.currentTarget as HTMLButtonElement).style.background = "hsl(195 100% 90%)";
             }}
             onMouseLeave={e => {
@@ -147,7 +136,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             }}
           >
             {X_LOGO}
-            {xPending ? "AWAITING CONFIRMATION..." : "SIGN IN WITH X"}
+            {xPending ? "AWAITING CONFIRMATION..." : "AUTHORIZE WITH X"}
           </button>
 
           {xError && (
@@ -156,64 +145,6 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             </p>
           )}
 
-          {/* ── Divider ── */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.15)" }} />
-            <span className="text-[10px] font-mono tracking-[0.3em] text-foreground/30 uppercase">or enter manually</span>
-            <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.15)" }} />
-          </div>
-
-          {/* ── Manual callsign ── */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <div className="relative">
-              <span
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold font-mono"
-                style={{ color: "hsl(195 100% 50%)" }}
-              >
-                @
-              </span>
-              <input
-                className="w-full h-12 pl-10 pr-4 text-base font-mono rounded-lg outline-none transition-all text-center uppercase tracking-widest"
-                style={{
-                  background: "hsl(222 40% 10%)",
-                  border: "1px solid hsl(195 100% 50% / 0.3)",
-                  color: "hsl(195 100% 70%)",
-                }}
-                placeholder="CALLSIGN"
-                value={val}
-                onChange={(e) => setVal(e.target.value)}
-                onFocus={e => {
-                  (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.7)";
-                  (e.target as HTMLInputElement).style.boxShadow = "0 0 20px hsl(195 100% 50% / 0.2)";
-                }}
-                onBlur={e => {
-                  (e.target as HTMLInputElement).style.borderColor = "hsl(195 100% 50% / 0.3)";
-                  (e.target as HTMLInputElement).style.boxShadow = "none";
-                }}
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={!val.trim() || isPending || xPending}
-              className="w-full h-11 rounded-lg font-black tracking-[0.2em] uppercase text-sm transition-all disabled:opacity-40"
-              style={{
-                background: "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))",
-                border: "1px solid hsl(195 100% 50% / 0.5)",
-                color: "hsl(195 100% 65%)",
-                boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)",
-              }}
-              onMouseEnter={e => {
-                if (!isPending) {
-                  (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.3), hsl(290 90% 62% / 0.25))";
-                }
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))";
-              }}
-            >
-              {isPending ? "TRANSMITTING..." : "OPEN CHANNEL"}
-            </button>
-          </form>
         </div>
       </DialogContent>
     </Dialog>
