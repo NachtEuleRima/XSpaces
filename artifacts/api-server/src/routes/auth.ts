@@ -6,6 +6,7 @@ const router = Router();
 interface StateEntry {
   verifier: string;
   expires: number;
+  mode: "popup" | "redirect";
 }
 
 const stateStore = new Map<string, StateEntry>();
@@ -32,6 +33,12 @@ function popupHtml(script: string): string {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="background:#0a0f1a;color:#fff;font-family:monospace;display:flex;align-items:center;justify-content:center;height:100vh;margin:0"><p>Closing...</p><script>${script}</script></body></html>`;
 }
 
+function getAppOrigin(req: Parameters<Parameters<typeof router.get>[1]>[0]): string {
+  const host = (req.headers["x-forwarded-host"] as string) || req.headers.host || process.env["REPLIT_DEV_DOMAIN"];
+  const proto = (req.headers["x-forwarded-proto"] as string) || "https";
+  return `${proto}://${host}`;
+}
+
 router.get("/auth/x/login", (req, res) => {
   const clientId = process.env["X_CLIENT_ID"];
   if (!clientId) {
@@ -39,13 +46,13 @@ router.get("/auth/x/login", (req, res) => {
     return;
   }
 
+  const mode = req.query["mode"] === "redirect" ? "redirect" : "popup";
   const verifier = generateCodeVerifier();
   const challenge = generateCodeChallenge(verifier);
   const state = generateState();
 
-  stateStore.set(state, { verifier, expires: Date.now() + 10 * 60 * 1000 });
+  stateStore.set(state, { verifier, expires: Date.now() + 10 * 60 * 1000, mode });
 
-  // Clean up expired entries
   for (const [k, v] of stateStore) {
     if (v.expires < Date.now()) stateStore.delete(k);
   }
@@ -68,14 +75,21 @@ router.get("/auth/x/login", (req, res) => {
 router.get("/auth/x/callback", async (req, res) => {
   const { code, state, error } = req.query as Record<string, string>;
 
+  const stored = state ? stateStore.get(state) : undefined;
+  const mode = stored?.mode ?? "popup";
+  const origin = getAppOrigin(req);
+
   const fail = (msg: string) => {
-    res.send(popupHtml(`window.opener?.postMessage({type:"x-auth-error",error:${JSON.stringify(msg)}},"*");window.close();`));
+    if (mode === "redirect") {
+      res.redirect(`${origin}/?xcoms_auth_error=${encodeURIComponent(msg)}`);
+    } else {
+      res.send(popupHtml(`window.opener?.postMessage({type:"x-auth-error",error:${JSON.stringify(msg)}},"*");window.close();`));
+    }
   };
 
   if (error) { fail(error); return; }
   if (!code || !state) { fail("Missing code or state"); return; }
 
-  const stored = stateStore.get(state);
   if (!stored || stored.expires < Date.now()) {
     stateStore.delete(state);
     fail("Session expired — please try again");
@@ -123,7 +137,11 @@ router.get("/auth/x/callback", async (req, res) => {
     const username = userData.data?.username;
     if (!username) { fail("Could not read username from X"); return; }
 
-    res.send(popupHtml(`window.opener?.postMessage({type:"x-auth-success",username:${JSON.stringify(username)}},"*");window.close();`));
+    if (mode === "redirect") {
+      res.redirect(`${origin}/?xcoms_user=${encodeURIComponent(username)}`);
+    } else {
+      res.send(popupHtml(`window.opener?.postMessage({type:"x-auth-success",username:${JSON.stringify(username)}},"*");window.close();`));
+    }
   } catch {
     fail("Authentication failed — please try again");
   }

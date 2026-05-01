@@ -43,8 +43,31 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
     return () => window.removeEventListener("message", handleXMessage);
   }, [handleXMessage]);
 
+  // Handle redirect-mode return: ?xcoms_user=USERNAME or ?xcoms_auth_error=...
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const redirectUser = params.get("xcoms_user");
+    const redirectError = params.get("xcoms_auth_error");
+    if (redirectUser) {
+      // Clean the URL first
+      window.history.replaceState({}, "", window.location.pathname);
+      setXPending(true);
+      localStorage.setItem("xcoms_auth_method", "x");
+      saveUsername(redirectUser).then(() => finish());
+    } else if (redirectError) {
+      window.history.replaceState({}, "", window.location.pathname);
+      setXError(redirectError);
+    }
+  }, [saveUsername, finish]);
+
+  const isMobile = () => /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+
   const handleXSignIn = () => {
     setXError(null);
+    if (isMobile()) {
+      window.location.href = "/api/auth/x/login?mode=redirect";
+      return;
+    }
     const w = 600, h = 700;
     const left = window.screenX + (window.outerWidth - w) / 2;
     const top = window.screenY + (window.outerHeight - h) / 2;
