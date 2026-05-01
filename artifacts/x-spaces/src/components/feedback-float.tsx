@@ -1,4 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return isMobile;
+}
 
 /* Trek officer bust wearing a headset with mic boom */
 function HeadsetOfficerIcon() {
@@ -29,26 +39,22 @@ function HeadsetOfficerIcon() {
       {/* Uniform collar trim — gold */}
       <path d="M12 21 L17 26 L22 21" fill="none" stroke="hsl(42 90% 65%)" strokeWidth="1.1" strokeLinejoin="round"/>
       {/* Starfleet delta badge on chest — classic hollow arrowhead */}
-      {/* Outer gold delta */}
       <path d="M17 20.5 L21.8 29 L17 26.8 L12.2 29 Z"
         fill="url(#deltaGrad)" filter="url(#softGlow)" />
-      {/* Inner cutout — gives the hollow classic look */}
       <path d="M17 22.8 L20.2 28 L17 26 L13.8 28 Z"
         fill="hsl(222 60% 13%)" opacity="0.82" />
-      {/* Shine highlight on left face of delta */}
       <path d="M17 21.5 L14.2 28 L17 26 Z"
         fill="hsl(48 100% 85%)" opacity="0.18" />
 
       {/* Head */}
       <circle cx="17" cy="12" r="6.5" fill="url(#faceGrad)" filter="url(#softGlow)" />
-      {/* Face shadow / depth */}
       <circle cx="17" cy="12" r="5.5" fill="hsl(215 70% 60%)" opacity="0.25" />
 
-      {/* Eyes — two small dots */}
+      {/* Eyes */}
       <circle cx="14.8" cy="11.5" r="0.8" fill="hsl(222 60% 12%)" opacity="0.7"/>
       <circle cx="19.2" cy="11.5" r="0.8" fill="hsl(222 60% 12%)" opacity="0.7"/>
 
-      {/* Headset band arc over head */}
+      {/* Headset band */}
       <path d="M10 11.5 C10 5 24 5 24 11.5"
         stroke="hsl(290 85% 70%)" strokeWidth="1.5" fill="none" strokeLinecap="round"
         filter="url(#softGlow)"
@@ -62,19 +68,17 @@ function HeadsetOfficerIcon() {
         fill="hsl(290 85% 20%)" stroke="hsl(290 85% 70%)" strokeWidth="1"
       />
 
-      {/* Mic boom — curves down from right ear cup */}
+      {/* Mic boom */}
       <path d="M24 14.5 C26 16 25.5 18.5 23.5 19.5"
         stroke="hsl(195 100% 65%)" strokeWidth="1" fill="none" strokeLinecap="round"
         filter="url(#softGlow)"
       />
-      {/* Mic capsule at boom tip */}
       <circle cx="23" cy="20" r="1.4"
         fill="hsl(195 100% 50%)" filter="url(#softGlow)"
       />
-      {/* Mic active dot */}
       <circle cx="23" cy="20" r="0.6" fill="white" opacity="0.9"/>
 
-      {/* Small sound-wave arcs left of mic — "listening/transmitting" */}
+      {/* Sound-wave arcs */}
       <path d="M20.5 18 C21.2 19 21.2 21 20.5 22"
         stroke="hsl(195 100% 65% / 0.6)" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
       <path d="M19 17 C20.2 18.5 20.2 21.5 19 23"
@@ -85,13 +89,29 @@ function HeadsetOfficerIcon() {
 
 export function FeedbackFloat() {
   const [hovered, setHovered] = useState(false);
+  const isMobile = useIsMobile();
+  const [autoShow, setAutoShow] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const show = () => {
+      setAutoShow(true);
+      setTimeout(() => setAutoShow(false), 2000);
+    };
+    // First flash after 2s so it's not immediate on load
+    const initial = setTimeout(show, 2000);
+    const interval = setInterval(show, 5000);
+    return () => {
+      clearTimeout(initial);
+      clearInterval(interval);
+    };
+  }, [isMobile]);
+
+  const showTooltip = hovered || autoShow;
+
   return (
     <>
       <style>{`
-        @keyframes cb-float {
-          0%, 100% { transform: translateY(0px); }
-          50%       { transform: translateY(-6px); }
-        }
         @keyframes cb-ping {
           0%   { transform: scale(1); opacity: 0.65; }
           100% { transform: scale(2.4); opacity: 0; }
@@ -104,6 +124,12 @@ export function FeedbackFloat() {
           0%, 80%, 100% { opacity: 1; }
           90% { opacity: 0.15; }
         }
+        @keyframes tooltip-pop {
+          0%   { opacity: 0; transform: translateY(-50%) translateX(-6px); }
+          20%  { opacity: 1; transform: translateY(-50%) translateX(0); }
+          80%  { opacity: 1; transform: translateY(-50%) translateX(0); }
+          100% { opacity: 0; transform: translateY(-50%) translateX(-6px); }
+        }
         .cb-fab { animation: none; }
         .cb-fab:hover {
           filter: drop-shadow(0 0 16px hsl(195 100% 55% / 0.95)) drop-shadow(0 0 24px hsl(290 85% 65% / 0.5)) !important;
@@ -115,7 +141,6 @@ export function FeedbackFloat() {
           display: flex; flex-direction: column; align-items: center; gap: 5px;
           pointer-events: auto;
         }
-
         .feedback-label {
           font-family: monospace;
           font-size: 0.42rem;
@@ -129,7 +154,6 @@ export function FeedbackFloat() {
         .feedback-wrapper:hover .feedback-label {
           color: hsl(195 100% 70% / 0.9);
         }
-
         .tooltip-bubble {
           position: absolute;
           top: 50%;
@@ -150,6 +174,12 @@ export function FeedbackFloat() {
           text-align: center;
           white-space: nowrap;
         }
+        .tooltip-bubble.hover-show {
+          opacity: 1;
+        }
+        .tooltip-bubble.auto-show {
+          animation: tooltip-pop 2s ease forwards;
+        }
         .tooltip-bubble::after {
           content: '';
           position: absolute;
@@ -167,8 +197,8 @@ export function FeedbackFloat() {
         style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, pointerEvents: "auto" }}
       >
         <div style={{ position: "relative" }}>
-          {hovered && (
-            <div className="tooltip-bubble">
+          {showTooltip && (
+            <div className={`tooltip-bubble ${hovered ? "hover-show" : "auto-show"}`}>
               <div>Hail</div>
               <div style={{ opacity: 0.65 }}>bridge</div>
             </div>
