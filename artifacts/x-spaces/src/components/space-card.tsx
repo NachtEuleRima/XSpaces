@@ -99,15 +99,15 @@ export function SpaceCard({ space }: { space: Space }) {
                       <div
                         className="flex items-center gap-1.5 text-[10px] font-mono tracking-[0.15em] font-bold uppercase px-2 py-1 rounded-full whitespace-nowrap"
                         style={{
-                          color: "hsl(0 90% 72%)",
-                          background: "hsl(0 90% 50% / 0.12)",
-                          border: "1px solid hsl(0 90% 55% / 0.5)",
-                          boxShadow: "0 0 10px hsl(0 90% 50% / 0.25), inset 0 1px 0 hsl(0 90% 80% / 0.15)",
+                          color: "hsl(348 100% 75%)",
+                          background: "hsl(348 100% 55% / 0.12)",
+                          border: "1px solid hsl(348 100% 60% / 0.5)",
+                          boxShadow: "0 0 10px hsl(348 100% 55% / 0.3), inset 0 1px 0 hsl(348 100% 85% / 0.15)",
                         }}
                       >
                         <span
                           className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
-                          style={{ background: "hsl(0 90% 60%)", boxShadow: "0 0 6px hsl(0 90% 55%)" }}
+                          style={{ background: "hsl(348 100% 62%)", boxShadow: "0 0 6px hsl(348 100% 60%)" }}
                         />
                         LIVE
                       </div>
