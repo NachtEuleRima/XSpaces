@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const AMOUNTS = [4.2, 6.9, 42, 69];
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
@@ -30,6 +30,12 @@ function PayPalIcon() {
 }
 
 
+const X_LOGO = (
+  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 16, height: 16, display: "inline-block", verticalAlign: "middle" }}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.261 5.632 5.903-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
 type Method = "venmo" | "cashapp" | "paypal";
 
 interface DonationModalProps {
@@ -40,30 +46,74 @@ export function DonationModal({ onClose }: DonationModalProps) {
   const [amount, setAmount] = useState(4.2);
   const [custom, setCustom] = useState("");
   const [method, setMethod] = useState<Method>("venmo");
+  const [showAuth, setShowAuth] = useState(false);
+  const [xPending, setXPending] = useState(false);
+  const [xError, setXError] = useState<string | null>(null);
+  const popupRef = useRef<Window | null>(null);
 
   const finalAmount = custom ? parseFloat(custom) || 0 : amount;
 
-  const handleFund = () => {
-    // Record the donation attempt in the database
-    const username = localStorage.getItem("xcoms_username") ?? undefined;
+  const proceedToPayment = useCallback((username?: string) => {
+    const user = username ?? localStorage.getItem("xcoms_username") ?? undefined;
     fetch("/api/donations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, amount: finalAmount, method }),
-    }).catch(() => {/* non-blocking */});
+      body: JSON.stringify({ username: user, amount: finalAmount, method }),
+    }).catch(() => {});
 
     if (method === "venmo") {
       const note = encodeURIComponent("Fund the Mission ⚡ XCOMS.Space");
       window.open(`${VENMO_URL}?txn=pay&amount=${finalAmount}&note=${note}`, "_blank", "noopener,noreferrer");
-      onClose();
     } else if (method === "cashapp") {
       window.open(`${CASHAPP_URL}?amount=${finalAmount}`, "_blank", "noopener,noreferrer");
-      onClose();
     } else if (method === "paypal") {
       window.open(PAYPAL_URL, "_blank", "noopener,noreferrer");
-      onClose();
     }
+    onClose();
+  }, [finalAmount, method, onClose]);
+
+  const handleFund = () => {
+    const username = localStorage.getItem("xcoms_username");
+    if (!username) {
+      setShowAuth(true);
+      return;
+    }
+    proceedToPayment(username);
   };
+
+  const handleXSignIn = () => {
+    setXError(null);
+    const w = 600, h = 700;
+    const left = window.screenX + (window.outerWidth - w) / 2;
+    const top = window.screenY + (window.outerHeight - h) / 2;
+    const popup = window.open("/api/auth/x/login", "x-oauth", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+    if (!popup) { setXError("Popup blocked — please allow popups"); return; }
+    popupRef.current = popup;
+    setXPending(true);
+    const poll = setInterval(() => {
+      if (popup.closed) { clearInterval(poll); setXPending(false); }
+    }, 500);
+  };
+
+  const handleXMessage = useCallback(async (e: MessageEvent) => {
+    if (e.data?.type === "x-auth-success" && e.data.username) {
+      const username = e.data.username.replace(/^@/, "").toLowerCase().trim();
+      localStorage.setItem("xcoms_username", username);
+      localStorage.setItem("xcoms_auth_method", "x");
+      window.dispatchEvent(new CustomEvent("xcoms:auth-close"));
+      setXPending(false);
+      setShowAuth(false);
+      proceedToPayment(username);
+    } else if (e.data?.type === "x-auth-error") {
+      setXError(e.data.error ?? "Sign-in failed");
+      setXPending(false);
+    }
+  }, [proceedToPayment]);
+
+  useEffect(() => {
+    window.addEventListener("message", handleXMessage);
+    return () => window.removeEventListener("message", handleXMessage);
+  }, [handleXMessage]);
 
   const methods: { id: Method; label: string; icon: React.ReactNode; color: string }[] = [
     { id: "venmo",   label: "Venmo",    icon: <VenmoIcon />,   color: "hsl(210 100% 60%)" },
@@ -133,6 +183,49 @@ export function DonationModal({ onClose }: DonationModalProps) {
           aria-label="Close"
         >✕</button>
 
+        {/* Auth gate step */}
+        {showAuth && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", textAlign: "center", padding: "0.5rem 0" }}>
+            <div style={{ fontFamily: "monospace", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "hsl(195 100% 55%)" }}>
+              IDENTIFY BEFORE TRANSMITTING
+            </div>
+            <p style={{ fontSize: "1.1rem", fontWeight: 800, color: "white", margin: 0, lineHeight: 1.3 }}>
+              State your designation<br />
+              <span style={{ background: "linear-gradient(90deg, hsl(195 100% 65%), hsl(290 90% 70%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                to proceed
+              </span>
+            </p>
+            <p style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", fontFamily: "monospace", lineHeight: 1.6, margin: 0 }}>
+              Your callsign will be logged<br />with your contribution
+            </p>
+            <button
+              onClick={handleXSignIn}
+              disabled={xPending}
+              style={{
+                width: "100%", padding: "0.85rem", borderRadius: 12,
+                background: "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))",
+                border: "1px solid hsl(195 100% 50% / 0.5)",
+                color: xPending ? "hsl(195 100% 65% / 0.4)" : "hsl(195 100% 70%)",
+                fontFamily: "monospace", fontWeight: 700, fontSize: "0.82rem",
+                letterSpacing: "0.12em", textTransform: "uppercase",
+                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)",
+                opacity: xPending ? 0.6 : 1,
+              }}
+            >
+              {xPending ? "AWAITING CONFIRMATION..." : <>AUTHORIZE WITH {X_LOGO}</>}
+            </button>
+            {xError && <p style={{ fontSize: "0.65rem", color: "hsl(0 80% 65%)", fontFamily: "monospace", margin: 0 }}>{xError}</p>}
+            <button
+              onClick={() => setShowAuth(false)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "monospace", fontSize: "0.6rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}
+            >
+              ← back
+            </button>
+          </div>
+        )}
+
+        {!showAuth && <>
         {/* Header */}
         <div style={{ textAlign: "center" }}>
           <div style={{
@@ -155,8 +248,6 @@ export function DonationModal({ onClose }: DonationModalProps) {
             This vessel runs on dilithium crystals<br />and caffeine. Help keep the shields up.
           </p>
         </div>
-
-        {/* Amount picker */}
         <div>
           <p style={{ fontSize: "0.58rem", fontFamily: "monospace", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", marginBottom: "0.5rem" }}>
             Select amount
@@ -262,6 +353,7 @@ export function DonationModal({ onClose }: DonationModalProps) {
         <p style={{ textAlign: "center", fontSize: "0.58rem", fontFamily: "monospace", color: "rgba(255,255,255,0.18)", letterSpacing: "0.1em", margin: 0 }}>
           Secured · Opens your payment app
         </p>
+        </>}
       </div>
     </>
   );
