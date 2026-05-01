@@ -15,14 +15,15 @@ function isOwnerSpace(space: typeof spacesTable.$inferSelect): boolean {
   const coHosts = space.coHosts as Participant[];
   const speakers = space.speakers as Participant[];
   const all = [host, ...coHosts, ...speakers].filter(Boolean) as Participant[];
-  const allUsernames = all.map(p => p.username?.toLowerCase() ?? "");
+  const allUsernames = all.map(p => p.username?.toLowerCase() ?? "").filter(Boolean);
 
-  // True if the owner is a participant OR the host is someone the owner follows
+  // True if the owner themselves is a participant
   if (OWNER_USERNAME && allUsernames.includes(OWNER_USERNAME)) return true;
 
+  // True if ANY participant (host, co-host, or speaker) is someone the owner follows
   const following = getFollowingUsernamesCache();
-  const hostUsername = (host?.username ?? "").toLowerCase();
-  return following.size > 0 && following.has(hostUsername);
+  if (following.size === 0) return false;
+  return allUsernames.some(u => following.has(u));
 }
 
 function formatSpace(space: typeof spacesTable.$inferSelect) {
