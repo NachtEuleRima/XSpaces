@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 /* Trek officer bust wearing a headset with mic boom */
 function HeadsetOfficerIcon() {
@@ -86,7 +87,7 @@ function HeadsetOfficerIcon() {
 export function FeedbackFloat() {
   const [hovered, setHovered] = useState(false);
 
-  return (
+  return createPortal(
     <>
       <style>{`
         @keyframes cb-float {
@@ -215,6 +216,7 @@ export function FeedbackFloat() {
         {/* Always-visible label below button */}
         <span className="feedback-label">feedback</span>
       </div>
-    </>
+    </>,
+    document.body
   );
 }

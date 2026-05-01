@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 
 function DonateTooltip() {
@@ -81,7 +82,7 @@ export function DonateFloat() {
 
   if (authModalOpen) return null;
 
-  return (
+  return createPortal(
     <>
       <style>{`
         @keyframes donate-float {
@@ -166,6 +167,7 @@ export function DonateFloat() {
           </span>
         </button>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
