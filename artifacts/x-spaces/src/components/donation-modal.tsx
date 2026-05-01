@@ -248,7 +248,7 @@ export function DonationModal({ onClose }: DonationModalProps) {
               transition: "background 0.2s",
             }}
           >
-            ⚡ {ctaLabel}
+            ⚡ FUND THE MISSION ⚡
           </button>
 
         <p style={{ textAlign: "center", fontSize: "0.58rem", fontFamily: "monospace", color: "rgba(255,255,255,0.18)", letterSpacing: "0.1em", margin: 0 }}>
