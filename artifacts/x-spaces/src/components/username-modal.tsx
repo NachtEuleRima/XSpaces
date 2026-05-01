@@ -107,7 +107,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
             className="text-2xl font-black uppercase tracking-[0.15em] mb-2"
             style={{ color: "hsl(195 100% 65%)" }}
           >
-            STATE YOUR DESIGNATION
+            XFLEET COMMAND
           </DialogTitle>
           <DialogDescription className="text-foreground/60 font-mono text-sm leading-relaxed">
             Identify yourself to Starfleet Command
