@@ -269,7 +269,7 @@ export default function Home() {
         </section>
 
         {/* ── UPCOMING ── */}
-        <section className="mb-16">
+        <section className="mb-0">
           <SectionHeader color="hsl(290 90% 62%)" label="SCHEDULED TRANSMISSIONS" />
 
           {isLoadingUpcoming ? (

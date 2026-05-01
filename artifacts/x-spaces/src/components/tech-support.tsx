@@ -8,7 +8,7 @@ export function TechSupport() {
       style={{
         position: "relative",
         zIndex: 10,
-        padding: "4rem 1.5rem 5rem",
+        padding: "2rem 1.5rem 4rem",
         maxWidth: 480,
         margin: "0 auto",
         width: "100%",
@@ -21,7 +21,7 @@ export function TechSupport() {
         }
       `}</style>
 
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1.5rem", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
 
         {/* Header */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
