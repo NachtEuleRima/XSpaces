@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Space, SpaceParticipant } from "@workspace/api-client-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { UsernameModal } from "./username-modal";
 import { useUsername } from "@/hooks/use-username";
 
 export function SpaceCard({ space }: { space: Space }) {
   const isLive = space.status === "live";
-  const isUpcoming = space.status === "upcoming";
   const [modalOpen, setModalOpen] = useState(false);
   const { username } = useUsername();
 
@@ -19,107 +16,218 @@ export function SpaceCard({ space }: { space: Space }) {
     if (!username) {
       setModalOpen(true);
     } else {
-      window.location.href = space.spaceUrl;
+      window.open(space.spaceUrl, "_blank");
     }
   };
 
   const handleModalSuccess = () => {
-    window.location.href = space.spaceUrl;
+    window.open(space.spaceUrl, "_blank");
   };
 
-  const ringColor = isLive ? "ring-primary" : "ring-accent";
-  const glowShadow = isLive ? "shadow-[0_0_30px_-5px_rgba(255,0,128,0.5)]" : "shadow-[0_0_15px_-5px_rgba(0,255,255,0.3)]";
+  // Cyan for live, magenta for upcoming
+  const primaryColor = isLive
+    ? "hsl(195 100% 50%)"
+    : "hsl(290 90% 62%)";
+  const primaryColorFaded = isLive
+    ? "hsl(195 100% 50% / 0.15)"
+    : "hsl(290 90% 62% / 0.15)";
+  const primaryColorBorder = isLive
+    ? "hsl(195 100% 50% / 0.35)"
+    : "hsl(290 90% 62% / 0.35)";
 
   return (
     <>
       <Link href={`/space/${space.id}`}>
-        <motion.div 
-          whileHover={{ scale: 1.02 }}
-          className={`block group relative rounded-xl border-2 ${isLive ? 'border-primary animate-neon-pulse' : 'border-accent/50'} bg-card p-6 ${glowShadow} overflow-hidden cursor-pointer`}
+        <motion.div
+          whileHover={{ scale: 1.02, translateY: -4 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="block group relative rounded-xl bg-card overflow-hidden cursor-pointer h-full"
+          style={{
+            border: `1px solid ${primaryColorBorder}`,
+            boxShadow: isLive
+              ? `0 0 0 1px ${primaryColorFaded}, 0 4px 30px hsl(195 100% 50% / 0.12), 0 0 60px hsl(195 100% 50% / 0.06)`
+              : `0 0 0 1px ${primaryColorFaded}, 0 4px 20px hsl(290 90% 62% / 0.08)`,
+            animation: isLive ? "neon-pulse 2.5s ease-in-out infinite" : "none",
+          }}
         >
-          {isLive && (
-            <div className="absolute top-0 right-0 p-4">
-              <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-widest animate-pulse">
-                <span className="h-2 w-2 rounded-full bg-primary" />
+          {/* Top color bar */}
+          <div
+            className="absolute top-0 left-0 right-0 h-[2px]"
+            style={{ background: `linear-gradient(to right, transparent, ${primaryColor}, transparent)` }}
+          />
+
+          {/* Status badge */}
+          <div className="absolute top-4 right-4 z-10">
+            {isLive ? (
+              <div
+                className="flex items-center gap-1.5 text-xs font-mono tracking-[0.15em] font-bold uppercase px-2.5 py-1 rounded-full"
+                style={{
+                  color: "hsl(195 100% 65%)",
+                  background: "hsl(195 100% 50% / 0.1)",
+                  border: "1px solid hsl(195 100% 50% / 0.3)",
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full animate-pulse"
+                  style={{ background: "hsl(195 100% 50%)", boxShadow: "0 0 6px hsl(195 100% 50%)" }}
+                />
                 LIVE
               </div>
-            </div>
-          )}
-
-          {isUpcoming && space.scheduledAt && (
-            <div className="absolute top-0 right-0 p-4">
-              <div className="text-accent font-mono text-xs opacity-70">
-                {new Date(space.scheduledAt).toLocaleString()}
+            ) : space.scheduledAt ? (
+              <div
+                className="text-xs font-mono tracking-[0.1em] px-2.5 py-1 rounded-full"
+                style={{
+                  color: "hsl(290 90% 75%)",
+                  background: "hsl(290 90% 62% / 0.1)",
+                  border: "1px solid hsl(290 90% 62% / 0.25)",
+                }}
+              >
+                {new Date(space.scheduledAt).toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </div>
-            </div>
-          )}
+            ) : null}
+          </div>
 
-          <div className="flex flex-col gap-4">
-            <div>
-              <h2 className="text-2xl font-black text-foreground uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-2">
+          <div className="p-6 flex flex-col gap-5">
+            {/* Title */}
+            <div className="pr-16">
+              <h2
+                className="text-xl font-black uppercase tracking-tight leading-tight line-clamp-2 transition-colors"
+                style={{ color: "hsl(210 20% 96%)" }}
+              >
                 {space.title}
               </h2>
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2 font-mono">
+              <p className="text-sm text-muted-foreground mt-2 line-clamp-2 font-mono leading-relaxed">
                 {space.description}
               </p>
             </div>
 
+            {/* Tags */}
             <div className="flex flex-wrap gap-2">
               {space.topicTags.map(tag => (
-                <Badge key={tag} variant="outline" className={`bg-transparent border-${isLive ? 'primary' : 'accent'}/50 text-${isLive ? 'primary' : 'accent'} uppercase text-xs tracking-wider`}>
+                <span
+                  key={tag}
+                  className="text-[10px] font-mono tracking-[0.15em] uppercase px-2.5 py-1 rounded-full"
+                  style={{
+                    color: primaryColor,
+                    background: primaryColorFaded,
+                    border: `1px solid ${primaryColorBorder}`,
+                  }}
+                >
                   #{tag}
-                </Badge>
+                </span>
               ))}
             </div>
 
-            <div className="flex items-center gap-4 mt-2">
-              <div className="flex -space-x-4">
-                <ParticipantAvatar participant={space.host} size="lg" ringColor={ringColor} />
+            {/* Participants */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {/* Host */}
+                <ParticipantAvatar participant={space.host} size="lg" color={primaryColor} />
+                {/* Co-hosts */}
                 {space.coHosts.slice(0, 2).map((p, i) => (
-                  <ParticipantAvatar key={i} participant={p} size="md" ringColor={ringColor} />
+                  <ParticipantAvatar key={i} participant={p} size="md" color={primaryColor} />
                 ))}
+                {/* Speakers */}
                 {space.speakers.slice(0, 3).map((p, i) => (
-                  <ParticipantAvatar key={i} participant={p} size="sm" ringColor={ringColor} />
+                  <ParticipantAvatar key={i} participant={p} size="sm" color={primaryColor} />
                 ))}
+                {space.speakers.length > 3 && (
+                  <span className="text-xs font-mono text-muted-foreground ml-1">
+                    +{space.speakers.length - 3}
+                  </span>
+                )}
               </div>
-              <div className="text-xs font-mono text-muted-foreground">
-                <span className="text-foreground font-bold">{space.listenerCount.toLocaleString()}</span> LISTENING
-              </div>
+              {isLive && (
+                <div className="text-right">
+                  <div
+                    className="text-lg font-black tabular-nums"
+                    style={{ color: primaryColor }}
+                  >
+                    {space.listenerCount.toLocaleString()}
+                  </div>
+                  <div className="text-[10px] font-mono tracking-[0.15em] text-muted-foreground uppercase">
+                    listening
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="pt-4">
-              <Button 
-                onClick={handleActionClick}
-                className={`w-full font-bold tracking-widest uppercase ${isLive ? 'bg-primary text-primary-foreground hover:bg-primary/80' : 'bg-accent text-accent-foreground hover:bg-accent/80'}`}
-              >
-                {isLive ? "JOIN THE CHAOS" : "SET REMINDER"}
-              </Button>
-            </div>
+            {/* CTA */}
+            <button
+              onClick={handleActionClick}
+              className="w-full py-3 rounded-lg font-bold tracking-[0.15em] uppercase text-sm transition-all duration-200 mt-1"
+              style={{
+                background: isLive
+                  ? "linear-gradient(135deg, hsl(195 100% 50% / 0.15), hsl(195 100% 50% / 0.08))"
+                  : "linear-gradient(135deg, hsl(290 90% 62% / 0.15), hsl(290 90% 62% / 0.08))",
+                border: `1px solid ${primaryColorBorder}`,
+                color: primaryColor,
+              }}
+              onMouseEnter={e => {
+                (e.target as HTMLButtonElement).style.background = isLive
+                  ? "hsl(195 100% 50% / 0.25)"
+                  : "hsl(290 90% 62% / 0.25)";
+              }}
+              onMouseLeave={e => {
+                (e.target as HTMLButtonElement).style.background = isLive
+                  ? "linear-gradient(135deg, hsl(195 100% 50% / 0.15), hsl(195 100% 50% / 0.08))"
+                  : "linear-gradient(135deg, hsl(290 90% 62% / 0.15), hsl(290 90% 62% / 0.08))";
+              }}
+            >
+              {isLive ? "JOIN THE SPACE" : "VIEW DETAILS"}
+            </button>
           </div>
         </motion.div>
       </Link>
-      <UsernameModal 
-        open={modalOpen} 
-        onOpenChange={setModalOpen} 
-        onSuccess={handleModalSuccess} 
-        spaceId={space.id} 
+      <UsernameModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onSuccess={handleModalSuccess}
+        spaceId={space.id}
       />
     </>
   );
 }
 
-function ParticipantAvatar({ participant, size, ringColor }: { participant: SpaceParticipant, size: "sm" | "md" | "lg", ringColor: string }) {
+function ParticipantAvatar({
+  participant,
+  size,
+  color,
+}: {
+  participant: SpaceParticipant;
+  size: "sm" | "md" | "lg";
+  color: string;
+}) {
   const sizeClasses = {
-    sm: "h-8 w-8 z-10",
-    md: "h-10 w-10 z-20",
-    lg: "h-14 w-14 z-30"
+    sm: "h-7 w-7",
+    md: "h-9 w-9",
+    lg: "h-11 w-11",
   };
 
   return (
-    <Avatar className={`${sizeClasses[size]} ring-2 ${ringColor} bg-background`}>
+    <Avatar
+      className={`${sizeClasses[size]} shrink-0`}
+      style={{
+        ring: "2px solid " + color,
+        outline: `2px solid ${color}`,
+        outlineOffset: "1px",
+        boxShadow: `0 0 8px ${color}40`,
+      }}
+    >
       <AvatarImage src={participant.avatarUrl || undefined} alt={participant.displayName} />
-      <AvatarFallback className="font-mono text-xs font-bold uppercase bg-background text-foreground">
-        {participant.username.slice(0, 2)}
+      <AvatarFallback
+        className="font-mono text-xs font-bold uppercase"
+        style={{
+          background: "hsl(222 40% 12%)",
+          color: color,
+        }}
+      >
+        {participant.username.slice(0, 2).toUpperCase()}
       </AvatarFallback>
     </Avatar>
   );
