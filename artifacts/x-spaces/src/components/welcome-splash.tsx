@@ -243,10 +243,10 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               <button
                 type="button"
                 onClick={() => { localStorage.setItem("xcoms_auth_method", "skip"); finish(); }}
-                className="text-[10px] font-mono tracking-[0.2em] uppercase transition-colors"
-                style={{ color: "hsl(210 20% 50%)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "hsl(210 20% 72%)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "hsl(210 20% 50%)"; }}
+                className="text-[10px] font-mono tracking-[0.2em] uppercase transition-all"
+                style={{ color: "hsl(195 80% 65%)", textShadow: "0 0 10px hsl(195 100% 50% / 0.4)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "hsl(195 100% 78%)"; (e.currentTarget as HTMLButtonElement).style.textShadow = "0 0 16px hsl(195 100% 50% / 0.7)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "hsl(195 80% 65%)"; (e.currentTarget as HTMLButtonElement).style.textShadow = "0 0 10px hsl(195 100% 50% / 0.4)"; }}
               >
                 Skip — browse without personalization
               </button>
