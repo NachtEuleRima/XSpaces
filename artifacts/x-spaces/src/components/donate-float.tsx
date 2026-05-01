@@ -1,16 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const VENMO_URL = "https://venmo.com/u/Rima-Sukhadia";
 
 export function DonateFloat() {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+
+    const onScroll = () => {
+      setIsScrolling(true);
+      if (scrollTimer.current) clearTimeout(scrollTimer.current);
+      scrollTimer.current = setTimeout(() => setIsScrolling(false), 800);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      mq.removeEventListener("change", onChange);
+      window.removeEventListener("scroll", onScroll);
+      if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    };
   }, []);
 
   const size = isMobile ? 40 : 52;
@@ -115,19 +129,29 @@ export function DonateFloat() {
           </span>
         </button>
 
-        {/* Persistent label — mobile only */}
-        {isMobile && (
-          <span style={{
-            fontFamily: "monospace",
-            fontSize: "0.45rem",
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: "hsl(290 90% 65% / 0.7)",
+        {/* Scroll-triggered tooltip — mobile only */}
+        {isMobile && isScrolling && (
+          <div style={{
+            position: "absolute",
+            top: "50%",
+            right: "calc(100% + 10px)",
+            transform: "translateY(-50%)",
             whiteSpace: "nowrap",
+            background: "hsl(222 60% 7%)",
+            border: "1px solid hsl(290 90% 62% / 0.35)",
+            borderRadius: 8,
+            padding: "0.35rem 0.75rem",
+            fontFamily: "monospace",
+            fontSize: "0.6rem",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "hsl(290 90% 75%)",
+            boxShadow: "0 0 16px hsl(290 90% 62% / 0.2)",
             pointerEvents: "none",
+            transition: "opacity 0.3s",
           }}>
-            Fund
-          </span>
+            Fund the mission
+          </div>
         )}
       </div>
     </>
