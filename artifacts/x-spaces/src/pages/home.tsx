@@ -194,7 +194,7 @@ export default function Home() {
           style={{ boxShadow: "0 0 20px hsl(195 100% 50% / 0.15)" }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          XCOMS // LIVE NOW
+          XCOMS // OPEN CHANNEL
         </motion.div>
 
         <motion.h1
@@ -207,7 +207,7 @@ export default function Home() {
             XCOMS
           </span>
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[hsl(290_90%_80%)] to-[hsl(290_90%_62%)]" style={{ filter: "drop-shadow(0 0 30px hsl(290 90% 62% / 0.4))" }}>
-            .LIVE
+            .Space
           </span>
         </motion.h1>
 
