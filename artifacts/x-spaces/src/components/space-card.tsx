@@ -26,14 +26,14 @@ export function SpaceCard({ space }: { space: Space }) {
       saveUsername(username, space.id).catch(() => {});
     }
 
-    // On iOS, use the twitter.com Universal Link so iOS hands it to the X app automatically
+    // On iOS, navigate the current page to the Universal Link —
+    // iOS intercepts it and hands off to the X app, then returns the user here.
+    // window.open(_blank) does NOT trigger Universal Links on iOS Safari.
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     if (isIOS) {
       const match = space.spaceUrl.match(/\/spaces\/([A-Za-z0-9]+)/);
       if (match) {
-        const spaceId = match[1];
-        // Universal link — iOS intercepts this and opens the X app directly
-        window.open(`https://twitter.com/i/spaces/${spaceId}`, "_blank");
+        window.location.href = `https://twitter.com/i/spaces/${match[1]}`;
         return;
       }
     }
