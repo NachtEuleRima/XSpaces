@@ -27,14 +27,14 @@ export function DonateFloat() {
         }
       `}</style>
 
-      <div style={{ position: "fixed", bottom: 72, left: 20, zIndex: 80 }}>
+      <div style={{ position: "fixed", top: "50%", left: 10, transform: "translateY(-50%)", zIndex: 80 }}>
         {/* Tooltip */}
         {hovered && (
           <div style={{
             position: "absolute",
-            bottom: "calc(100% + 10px)",
-            left: "50%",
-            transform: "translateX(-50%)",
+            top: "50%",
+            left: "calc(100% + 10px)",
+            transform: "translateY(-50%)",
             whiteSpace: "nowrap",
             background: "hsl(222 60% 7%)",
             border: "1px solid hsl(290 90% 62% / 0.35)",
