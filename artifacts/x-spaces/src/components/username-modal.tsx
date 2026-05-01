@@ -150,7 +150,7 @@ export function UsernameModal({ open, onOpenChange, onSuccess, spaceId }: Userna
               (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, hsl(195 100% 50% / 0.2), hsl(290 90% 62% / 0.15))";
             }}
           >
-            {xPending ? "AWAITING CONFIRMATION..." : <>AUTHORIZE WITH {X_LOGO} X</>}
+            {xPending ? "AWAITING CONFIRMATION..." : <>AUTHORIZE WITH {X_LOGO}</>}
           </button>
 
           {xError && (
