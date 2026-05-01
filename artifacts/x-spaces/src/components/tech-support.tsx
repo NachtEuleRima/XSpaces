@@ -46,7 +46,6 @@ export function TechSupport() {
             letterSpacing: "0.25em",
             textTransform: "uppercase",
             color: "#00e5f5",
-            WebkitTextStroke: "0.5px rgba(210,140,10,0.5)",
             textShadow: "0 0 4px #00e5f5, 0 0 11px #00e5f5, 0 0 19px #00e5f5, 0 0 40px #00b8c4, 0 0 80px #00b8c4",
             animation: "neonFlicker 3s infinite",
           }}>
