@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   useEffect(() => {
@@ -10,80 +12,15 @@ function useIsMobile() {
   return isMobile;
 }
 
-/* Trek officer bust wearing a headset with mic boom */
-function HeadsetOfficerIcon() {
+function DeltaBadgeIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="faceGrad" x1="11" y1="5" x2="23" y2="17" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="hsl(195 100% 80%)" />
-          <stop offset="100%" stopColor="hsl(220 80% 65%)" />
-        </linearGradient>
-        <linearGradient id="uniformGrad" x1="4" y1="20" x2="30" y2="34" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="hsl(222 60% 22%)" />
-          <stop offset="100%" stopColor="hsl(222 60% 12%)" />
-        </linearGradient>
-        <linearGradient id="deltaGrad" x1="14" y1="20" x2="20" y2="29" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="hsl(48 100% 78%)" />
-          <stop offset="55%" stopColor="hsl(42 90% 58%)" />
-          <stop offset="100%" stopColor="hsl(36 80% 42%)" />
-        </linearGradient>
-        <filter id="softGlow">
-          <feGaussianBlur stdDeviation="0.8" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      {/* Starfleet uniform / shoulders */}
-      <path d="M4 34 C4 25 9 21 17 21 C25 21 30 25 30 34" fill="url(#uniformGrad)" />
-      {/* Uniform collar trim — gold */}
-      <path d="M12 21 L17 26 L22 21" fill="none" stroke="hsl(42 90% 65%)" strokeWidth="1.1" strokeLinejoin="round"/>
-      {/* Starfleet delta badge on chest — classic hollow arrowhead */}
-      <path d="M17 20.5 L21.8 29 L17 26.8 L12.2 29 Z"
-        fill="url(#deltaGrad)" filter="url(#softGlow)" />
-      <path d="M17 22.8 L20.2 28 L17 26 L13.8 28 Z"
-        fill="hsl(222 60% 13%)" opacity="0.82" />
-      <path d="M17 21.5 L14.2 28 L17 26 Z"
-        fill="hsl(48 100% 85%)" opacity="0.18" />
-
-      {/* Head */}
-      <circle cx="17" cy="12" r="6.5" fill="url(#faceGrad)" filter="url(#softGlow)" />
-      <circle cx="17" cy="12" r="5.5" fill="hsl(215 70% 60%)" opacity="0.25" />
-
-      {/* Eyes */}
-      <circle cx="14.8" cy="11.5" r="0.8" fill="hsl(222 60% 12%)" opacity="0.7"/>
-      <circle cx="19.2" cy="11.5" r="0.8" fill="hsl(222 60% 12%)" opacity="0.7"/>
-
-      {/* Headset band */}
-      <path d="M10 11.5 C10 5 24 5 24 11.5"
-        stroke="hsl(290 85% 70%)" strokeWidth="1.5" fill="none" strokeLinecap="round"
-        filter="url(#softGlow)"
-      />
-      {/* Left ear cup */}
-      <rect x="8" y="10.5" width="4" height="5.5" rx="2"
-        fill="hsl(290 85% 20%)" stroke="hsl(290 85% 70%)" strokeWidth="1"
-      />
-      {/* Right ear cup */}
-      <rect x="22" y="10.5" width="4" height="5.5" rx="2"
-        fill="hsl(290 85% 20%)" stroke="hsl(290 85% 70%)" strokeWidth="1"
-      />
-
-      {/* Mic boom */}
-      <path d="M24 14.5 C26 16 25.5 18.5 23.5 19.5"
-        stroke="hsl(195 100% 65%)" strokeWidth="1" fill="none" strokeLinecap="round"
-        filter="url(#softGlow)"
-      />
-      <circle cx="23" cy="20" r="1.4"
-        fill="hsl(195 100% 50%)" filter="url(#softGlow)"
-      />
-      <circle cx="23" cy="20" r="0.6" fill="white" opacity="0.9"/>
-
-      {/* Sound-wave arcs */}
-      <path d="M20.5 18 C21.2 19 21.2 21 20.5 22"
-        stroke="hsl(195 100% 65% / 0.6)" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
-      <path d="M19 17 C20.2 18.5 20.2 21.5 19 23"
-        stroke="hsl(195 100% 65% / 0.35)" strokeWidth="0.7" fill="none" strokeLinecap="round"/>
-    </svg>
+    <img
+      src={`${BASE}/delta-badge-transparent.png`}
+      alt="Starfleet delta badge"
+      width={22}
+      height={22}
+      style={{ objectFit: "contain", filter: "drop-shadow(0 0 6px hsl(42 90% 65% / 0.7))" }}
+    />
   );
 }
 
@@ -225,7 +162,7 @@ export function FeedbackFloat() {
               padding: 0,
             }}
           >
-            <HeadsetOfficerIcon />
+            <DeltaBadgeIcon />
 
             <span className="cb-ping" style={{
               position: "absolute", inset: 0, borderRadius: "50%",
