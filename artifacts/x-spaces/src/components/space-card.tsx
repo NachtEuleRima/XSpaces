@@ -192,7 +192,7 @@ export function SpaceCard({ space }: { space: Space }) {
                     {audienceCount.toLocaleString()}
                   </div>
                   <div className="text-[9px] font-mono tracking-[0.2em] text-muted-foreground uppercase mt-0.5">
-                    listening
+                    on deck
                   </div>
                 </div>
               )}
