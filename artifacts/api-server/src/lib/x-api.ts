@@ -93,14 +93,17 @@ async function xFetch(path: string): Promise<unknown> {
 
 /**
  * Search for spaces by state (live or scheduled).
- * Note: Requires Basic or higher X API access.
+ * Runs several broad keyword searches in parallel and merges unique results
+ * to maximize coverage since X requires a non-empty query string.
+ * Note: Requires paid X API credits.
  */
 export async function searchSpacesByState(
   state: "live" | "scheduled",
   maxResults = 25
 ): Promise<XSpacesResponse> {
-  // X API Spaces search requires at least one character query OR state filter
-  // We search with a space or common term to get broad results
+  // Common words likely to appear in Space titles — spread across many topics
+  const broadQueries = ["the", "a", "live", "talk", "crypto", "tech", "news", "politics"];
+
   const params = new URLSearchParams({
     state,
     max_results: String(Math.min(maxResults, 100)),
@@ -109,8 +112,42 @@ export async function searchSpacesByState(
     expansions: EXPANSIONS,
   });
 
-  // Use a very broad query to catch all spaces
-  return xFetch(`/spaces/search?query=%20&${params.toString()}`) as Promise<XSpacesResponse>;
+  // Run all queries in parallel, ignore individual failures
+  const results = await Promise.allSettled(
+    broadQueries.map(q =>
+      xFetch(`/spaces/search?query=${encodeURIComponent(q)}&${params.toString()}`) as Promise<XSpacesResponse>
+    )
+  );
+
+  // Merge and deduplicate by space ID
+  const seenIds = new Set<string>();
+  const mergedData: XSpace[] = [];
+  const mergedUsers: XUser[] = [];
+  const seenUserIds = new Set<string>();
+
+  for (const result of results) {
+    if (result.status !== "fulfilled") continue;
+    const res = result.value;
+
+    for (const space of res.data ?? []) {
+      if (!seenIds.has(space.id)) {
+        seenIds.add(space.id);
+        mergedData.push(space);
+      }
+    }
+    for (const user of res.includes?.users ?? []) {
+      if (!seenUserIds.has(user.id)) {
+        seenUserIds.add(user.id);
+        mergedUsers.push(user);
+      }
+    }
+  }
+
+  return {
+    data: mergedData,
+    includes: { users: mergedUsers },
+    meta: { result_count: mergedData.length },
+  };
 }
 
 /**
