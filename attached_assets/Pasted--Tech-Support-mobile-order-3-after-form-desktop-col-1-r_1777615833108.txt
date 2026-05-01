@@ -1,0 +1,54 @@
+{/* Tech Support — mobile order 3 (after form), desktop col 1 row 2, nudged up */}
+<div className="order-3 md:order-none md:col-start-1 md:-mt-12">
+    <div className="border-t border-white/10 pt-8 flex flex-col items-center text-center">
+      <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+        <span style={{ fontSize: "1.5rem", color: "#ea8e2a", animation: "neonFlickerGold 3s infinite" }}>⚡</span>
+        <span style={{
+          fontSize: "clamp(1.25rem, 4vw, 1.75rem)",
+          fontWeight: 900,
+          fontFamily: "monospace",
+          letterSpacing: "0.25em",
+          textTransform: "uppercase",
+          color: "#00e5f5",
+          animation: "neonFlicker 3s infinite",
+        }}>
+          TECH SUPPORT
+        </span>
+        <span style={{ fontSize: "1.5rem", color: "#ea8e2a", animation: "neonFlickerGold 3s infinite" }}>⚡</span>
+      </div>
+      <p className="text-white/40 text-sm mb-5">Have a question? Reach out below.</p>
+      <div className="w-full flex flex-col gap-4">
+      {[
+        { username: "RimaSukhadia", display: "📐_Cyber_Owl_🦉", role: "Technical Inquiries" },
+        { username: "Heike_Jost", display: "Hi🔑 Heike Jost 🇺🇸🇩🇪", role: "Event Inquiries" },
+      ].map(({ username, display, role }) => (
+        <a
+          key={username}
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) { window.location.href = `twitter://user?screen_name=${username}`; }
+            else { window.open(`https://x.com/${username}`, "_blank", "noopener,noreferrer"); }
+          }}
+          className="group w-full flex items-center gap-4 p-5 rounded-2xl border border-primary/30 shadow-[0_0_18px_rgba(0,255,255,0.15)] hover:border-primary/60 hover:shadow-[0_0_32px_rgba(0,255,255,0.35)] transition-all duration-300"
+          style={{ background: "#0d1117" }}
+        >
+          <div className="w-14 h-14 rounded-full border-2 border-primary/50 shadow-[0_0_12px_rgba(0,255,255,0.4)] overflow-hidden relative flex items-center justify-center bg-white/5 shrink-0">
+            <img src={`https://unavatar.io/twitter/${username}`} alt={username} className="w-full h-full object-cover absolute inset-0"
+              onError={(e) => { e.currentTarget.style.display = "none"; (e.currentTarget.nextSibling as HTMLElement).style.display = "block"; }} />
+            <svg viewBox="0 0 24 24" className="hidden w-6 h-6 fill-white/30" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </div>
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <p className="font-bold text-white text-base leading-tight">{display}</p>
+            <p className="text-primary font-mono text-xs">@{username}</p>
+            <p className="text-white/40 text-xs mt-0.5">{role}</p>
+          </div>
+          <span className="text-sm text-primary/60 group-hover:text-primary font-mono font-bold tracking-wider transition-colors ml-auto shrink-0">→ X</span>
+        </a>
+      ))}
+      </div>
+    </div>
+</div>
