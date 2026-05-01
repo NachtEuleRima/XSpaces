@@ -27,7 +27,13 @@ function Router() {
 }
 
 function AppShell() {
-  const [showSplash, setShowSplash] = useState(() => !localStorage.getItem("xcoms_username"));
+  const [showSplash, setShowSplash] = useState(() => {
+    if (!localStorage.getItem("xcoms_username")) return true;
+    if (sessionStorage.getItem("xcoms_session_seen")) return false;
+    const lastSeen = parseInt(localStorage.getItem("xcoms_splash_seen") ?? "0", 10);
+    const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    return Date.now() - lastSeen > WEEK_MS;
+  });
   const [showDonation, setShowDonation] = useState(false);
   const { clearUsername } = useUsername();
   const qc = useQueryClient();
@@ -62,7 +68,11 @@ function AppShell() {
         <Router />
       </WouterRouter>
       <Toaster />
-      {showSplash && <WelcomeSplash onDone={() => setShowSplash(false)} />}
+      {showSplash && <WelcomeSplash onDone={() => {
+        localStorage.setItem("xcoms_splash_seen", String(Date.now()));
+        sessionStorage.setItem("xcoms_session_seen", "1");
+        setShowSplash(false);
+      }} />}
       {!showSplash && <UsernameCapture />}
       {showDonation && <DonationModal onClose={() => setShowDonation(false)} />}
       <SupportPopup />
