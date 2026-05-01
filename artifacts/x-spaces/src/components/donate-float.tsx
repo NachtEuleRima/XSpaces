@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-
 
 
 function DonateTooltip() {
@@ -81,21 +79,9 @@ export function DonateFloat() {
   const size = isMobile ? 40 : 52;
   const fontSize = isMobile ? 18 : 24;
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
-    containerRef.current = el;
-    setMounted(true);
-    return () => { document.body.removeChild(el); };
-  }, []);
-
   if (authModalOpen) return null;
-  if (!mounted || !containerRef.current) return null;
 
-  return createPortal(
+  return (
     <>
       <style>{`
         @keyframes donate-float {
@@ -180,7 +166,6 @@ export function DonateFloat() {
           </span>
         </button>
       </div>
-    </>,
-    containerRef.current
+    </>
   );
 }

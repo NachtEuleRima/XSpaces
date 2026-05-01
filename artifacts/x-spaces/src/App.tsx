@@ -8,13 +8,11 @@ import Home from "@/pages/home";
 import SpaceDetail from "@/pages/space";
 import { WelcomeSplash } from "@/components/welcome-splash";
 import { SupportPopup } from "@/components/support-popup";
-import { DonateFloat } from "@/components/donate-float";
 import { UsernameProvider } from "@/context/username-context";
 import { useUsername } from "@/hooks/use-username";
 import { UsernameCapture } from "@/components/username-capture";
 import { DonationModal } from "@/components/donation-modal";
 import { PostDonationToast } from "@/components/post-donation-toast";
-import { FeedbackFloat } from "@/components/feedback-float";
 
 const queryClient = new QueryClient();
 
@@ -78,8 +76,6 @@ function AppShell() {
       {!showSplash && <UsernameCapture />}
       {showDonation && <DonationModal onClose={() => setShowDonation(false)} />}
       <SupportPopup />
-      <DonateFloat />
-      <FeedbackFloat />
       <PostDonationToast />
     </>
   );
