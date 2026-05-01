@@ -105,7 +105,7 @@ export function FeedbackFloat() {
           0%, 80%, 100% { opacity: 1; }
           90% { opacity: 0.15; }
         }
-        .cb-fab { animation: cb-float 4s ease-in-out infinite; }
+        .cb-fab { animation: none; }
         .cb-fab:hover {
           filter: drop-shadow(0 0 16px hsl(195 100% 55% / 0.95)) drop-shadow(0 0 24px hsl(290 85% 65% / 0.5)) !important;
         }
@@ -113,11 +113,10 @@ export function FeedbackFloat() {
         .cb-ping2 { animation: cb-ping2 2.6s ease-out 1.3s infinite; }
         .mic-dot  { animation: mic-blink 2s ease-in-out infinite; }
         .feedback-wrapper {
-          position: fixed; right: 16px; top: 59%;
-          transform: translateY(-50%); z-index: 80;
+          position: fixed; left: 16px; top: 16px;
+          z-index: 80;
           display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
-        @media (min-width: 768px) { .feedback-wrapper { top: 65%; } }
 
         .feedback-label {
           font-family: monospace;
@@ -136,7 +135,7 @@ export function FeedbackFloat() {
         .tooltip-bubble {
           position: absolute;
           top: 50%;
-          right: calc(100% + 10px);
+          left: calc(100% + 10px);
           transform: translateY(-50%);
           background: hsl(222 60% 7%);
           border: 1px solid hsl(195 100% 50% / 0.4);
@@ -156,10 +155,10 @@ export function FeedbackFloat() {
         .tooltip-bubble::after {
           content: '';
           position: absolute;
-          top: 50%; right: -5px;
+          top: 50%; left: -5px;
           transform: translateY(-50%);
           border: 4px solid transparent;
-          border-left-color: hsl(195 100% 50% / 0.4);
+          border-right-color: hsl(195 100% 50% / 0.4);
         }
       `}</style>
 
