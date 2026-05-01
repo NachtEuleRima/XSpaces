@@ -95,7 +95,7 @@ export function DonationModal({ onClose }: DonationModalProps) {
     }, 500);
   };
 
-  const handleXMessage = useCallback(async (e: MessageEvent) => {
+  const handleXMessage = useCallback((e: MessageEvent) => {
     if (e.data?.type === "x-auth-success" && e.data.username) {
       const username = e.data.username.replace(/^@/, "").toLowerCase().trim();
       localStorage.setItem("xcoms_username", username);
@@ -103,12 +103,12 @@ export function DonationModal({ onClose }: DonationModalProps) {
       window.dispatchEvent(new CustomEvent("xcoms:auth-close"));
       setXPending(false);
       setShowAuth(false);
-      proceedToPayment(username);
+      // Return to the main modal view — user can review and hit Fund the Mission
     } else if (e.data?.type === "x-auth-error") {
       setXError(e.data.error ?? "Sign-in failed");
       setXPending(false);
     }
-  }, [proceedToPayment]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("message", handleXMessage);
