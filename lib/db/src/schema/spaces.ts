@@ -4,6 +4,7 @@ import { z } from "zod/v4";
 
 export const spacesTable = pgTable("spaces", {
   id: serial("id").primaryKey(),
+  xSpaceId: text("x_space_id").unique(), // X API Space ID, null for manually added spaces
   title: text("title").notNull(),
   description: text("description"),
   status: text("status").notNull().default("upcoming"), // live | upcoming | ended
@@ -15,6 +16,7 @@ export const spacesTable = pgTable("spaces", {
   coHosts: jsonb("co_hosts").notNull().default([]),
   speakers: jsonb("speakers").notNull().default([]),
   topicTags: jsonb("topic_tags").notNull().default([]),
+  lastSyncedAt: timestamp("last_synced_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

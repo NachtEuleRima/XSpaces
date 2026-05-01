@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db, spacesTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { GetSpaceParams } from "@workspace/api-zod";
+import { syncIfStale, syncSpacesFromX } from "../lib/sync.js";
 
 const router = Router();
 
@@ -23,27 +24,43 @@ function formatSpace(space: typeof spacesTable.$inferSelect) {
   };
 }
 
+// Trigger a non-blocking background sync before responding
+async function withSync(fn: () => Promise<void>): Promise<void> {
+  // Fire sync in background — don't await so response isn't delayed
+  syncIfStale().catch(() => {});
+  await fn();
+}
+
 router.get("/spaces", async (req, res) => {
-  const spaces = await db.select().from(spacesTable).orderBy(desc(spacesTable.createdAt));
-  res.json(spaces.map(formatSpace));
+  await withSync(async () => {
+    const spaces = await db
+      .select()
+      .from(spacesTable)
+      .orderBy(desc(spacesTable.createdAt));
+    res.json(spaces.map(formatSpace));
+  });
 });
 
 router.get("/spaces/live", async (req, res) => {
-  const spaces = await db
-    .select()
-    .from(spacesTable)
-    .where(eq(spacesTable.status, "live"))
-    .orderBy(desc(spacesTable.listenerCount));
-  res.json(spaces.map(formatSpace));
+  await withSync(async () => {
+    const spaces = await db
+      .select()
+      .from(spacesTable)
+      .where(eq(spacesTable.status, "live"))
+      .orderBy(desc(spacesTable.listenerCount));
+    res.json(spaces.map(formatSpace));
+  });
 });
 
 router.get("/spaces/upcoming", async (req, res) => {
-  const spaces = await db
-    .select()
-    .from(spacesTable)
-    .where(eq(spacesTable.status, "upcoming"))
-    .orderBy(spacesTable.scheduledAt);
-  res.json(spaces.map(formatSpace));
+  await withSync(async () => {
+    const spaces = await db
+      .select()
+      .from(spacesTable)
+      .where(eq(spacesTable.status, "upcoming"))
+      .orderBy(spacesTable.scheduledAt);
+    res.json(spaces.map(formatSpace));
+  });
 });
 
 router.get("/spaces/stats", async (req, res) => {
@@ -79,6 +96,12 @@ router.get("/spaces/:id", async (req, res) => {
     return;
   }
   res.json(formatSpace(space));
+});
+
+// Manual sync endpoint — triggers an immediate forced sync from X API
+router.post("/sync", async (req, res) => {
+  const result = await syncSpacesFromX();
+  res.json(result);
 });
 
 export default router;
