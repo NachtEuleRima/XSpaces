@@ -263,13 +263,14 @@ export default function Home() {
 
       <StatsTicker />
 
-      <main className="flex-1 container mx-auto px-6 pt-16 pb-0 z-10">
+      <div className="container mx-auto px-6 pt-4 pb-0 z-10 flex justify-start">
+        <DonateFloat />
+      </div>
+
+      <main className="flex-1 container mx-auto px-6 pt-2 pb-0 z-10">
 
         {/* ── LIVE NOW ── */}
         <section className="mb-24">
-          <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: 16 }}>
-            <DonateFloat />
-          </div>
           <SectionHeader color="hsl(195 100% 50%)" label="MAIN BRIDGE — LIVE TRANSMISSION" pulse />
 
           {isLoadingLive ? (
