@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { useGetSpaceStats, useGetVisitorCount, getGetSpaceStatsQueryKey, getGetVisitorCountQueryKey } from "@workspace/api-client-react";
 
 export function StatsTicker() {
@@ -14,9 +15,48 @@ export function StatsTicker() {
     { label: "UNIQUE CREW", value: visitors?.count ?? 0, highlight: false },
   ];
 
-  // 4 copies so track is always much wider than viewport.
-  // Animation moves -50% = exactly 2 copies, reset is always off-screen.
+  // 4 copies: the rAF loop resets by exactly half the track width (2 copies)
+  // so the seam is always off-screen.
   const looped = [...items, ...items, ...items, ...items];
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    const track = trackRef.current;
+    if (!track) return;
+
+    // px/s — faster on narrow screens since there's less content visible
+    const isMobile = window.innerWidth < 768;
+    const speed = isMobile ? 55 : 35;
+
+    let lastTime: number | null = null;
+
+    const tick = (time: number) => {
+      if (lastTime === null) lastTime = time;
+      const dt = (time - lastTime) / 1000; // seconds
+      lastTime = time;
+
+      posRef.current -= speed * dt;
+
+      // Reset by exactly half the track width — visually identical position
+      const half = track.scrollWidth / 2;
+      if (posRef.current <= -half) {
+        posRef.current += half;
+      }
+
+      track.style.transform = `translateX(${posRef.current}px)`;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [loaded]);
 
   return (
     <div
@@ -29,8 +69,10 @@ export function StatsTicker() {
         WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
       }}
     >
-      {/* Only animate once data is loaded so track width is stable */}
-      <div className={loaded ? "ticker-track" : ""} style={{ display: "flex", whiteSpace: "nowrap", alignItems: "center" }}>
+      <div
+        ref={trackRef}
+        style={{ display: "flex", whiteSpace: "nowrap", alignItems: "center" }}
+      >
         {looped.map((item, i) => (
           <span key={i} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
             <span style={{ color: "hsl(195 100% 50% / 0.4)", marginRight: "0.75rem" }}>{item.label}:</span>
