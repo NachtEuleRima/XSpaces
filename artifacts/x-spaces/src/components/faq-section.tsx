@@ -11,7 +11,7 @@ const FAQS = [
   },
   {
     q: "What does signing in actually do?",
-    a: "When you sign in, XCOMS tunes its sensors to your X following list — surfacing Spaces from people you already follow at the top of the feed, separated from the wider quadrant.",
+    a: "When you sign in, XCOMS tunes its sensors to your aliens — surfacing Spaces from people you like and follow at the top of the feed, separated from the wider quadrant.",
   },
   {
     q: "How do I send feedback?",
