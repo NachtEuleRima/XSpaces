@@ -42,9 +42,9 @@ export function DonateFloat() {
     mq.addEventListener("change", onChange);
 
     const checkOverCard = () => {
-      // Button fixed position: left 16px, top 64vh, size ~40px
+      // Button fixed position: left 16px, top 60vh, size ~40px
       const btnX = 16 + 20; // center x
-      const btnY = window.innerHeight * 0.64; // center y
+      const btnY = window.innerHeight * 0.60; // center y
       const elements = document.elementsFromPoint(btnX, btnY);
       const hit = elements.some(el => el.closest("[data-space-card]"));
       setOverCard(hit);
@@ -91,7 +91,7 @@ export function DonateFloat() {
       `}</style>
 
       <div
-        style={{ position: "fixed", left: 16, top: "64%", transform: "translateY(-50%)", zIndex: 80, display: "inline-flex", alignItems: "center" }}
+        style={{ position: "fixed", left: 16, top: "60%", transform: "translateY(-50%)", zIndex: 80, display: "inline-flex", alignItems: "center" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
