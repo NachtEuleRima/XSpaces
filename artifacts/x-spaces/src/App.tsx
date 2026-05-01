@@ -72,6 +72,7 @@ function AppShell() {
         localStorage.setItem("xcoms_splash_seen", String(Date.now()));
         sessionStorage.setItem("xcoms_session_seen", "1");
         setShowSplash(false);
+        setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" }), 50);
       }} />}
       {!showSplash && <UsernameCapture />}
       {showDonation && <DonationModal onClose={() => setShowDonation(false)} />}
