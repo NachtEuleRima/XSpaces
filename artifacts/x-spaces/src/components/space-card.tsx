@@ -242,7 +242,7 @@ export function SpaceCard({ space }: { space: Space }) {
                 (e.currentTarget as HTMLButtonElement).style.background = primaryColorFaded;
               }}
             >
-              {isLive ? "OPEN CHANNEL" : "VIEW DETAILS"}
+              {isLive ? "OPEN CHANNEL" : "SCAN VESSEL"}
             </button>
           </div>
         </motion.div>
