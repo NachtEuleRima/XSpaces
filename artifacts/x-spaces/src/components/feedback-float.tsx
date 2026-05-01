@@ -170,8 +170,8 @@ export function FeedbackFloat() {
         <div style={{ position: "relative" }}>
           {hovered && (
             <div className="tooltip-bubble">
-              <div style={{ fontWeight: 800 }}>Open Channel</div>
-              <div style={{ opacity: 0.5, fontSize: "0.46rem" }}>Send feedback</div>
+              <div>Hail</div>
+              <div style={{ opacity: 0.65 }}>bridge</div>
             </div>
           )}
 
