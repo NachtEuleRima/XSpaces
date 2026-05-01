@@ -109,7 +109,7 @@ export function SupportPopup() {
           boxShadow: "0 0 14px hsl(195 100% 50% / 0.15)",
         }}>
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "hsl(195 100% 50%)", boxShadow: "0 0 8px hsl(195 100% 50%)", flexShrink: 0 }} />
-          STARFLEET OPERATIONS
+          XFLEET OPERATIONS
         </div>
 
         {/* Heading */}
