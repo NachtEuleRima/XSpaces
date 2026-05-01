@@ -3,28 +3,40 @@ import { useEffect, useRef, useState } from "react";
 
 function DonateTooltip() {
   return (
-    <div style={{
-      position: "absolute",
-      top: "50%",
-      left: "calc(100% + 8px)",
-      transform: "translateY(-50%)",
-      background: "hsl(222 60% 7%)",
-      border: "1px solid hsl(290 90% 62% / 0.35)",
-      borderRadius: 6,
-      padding: "0.25rem 0.5rem",
-      fontFamily: "monospace",
-      fontSize: "0.5rem",
-      letterSpacing: "0.12em",
-      textTransform: "uppercase",
-      color: "hsl(290 90% 75%)",
-      boxShadow: "0 0 12px hsl(290 90% 62% / 0.2)",
-      pointerEvents: "none",
-      lineHeight: 1.6,
-      textAlign: "center",
-    }}>
-      <div>Fund</div>
-      <div style={{ opacity: 0.65 }}>mission</div>
-    </div>
+    <>
+      <style>{`
+        .donate-tooltip::after {
+          content: '';
+          position: absolute;
+          top: 50%; left: -5px;
+          transform: translateY(-50%);
+          border: 4px solid transparent;
+          border-right-color: hsl(290 90% 62% / 0.35);
+        }
+      `}</style>
+      <div className="donate-tooltip" style={{
+        position: "absolute",
+        top: "50%",
+        left: "calc(100% + 8px)",
+        transform: "translateY(-50%)",
+        background: "hsl(222 60% 7%)",
+        border: "1px solid hsl(290 90% 62% / 0.35)",
+        borderRadius: 6,
+        padding: "0.25rem 0.5rem",
+        fontFamily: "monospace",
+        fontSize: "0.5rem",
+        letterSpacing: "0.12em",
+        textTransform: "uppercase",
+        color: "hsl(290 90% 75%)",
+        boxShadow: "0 0 12px hsl(290 90% 62% / 0.2)",
+        pointerEvents: "none",
+        lineHeight: 1.6,
+        textAlign: "center",
+      }}>
+        <div>Fund</div>
+        <div style={{ opacity: 0.65 }}>mission</div>
+      </div>
+    </>
   );
 }
 
