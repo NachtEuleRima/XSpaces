@@ -285,7 +285,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                         <span style={{ fontFamily: "monospace", fontSize: "0.78rem", fontWeight: 700, color: "hsl(195 100% 70%)", letterSpacing: "0.05em" }}>@{suggestion.username}</span>
                         <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{suggestion.name}</span>
                       </div>
-                      <span style={{ marginLeft: "auto", fontSize: "0.6rem", fontFamily: "monospace", letterSpacing: "0.15em", textTransform: "uppercase", color: "hsl(195 100% 55%)", flexShrink: 0 }}>tap to select</span>
+                      <span style={{ marginLeft: "auto", fontSize: "0.6rem", fontFamily: "monospace", letterSpacing: "0.15em", textTransform: "uppercase", color: "hsl(195 100% 55%)", flexShrink: 0 }}>it's me</span>
                     </button>
                   )}
                 </div>
