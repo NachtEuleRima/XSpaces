@@ -25,6 +25,22 @@ export function SpaceCard({ space }: { space: Space }) {
     if (username) {
       saveUsername(username, space.id).catch(() => {});
     }
+
+    // On iOS Safari, try to open the X app via deep link first
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isIOS) {
+      // Extract space ID from URL: https://(twitter|x).com/i/spaces/SPACE_ID
+      const match = space.spaceUrl.match(/\/spaces\/([A-Za-z0-9]+)/);
+      if (match) {
+        const spaceId = match[1];
+        const appUrl = `twitter://spaces?id=${spaceId}`;
+        const webUrl = space.spaceUrl;
+        // Try app URL; if app not installed, browser ignores it — fall back after delay
+        window.location.href = appUrl;
+        setTimeout(() => { window.open(webUrl, "_blank"); }, 1500);
+        return;
+      }
+    }
     window.open(space.spaceUrl, "_blank");
   };
 
