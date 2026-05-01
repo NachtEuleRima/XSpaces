@@ -145,9 +145,6 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                     Spaces
                   </span>
                 </div>
-                <p className="text-xs font-mono tracking-[0.3em] text-foreground/40 uppercase mt-1">
-                  Hailing Frequencies Open
-                </p>
               </div>
 
               {/* Divider */}
