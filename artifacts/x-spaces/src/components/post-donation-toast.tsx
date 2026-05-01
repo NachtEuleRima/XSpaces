@@ -38,11 +38,13 @@ export function PostDonationToast() {
       {visible && (
         <div style={{
           position: "fixed",
-          bottom: "5rem",
+          top: "50%",
           left: 0,
           right: 0,
+          transform: "translateY(-50%)",
           display: "flex",
           justifyContent: "center",
+          padding: "0 1rem",
           zIndex: 200,
           pointerEvents: "none",
         }}>
@@ -72,7 +74,8 @@ export function PostDonationToast() {
               alignItems: "center",
               gap: "0.85rem",
               boxShadow: "0 0 0 1px hsl(195 100% 50% / 0.08), 0 8px 40px hsl(195 100% 50% / 0.18), 0 0 80px hsl(290 90% 62% / 0.1)",
-              whiteSpace: "nowrap",
+              maxWidth: "min(420px, 100%)",
+              width: "100%",
             }}
           >
             {/* Top beam */}
