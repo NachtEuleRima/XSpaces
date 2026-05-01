@@ -14,8 +14,9 @@ export function StatsTicker() {
     { label: "UNIQUE CREW", value: visitors?.count ?? 0, highlight: false },
   ];
 
-  // Duplicate for seamless infinite loop — CSS animation scrolls exactly one copy width (-50%)
-  const looped = [...items, ...items];
+  // 4 copies so track is always much wider than viewport.
+  // Animation moves -50% = exactly 2 copies, reset is always off-screen.
+  const looped = [...items, ...items, ...items, ...items];
 
   return (
     <div
