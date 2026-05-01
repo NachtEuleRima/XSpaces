@@ -131,7 +131,7 @@ function EmptyState({ color, message }: { color: string; message: string }) {
 }
 
 export default function Home() {
-  const { username } = useUsername();
+  const { username, clearUsername } = useUsername();
   const isMobile = useIsMobile();
   const featuredCount = isMobile ? 3 : 6;
   const params = username ? { viewerUsername: username } : undefined;
@@ -317,7 +317,7 @@ export default function Home() {
         {localStorage.getItem("xcoms_auth_method") === "x" ? (
           <button
             onClick={() => {
-              localStorage.removeItem("xcoms_username");
+              clearUsername();
               localStorage.removeItem("xcoms_auth_method");
               window.dispatchEvent(new Event("xcoms:signout"));
             }}
@@ -328,7 +328,7 @@ export default function Home() {
         ) : (
           <button
             onClick={() => {
-              localStorage.removeItem("xcoms_username");
+              clearUsername();
               localStorage.removeItem("xcoms_auth_method");
               window.dispatchEvent(new Event("xcoms:signout"));
             }}
