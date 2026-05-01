@@ -63,61 +63,79 @@ export function SpaceCard({ space }: { space: Space }) {
 
           <div className="p-5 flex flex-col gap-4 h-full">
 
-            {/* ── Row 1: title + status badge ── */}
-            <div className="flex items-start justify-between gap-3">
-              <h2
-                className="text-base font-black uppercase tracking-tight leading-snug line-clamp-2 flex-1"
-                style={{ color: "hsl(210 20% 96%)" }}
-              >
-                {space.title}
-              </h2>
-              <div className="shrink-0 mt-0.5">
-                {isLive ? (
-                  <div
-                    className="flex items-center gap-1.5 text-[10px] font-mono tracking-[0.15em] font-bold uppercase px-2 py-1 rounded-full whitespace-nowrap"
-                    style={{
-                      color: "hsl(195 100% 65%)",
-                      background: "hsl(195 100% 50% / 0.1)",
-                      border: "1px solid hsl(195 100% 50% / 0.3)",
-                    }}
+            {/* ── Row 1: host avatar (top-left) + title + badge ── */}
+            <div className="flex gap-3 items-start">
+              {/* Host avatar — prominent top-left bubble */}
+              <div className="shrink-0">
+                <Avatar
+                  className="h-12 w-12"
+                  style={{
+                    boxShadow: `0 0 0 2px hsl(222 40% 10%), 0 0 12px ${primaryColor}55`,
+                    outline: `2px solid ${primaryColorBorder}`,
+                    outlineOffset: "1px",
+                  }}
+                >
+                  <AvatarImage src={space.host?.avatarUrl || undefined} alt={space.host?.displayName} />
+                  <AvatarFallback
+                    className="font-mono text-sm font-bold uppercase"
+                    style={{ background: "hsl(222 40% 12%)", color: primaryColor }}
                   >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
-                      style={{ background: "hsl(195 100% 50%)", boxShadow: "0 0 6px hsl(195 100% 50%)" }}
-                    />
-                    LIVE
-                  </div>
-                ) : space.scheduledAt ? (
-                  <div
-                    className="text-[10px] font-mono tracking-[0.05em] px-2 py-1 rounded-full whitespace-nowrap"
-                    style={{
-                      color: "hsl(290 90% 75%)",
-                      background: "hsl(290 90% 62% / 0.1)",
-                      border: "1px solid hsl(290 90% 62% / 0.25)",
-                    }}
-                  >
-                    {new Date(space.scheduledAt).toLocaleDateString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                ) : null}
+                    {(space.host?.username ?? "?").slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
               </div>
-            </div>
 
-            {/* ── Row 2: host name ── */}
-            <div className="flex items-center gap-2">
-              <span
-                className="text-[10px] font-mono tracking-[0.2em] uppercase"
-                style={{ color: primaryColor, opacity: 0.7 }}
-              >
-                CMD
-              </span>
-              <span className="text-xs font-mono text-foreground/70 truncate">
-                @{space.host?.username ?? "unknown"}
-              </span>
+              {/* Right side: title + badge + host @username */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <h2
+                    className="text-base font-black uppercase tracking-tight leading-snug line-clamp-2 flex-1"
+                    style={{ color: "hsl(210 20% 96%)" }}
+                  >
+                    {space.title}
+                  </h2>
+                  <div className="shrink-0">
+                    {isLive ? (
+                      <div
+                        className="flex items-center gap-1.5 text-[10px] font-mono tracking-[0.15em] font-bold uppercase px-2 py-1 rounded-full whitespace-nowrap"
+                        style={{
+                          color: "hsl(195 100% 65%)",
+                          background: "hsl(195 100% 50% / 0.1)",
+                          border: "1px solid hsl(195 100% 50% / 0.3)",
+                        }}
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
+                          style={{ background: "hsl(195 100% 50%)", boxShadow: "0 0 6px hsl(195 100% 50%)" }}
+                        />
+                        LIVE
+                      </div>
+                    ) : space.scheduledAt ? (
+                      <div
+                        className="text-[10px] font-mono tracking-[0.05em] px-2 py-1 rounded-full whitespace-nowrap"
+                        style={{
+                          color: "hsl(290 90% 75%)",
+                          background: "hsl(290 90% 62% / 0.1)",
+                          border: "1px solid hsl(290 90% 62% / 0.25)",
+                        }}
+                      >
+                        {new Date(space.scheduledAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+                <p
+                  className="text-[10px] font-mono tracking-[0.1em] mt-1 truncate"
+                  style={{ color: primaryColor, opacity: 0.65 }}
+                >
+                  CMD · @{space.host?.username ?? "unknown"}
+                </p>
+              </div>
             </div>
 
             {/* ── Row 3: tags ── */}
