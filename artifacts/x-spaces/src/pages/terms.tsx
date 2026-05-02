@@ -3,7 +3,7 @@ import { useEffect } from "react";
 export default function Terms() {
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
-    const handlePop = () => { window.location.href = "/?auth=1"; };
+    const handlePop = () => { window.location.href = "/api/auth/x/login"; };
     window.addEventListener("popstate", handlePop);
     return () => window.removeEventListener("popstate", handlePop);
   }, []);
@@ -18,7 +18,7 @@ export default function Terms() {
     }}>
       <div style={{ maxWidth: 680, margin: "0 auto" }}>
 
-        <a href="/?auth=1" style={{ color: "hsl(195 100% 60%)", fontSize: "0.75rem", letterSpacing: "0.15em", textDecoration: "none", textTransform: "uppercase" }}>
+        <a href="/api/auth/x/login" style={{ color: "hsl(195 100% 60%)", fontSize: "0.75rem", letterSpacing: "0.15em", textDecoration: "none", textTransform: "uppercase" }}>
           ← Back to Mission Control
         </a>
 
