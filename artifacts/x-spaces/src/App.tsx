@@ -16,7 +16,15 @@ import { UsernameCapture } from "@/components/username-capture";
 import { DonationModal } from "@/components/donation-modal";
 import { PostDonationToast } from "@/components/post-donation-toast";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  },
+});
 
 function Router() {
   return (
@@ -48,6 +56,17 @@ function AppShell() {
   const [showDonation, setShowDonation] = useState(false);
   const { clearUsername } = useUsername();
   const qc = useQueryClient();
+
+  // Refetch all queries when the tab becomes visible again (mobile background/sleep fix).
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        qc.invalidateQueries();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [qc]);
 
   // Allow any child to re-trigger the splash by dispatching "xcoms:signout"
   // Also immediately clear the username + cached space queries so the page
