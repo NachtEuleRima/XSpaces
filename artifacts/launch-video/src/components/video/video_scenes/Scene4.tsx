@@ -1,50 +1,39 @@
 import { motion } from 'framer-motion';
 
-const words = "Know who's broadcasting".split(" ");
+const words = ["Know", "who's", "broadcasting"];
 
 export function Scene4() {
   return (
-    <motion.div 
+    <motion.div
       className="absolute inset-0 flex items-center justify-center"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -50 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.6 }}
     >
-      <div className="text-center px-12 max-w-6xl w-full relative z-10">
-        <h2 className="text-[4.5vw] font-display uppercase tracking-widest flex justify-center gap-[2vw]">
+      <div className="text-center px-12 max-w-5xl relative z-10">
+        <h2 className="text-[5.5vw] font-display uppercase tracking-widest leading-tight flex flex-wrap justify-center gap-x-[2.5vw] gap-y-[1vh]">
           {words.map((word, i) => (
-            <div key={i} className="relative overflow-hidden">
-              <motion.span
-                className="inline-block text-primary"
-                initial={{ y: '100%' }}
-                animate={{ y: '0%' }}
-                transition={{ duration: 0.6, delay: i * 0.2, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {word}
-              </motion.span>
-            </div>
+            <motion.span
+              key={i}
+              className="inline-block"
+              initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)', color: i === 1 ? 'var(--color-secondary)' : 'var(--color-primary)' }}
+              transition={{ duration: 0.8, delay: 0.2 + i * 0.25, ease: 'circOut' }}
+            >
+              {word}
+            </motion.span>
           ))}
         </h2>
-      </div>
 
-      {/* Radar rings */}
-      <motion.div 
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        {[1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full border border-accent/40"
-            initial={{ width: 0, height: 0, opacity: 1 }}
-            animate={{ width: '80vw', height: '80vw', opacity: 0 }}
-            transition={{ duration: 4, delay: i * 2, repeat: Infinity, ease: "linear" }}
-          />
-        ))}
-      </motion.div>
+        {/* Subtle horizontal scan line */}
+        <motion.div
+          className="mt-[3vh] h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto"
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: '40vw', opacity: 0.6 }}
+          transition={{ duration: 1, delay: 1, ease: 'circOut' }}
+        />
+      </div>
     </motion.div>
   );
 }

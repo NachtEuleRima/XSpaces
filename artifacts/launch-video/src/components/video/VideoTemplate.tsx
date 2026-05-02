@@ -61,43 +61,27 @@ export default function VideoTemplate({
         />
       </div>
 
-      {/* LCARS Interface Overlay (Persistent) */}
-      <div className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between p-[2vw]">
-        {/* Top bar */}
-        <div className="flex w-full h-[5vh]">
-          <motion.div className="w-[15vw] h-full bg-secondary rounded-l-full" 
-            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.5, ease: "circOut" }} style={{ originX: 0 }} />
-          <motion.div className="w-[40vw] h-[2vh] bg-primary ml-[1vw] mt-[3vh]"
-            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.7, ease: "circOut", delay: 0.2 }} style={{ originX: 0 }} />
-          <div className="flex-1" />
-          <motion.div className="w-[10vw] h-[2vh] bg-accent mt-[3vh] rounded-r-full"
-            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.5, ease: "circOut", delay: 0.4 }} style={{ originX: 1 }} />
+      {/* LCARS top + bottom accent bars only — no side framing */}
+      <div className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between py-[2vh] px-[3vw]">
+        <div className="flex w-full h-[4px] items-center gap-[1vw]">
+          <motion.div className="h-full bg-secondary rounded-full"
+            initial={{ width: 0 }} animate={{ width: '18vw' }} transition={{ duration: 0.6, ease: "circOut" }} />
+          <motion.div className="h-full bg-primary rounded-full flex-1"
+            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease: "circOut", delay: 0.2 }} style={{ originX: 0 }} />
+          <motion.div className="h-full bg-accent rounded-full"
+            initial={{ width: 0 }} animate={{ width: '8vw' }} transition={{ duration: 0.5, ease: "circOut", delay: 0.4 }} />
         </div>
-        
-        {/* Left sidebar */}
-        <div className="absolute left-[2vw] top-[8vh] bottom-[8vh] w-[8vw] flex flex-col gap-[1vh]">
-           <motion.div className="w-full bg-secondary rounded-tr-[3vw] flex-1"
-             initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 0.8, ease: "circOut" }} style={{ originY: 0 }} />
-           <motion.div className="w-full h-[5vh] bg-[#FFCC00]" 
-             animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-           <motion.div className="w-full bg-primary flex-1"
-             initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 0.8, ease: "circOut", delay: 0.3 }} style={{ originY: 1 }} />
-           <motion.div className="w-full h-[15vh] bg-accent rounded-br-[3vw] flex items-end justify-center pb-2 text-black font-bold text-[1vw]"
-             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
-             402-9
-           </motion.div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="flex w-full h-[5vh] items-end ml-[9vw] pl-[1vw] pr-[9vw]">
-          <motion.div className="w-[30vw] h-[2vh] bg-primary rounded-l-full"
-            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.6, ease: "circOut", delay: 0.5 }} style={{ originX: 0 }} />
-          <motion.div className="w-[15vw] h-full bg-secondary ml-[1vw]"
-            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.4, ease: "circOut", delay: 0.7 }} style={{ originX: 0 }} />
+        <div className="flex w-full h-[4px] items-center gap-[1vw]">
+          <motion.div className="h-full bg-primary rounded-full"
+            initial={{ width: 0 }} animate={{ width: '8vw' }} transition={{ duration: 0.5, ease: "circOut", delay: 0.5 }} />
+          <motion.div className="h-full bg-secondary rounded-full flex-1"
+            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease: "circOut", delay: 0.6 }} style={{ originX: 0 }} />
+          <motion.div className="h-full bg-accent rounded-full"
+            initial={{ width: 0 }} animate={{ width: '14vw' }} transition={{ duration: 0.6, ease: "circOut", delay: 0.7 }} />
         </div>
       </div>
 
-      <div className="absolute inset-0 ml-[12vw] mt-[8vh] mb-[8vh] mr-[2vw] overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
         <AnimatePresence initial={false} mode="wait">
           {SceneComponent && <SceneComponent key={currentSceneKey} />}
         </AnimatePresence>
