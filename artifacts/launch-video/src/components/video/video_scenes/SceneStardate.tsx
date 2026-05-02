@@ -29,7 +29,7 @@ export function SceneStardate() {
         <span className="font-mono text-[2.8vw] tracking-[0.3em] uppercase text-white/50">
           Stardate
         </span>
-        <span className="font-display text-[6vw] tracking-[0.08em] text-secondary leading-none">
+        <span className="font-display text-[3.8vw] tracking-[0.08em] text-secondary leading-none">
           {getCurrentStardate()}
         </span>
       </motion.div>
