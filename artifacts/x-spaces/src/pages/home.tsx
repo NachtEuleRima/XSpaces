@@ -6,6 +6,7 @@ import { FaqSection } from "@/components/faq-section";
 import { ScrollNav } from "@/components/scroll-nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useUsername } from "@/hooks/use-username";
 import { FeedbackFloat } from "@/components/feedback-float";
 
@@ -136,6 +137,14 @@ export default function Home() {
   const isMobile = useIsMobile();
   const featuredCount = isMobile ? 3 : 6;
   const params = username ? { viewerUsername: username } : undefined;
+  const qc = useQueryClient();
+
+  // One-shot refetch 25 s after mount so we pick up data from the server-side
+  // sync that fires in the background when this page loads (sync takes ~20 s).
+  useEffect(() => {
+    const t = setTimeout(() => qc.invalidateQueries(), 25_000);
+    return () => clearTimeout(t);
+  }, [qc]);
 
   const { data: liveSpaces, isLoading: isLoadingLive } = useGetLiveSpaces(params, { query: { queryKey: getGetLiveSpacesQueryKey(params), refetchInterval: false } });
   const { data: upcomingSpaces, isLoading: isLoadingUpcoming } = useGetUpcomingSpaces(params, { query: { queryKey: getGetUpcomingSpacesQueryKey(params), refetchInterval: false } });
