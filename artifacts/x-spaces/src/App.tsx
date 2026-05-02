@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import SpaceDetail from "@/pages/space";
+import Privacy from "@/pages/privacy";
+import Terms from "@/pages/terms";
 import { WelcomeSplash } from "@/components/welcome-splash";
 import { SupportPopup } from "@/components/support-popup";
 import { UsernameProvider } from "@/context/username-context";
@@ -21,6 +23,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/space/:id" component={SpaceDetail} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
       <Route component={NotFound} />
     </Switch>
   );
