@@ -152,13 +152,25 @@ export default function Home() {
   // Featured = spaces where someone you follow is speaking/cohosting (isMine), capped at limit.
   // If no personalization, fall back to top N of everything.
   // Everything else goes under HAIL MORE.
-  const myLive = (liveSpaces ?? []).filter(s => s.isMine);
+  const myLive = (liveSpaces ?? [])
+    .filter(s => s.isMine)
+    .sort((a, b) => {
+      const aIsMe = (a as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
+      const bIsMe = (b as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
+      return aIsMe === bIsMe ? 0 : aIsMe ? -1 : 1;
+    });
   const otherLive = (liveSpaces ?? []).filter(s => !s.isMine);
   const allLive = [...myLive, ...otherLive];
   const featuredLive = myLive.length > 0 ? myLive.slice(0, featuredCount) : allLive.slice(0, featuredCount);
   const hiddenLive = myLive.length > 0 ? [...myLive.slice(featuredCount), ...otherLive] : allLive.slice(featuredCount);
 
-  const myUpcoming = (upcomingSpaces ?? []).filter(s => s.isMine);
+  const myUpcoming = (upcomingSpaces ?? [])
+    .filter(s => s.isMine)
+    .sort((a, b) => {
+      const aIsMe = (a as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
+      const bIsMe = (b as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
+      return aIsMe === bIsMe ? 0 : aIsMe ? -1 : 1;
+    });
   const otherUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine);
   const allUpcoming = [...myUpcoming, ...otherUpcoming];
   const featuredUpcoming = myUpcoming.length > 0 ? myUpcoming.slice(0, featuredCount) : allUpcoming.slice(0, featuredCount);
