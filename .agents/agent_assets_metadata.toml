@@ -1,5 +1,10 @@
 uploads = []
-generated = []
+
+[[generated]]
+id = "2SW8ZlDVsVdb7ErmnpcGt"
+uri = "file://artifacts/launch-video/public/images/nebula.png"
+type = "image"
+title = "Star Trek style nebula space background"
 
 [[outputs]]
 id = "HEDYg30nUDSfdsEgFekDh"
