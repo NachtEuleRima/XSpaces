@@ -30,8 +30,14 @@ function Router() {
   );
 }
 
+const SPLASH_BYPASS_PATHS = ["/privacy", "/terms"];
+
 function AppShell() {
+  const isBypassRoute = SPLASH_BYPASS_PATHS.some(p =>
+    window.location.pathname === p || window.location.pathname.endsWith(p)
+  );
   const [showSplash, setShowSplash] = useState(() => {
+    if (isBypassRoute) return false;
     if (!localStorage.getItem("xcoms_username")) return true;
     if (sessionStorage.getItem("xcoms_session_seen")) return false;
     const lastSeen = parseInt(localStorage.getItem("xcoms_splash_seen") ?? "0", 10);
