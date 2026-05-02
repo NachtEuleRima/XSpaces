@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 function getCurrentStardate(): string {
@@ -11,18 +10,7 @@ function getCurrentStardate(): string {
   return stardate.toFixed(1);
 }
 
-function useLocalTime() {
-  const [time, setTime] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-}
-
 export function SceneStardate() {
-  const localTime = useLocalTime();
-
   return (
     <motion.div
       className="absolute inset-0 flex flex-col items-center justify-center gap-[2vh]"
@@ -45,16 +33,6 @@ export function SceneStardate() {
           {getCurrentStardate()}
         </span>
       </motion.div>
-
-      {/* Live local time */}
-      <motion.p
-        className="font-mono text-[2vw] tracking-[0.25em] text-primary/80"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.8, ease: 'circOut' }}
-      >
-        {localTime}
-      </motion.p>
 
       {/* Divider */}
       <motion.div
