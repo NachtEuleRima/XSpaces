@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "HEDYg30nUDSfdsEgFekDh"
+uri = "file://screenshots/delta-badge-icon.jpg"
+type = "image"
+title = "Delta Badge — X App Icon"
