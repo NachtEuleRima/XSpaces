@@ -1,30 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function speakIntro() {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-
-  function utter(text: string, delay: number, rate = 0.72, pitch = 0.75) {
-    setTimeout(() => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.rate = rate;
-      u.pitch = pitch;
-      u.volume = 0.9;
-      // prefer a deep male voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const deep = voices.find(v =>
-        /male|man|david|james|daniel|alex/i.test(v.name) && /en/i.test(v.lang)
-      ) ?? voices.find(v => /en/i.test(v.lang));
-      if (deep) u.voice = deep;
-      window.speechSynthesis.speak(u);
-    }, delay);
-  }
-
-  utter('Space...', 350);
-  utter('the final frontier.', 2200, 0.68, 0.72);
-}
-
 const LINE1 = 'Space...';
 const LINE2 = 'the final frontier.';
 
@@ -66,12 +42,8 @@ export function Scene1() {
   const [showLine2, setShowLine2] = useState(false);
 
   useEffect(() => {
-    speakIntro();
     const t = setTimeout(() => setShowLine2(true), 1400);
-    return () => {
-      clearTimeout(t);
-      window.speechSynthesis?.cancel();
-    };
+    return () => clearTimeout(t);
   }, []);
 
   return (
