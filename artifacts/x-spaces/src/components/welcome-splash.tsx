@@ -232,7 +232,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                 <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
                 <div className="flex flex-col items-center gap-0.5">
                   <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase whitespace-nowrap">or</span>
-                  <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase whitespace-nowrap">enter username</span>
+                  <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase whitespace-nowrap">type username</span>
                 </div>
                 <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
               </div>
