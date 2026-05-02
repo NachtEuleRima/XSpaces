@@ -9,7 +9,7 @@ export default function Terms() {
     }}>
       <div style={{ maxWidth: 680, margin: "0 auto" }}>
 
-        <a href="/" style={{ color: "hsl(195 100% 60%)", fontSize: "0.75rem", letterSpacing: "0.15em", textDecoration: "none", textTransform: "uppercase" }}>
+        <a href="/?auth=1" style={{ color: "hsl(195 100% 60%)", fontSize: "0.75rem", letterSpacing: "0.15em", textDecoration: "none", textTransform: "uppercase" }}>
           ← Back to Mission Control
         </a>
 

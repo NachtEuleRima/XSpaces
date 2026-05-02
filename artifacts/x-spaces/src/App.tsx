@@ -38,6 +38,7 @@ function AppShell() {
   ));
   const [showSplash, setShowSplash] = useState(() => {
     if (!isSplashRoute) return false;
+    if (new URLSearchParams(window.location.search).get("auth") === "1") return true;
     if (!localStorage.getItem("xcoms_username")) return true;
     if (sessionStorage.getItem("xcoms_session_seen")) return false;
     const lastSeen = parseInt(localStorage.getItem("xcoms_splash_seen") ?? "0", 10);
