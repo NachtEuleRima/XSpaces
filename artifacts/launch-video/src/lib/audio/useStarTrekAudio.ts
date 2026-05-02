@@ -90,6 +90,7 @@ const CHIRP_PATTERNS: Array<[number, number][]> = [
 export function useStarTrekAudio() {
   const ctxRef = useRef<AudioContext | null>(null);
   const masterRef = useRef<GainNode | null>(null);
+  const audioStreamRef = useRef<MediaStream | null>(null);
   const chirpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [muted, setMuted] = useState(false);
   const mutedRef = useRef(false);
@@ -155,6 +156,10 @@ export function useStarTrekAudio() {
     master.connect(ctx.destination);
     masterRef.current = master;
 
+    const streamDest = ctx.createMediaStreamDestination();
+    master.connect(streamDest);
+    audioStreamRef.current = streamDest.stream;
+
     const resume = () => ctx.resume();
     document.addEventListener('click', resume, { once: true });
     document.addEventListener('keydown', resume, { once: true });
@@ -182,5 +187,5 @@ export function useStarTrekAudio() {
     }
   }
 
-  return { muted, toggleMute };
+  return { muted, toggleMute, audioStreamRef };
 }

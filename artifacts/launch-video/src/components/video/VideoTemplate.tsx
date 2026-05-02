@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, Download, X } from 'lucide-react';
 import { useVideoPlayer } from '@/lib/video';
 import { useStarTrekAudio } from '@/lib/audio/useStarTrekAudio';
+import { useVideoExport } from '@/lib/video/useVideoExport';
 import { Scene1 } from './video_scenes/Scene1';
 import { SceneStardate } from './video_scenes/SceneStardate';
 import { Scene2 } from './video_scenes/Scene2';
@@ -18,6 +19,8 @@ export const SCENE_DURATIONS: Record<string, number> = {
   broadcasting: 4000,
   fades: 5000,
 };
+
+const TOTAL_MS = Object.values(SCENE_DURATIONS).reduce((a, b) => a + b, 0);
 
 const SCENE_COMPONENTS: Record<string, React.ComponentType> = {
   intro: Scene1,
@@ -38,7 +41,8 @@ export default function VideoTemplate({
   onSceneChange?: (sceneKey: string) => void;
 } = {}) {
   const { currentScene, currentSceneKey } = useVideoPlayer({ durations, loop });
-  const { muted, toggleMute } = useStarTrekAudio();
+  const { muted, toggleMute, audioStreamRef } = useStarTrekAudio();
+  const { status, progress, secondsLeft, startExport, cancelExport } = useVideoExport(audioStreamRef, TOTAL_MS);
 
   useEffect(() => {
     onSceneChange?.(currentSceneKey);
@@ -46,6 +50,10 @@ export default function VideoTemplate({
 
   const baseSceneKey = currentSceneKey.replace(/_r[12]$/, '') as keyof typeof SCENE_DURATIONS;
   const SceneComponent = SCENE_COMPONENTS[baseSceneKey];
+
+  const isRecording = status === 'recording';
+  const isDone = status === 'done';
+  const isError = status === 'error';
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black text-text-primary font-body">
@@ -67,7 +75,7 @@ export default function VideoTemplate({
         />
       </div>
 
-      {/* LCARS top + bottom accent bars only — no side framing */}
+      {/* LCARS accent bars */}
       <div className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between py-[2vh] px-[3vw]">
         <div className="flex w-full h-[4px] items-center gap-[1vw]">
           <motion.div className="h-full bg-secondary rounded-full"
@@ -93,15 +101,92 @@ export default function VideoTemplate({
         </AnimatePresence>
       </div>
 
-      {/* Mute toggle */}
-      <button
-        onClick={toggleMute}
-        className="absolute top-4 right-4 z-30 w-9 h-9 flex items-center justify-center rounded-full bg-black/40 text-white/50 hover:text-white hover:bg-black/60 transition-colors"
-        title={muted ? 'Unmute' : 'Mute'}
-        aria-label={muted ? 'Unmute audio' : 'Mute audio'}
-      >
-        {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-      </button>
+      {/* Top-right controls: mute + export */}
+      <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+        {/* Export / Download button */}
+        {!isRecording && (
+          <button
+            onClick={startExport}
+            disabled={isRecording}
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-black/40 text-white/50 hover:text-white hover:bg-black/60 transition-colors"
+            title="Download video"
+            aria-label="Download video"
+          >
+            <Download className="w-4 h-4" />
+          </button>
+        )}
+
+        <button
+          onClick={toggleMute}
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-black/40 text-white/50 hover:text-white hover:bg-black/60 transition-colors"
+          title={muted ? 'Unmute' : 'Mute'}
+          aria-label={muted ? 'Unmute audio' : 'Mute audio'}
+        >
+          {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+        </button>
+      </div>
+
+      {/* Recording overlay */}
+      <AnimatePresence>
+        {isRecording && (
+          <motion.div
+            className="absolute inset-x-0 bottom-0 z-40 flex flex-col gap-2 bg-black/70 backdrop-blur-sm px-5 py-4"
+            initial={{ y: 60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 60, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                <span className="font-mono text-sm text-white/80 tracking-widest uppercase">
+                  Recording — {secondsLeft}s left
+                </span>
+              </div>
+              <button
+                onClick={cancelExport}
+                className="w-7 h-7 flex items-center justify-center rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                aria-label="Cancel recording"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="w-full h-1.5 bg-white/15 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-primary rounded-full"
+                style={{ width: `${progress * 100}%` }}
+                transition={{ duration: 0.2 }}
+              />
+            </div>
+          </motion.div>
+        )}
+
+        {isDone && (
+          <motion.div
+            className="absolute inset-x-0 bottom-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm px-5 py-4"
+            initial={{ y: 60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 60, opacity: 0 }}
+          >
+            <span className="font-mono text-sm tracking-widest uppercase text-primary">
+              Download started — check your downloads folder
+            </span>
+          </motion.div>
+        )}
+
+        {isError && (
+          <motion.div
+            className="absolute inset-x-0 bottom-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm px-5 py-4"
+            initial={{ y: 60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 60, opacity: 0 }}
+          >
+            <span className="font-mono text-sm tracking-widest uppercase text-red-400">
+              Recording cancelled or not supported in this browser
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Watermark */}
       <div className="absolute bottom-10 right-4 z-20 pointer-events-none">
