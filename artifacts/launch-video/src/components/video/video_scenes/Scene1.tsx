@@ -114,14 +114,21 @@ export function Scene1() {
             >
               XComSpace | Live
             </motion.p>
-            <motion.p
-              className="font-mono text-[0.9vw] tracking-[0.3em] text-white/40 mt-[0.5vh]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4, ease: 'easeIn' }}
+
+            {/* Prominent stardate */}
+            <motion.div
+              className="flex items-baseline gap-[1.5vw] mt-[1.5vh]"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: 'circOut' }}
             >
-              STARDATE {getCurrentStardate()}
-            </motion.p>
+              <span className="font-display text-[2.2vw] tracking-[0.2em] uppercase text-white/70">
+                Stardate
+              </span>
+              <span className="font-display text-[2.8vw] tracking-[0.1em] text-secondary">
+                {getCurrentStardate()}
+              </span>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
