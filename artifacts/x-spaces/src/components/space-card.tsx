@@ -155,14 +155,6 @@ export function SpaceCard({ space, matchedFollower }: { space: Space; matchedFol
                 >
                   CMD · @{space.host?.username ?? "unknown"}
                 </p>
-                {matchedFollower && (
-                  <p
-                    className="text-[9px] font-mono tracking-[0.08em] mt-0.5 truncate"
-                    style={{ color: "hsl(142 70% 55%)", opacity: 0.85 }}
-                  >
-                    ↳ you follow @{matchedFollower}
-                  </p>
-                )}
               </div>
             </div>
 
