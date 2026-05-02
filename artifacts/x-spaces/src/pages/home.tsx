@@ -152,12 +152,13 @@ export default function Home() {
   // Featured = spaces where someone you follow is speaking/cohosting (isMine), capped at limit.
   // If no personalization, fall back to top N of everything.
   // Everything else goes under HAIL MORE.
+  const roleRank: Record<string, number> = { self: 0, host: 1, cohost: 2, speaker: 3 };
   const myLive = (liveSpaces ?? [])
     .filter(s => s.isMine)
     .sort((a, b) => {
-      const aIsMe = (a as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
-      const bIsMe = (b as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
-      return aIsMe === bIsMe ? 0 : aIsMe ? -1 : 1;
+      const aRank = roleRank[(a as any).matchedRole ?? "speaker"] ?? 3;
+      const bRank = roleRank[(b as any).matchedRole ?? "speaker"] ?? 3;
+      return aRank - bRank;
     });
   const otherLive = (liveSpaces ?? []).filter(s => !s.isMine);
   const allLive = [...myLive, ...otherLive];
@@ -167,9 +168,9 @@ export default function Home() {
   const myUpcoming = (upcomingSpaces ?? [])
     .filter(s => s.isMine)
     .sort((a, b) => {
-      const aIsMe = (a as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
-      const bIsMe = (b as any).matchedFollower?.toLowerCase() === username?.toLowerCase();
-      return aIsMe === bIsMe ? 0 : aIsMe ? -1 : 1;
+      const aRank = roleRank[(a as any).matchedRole ?? "speaker"] ?? 3;
+      const bRank = roleRank[(b as any).matchedRole ?? "speaker"] ?? 3;
+      return aRank - bRank;
     });
   const otherUpcoming = (upcomingSpaces ?? []).filter(s => !s.isMine);
   const allUpcoming = [...myUpcoming, ...otherUpcoming];

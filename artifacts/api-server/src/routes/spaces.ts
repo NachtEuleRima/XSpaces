@@ -21,20 +21,36 @@ function getParticipantUsernames(space: typeof spacesTable.$inferSelect): string
     .filter(Boolean);
 }
 
-function isSpaceForFollowing(space: typeof spacesTable.$inferSelect, following: Set<string>, viewerUsername?: string): { isMine: boolean; matchedFollower?: string } {
-  const usernames = getParticipantUsernames(space);
-  if (viewerUsername && usernames.includes(viewerUsername.toLowerCase())) return { isMine: true, matchedFollower: viewerUsername };
-  if (!viewerUsername && OWNER_USERNAME && usernames.includes(OWNER_USERNAME)) return { isMine: true, matchedFollower: OWNER_USERNAME };
+type MatchedRole = "self" | "host" | "cohost" | "speaker";
+
+function isSpaceForFollowing(space: typeof spacesTable.$inferSelect, following: Set<string>, viewerUsername?: string): { isMine: boolean; matchedFollower?: string; matchedRole?: MatchedRole } {
+  const host = (space.host as Participant | null)?.username?.toLowerCase();
+  const coHosts = (space.coHosts as Participant[]).map(p => p.username?.toLowerCase() ?? "").filter(Boolean);
+  const speakers = (space.speakers as Participant[]).map(p => p.username?.toLowerCase() ?? "").filter(Boolean);
+
+  const checkSelf = viewerUsername?.toLowerCase() ?? (OWNER_USERNAME || undefined);
+  if (checkSelf) {
+    if (checkSelf === host) return { isMine: true, matchedFollower: checkSelf, matchedRole: viewerUsername ? "self" : "host" };
+    if (coHosts.includes(checkSelf)) return { isMine: true, matchedFollower: checkSelf, matchedRole: viewerUsername ? "self" : "cohost" };
+    if (speakers.includes(checkSelf)) return { isMine: true, matchedFollower: checkSelf, matchedRole: viewerUsername ? "self" : "speaker" };
+  }
+
   if (following.size === 0) return { isMine: false };
-  const matched = usernames.find(u => following.has(u));
-  return matched ? { isMine: true, matchedFollower: matched } : { isMine: false };
+
+  if (host && following.has(host)) return { isMine: true, matchedFollower: host, matchedRole: "host" };
+  const matchedCohost = coHosts.find(u => following.has(u));
+  if (matchedCohost) return { isMine: true, matchedFollower: matchedCohost, matchedRole: "cohost" };
+  const matchedSpeaker = speakers.find(u => following.has(u));
+  if (matchedSpeaker) return { isMine: true, matchedFollower: matchedSpeaker, matchedRole: "speaker" };
+
+  return { isMine: false };
 }
 
 function formatSpace(space: typeof spacesTable.$inferSelect, following?: Set<string>, viewerUsername?: string) {
   // Only use owner cache when a real viewer is logged in (following lookup succeeded).
   // Anonymous / failed-lookup visitors get an empty set so they don't inherit the owner's quadrant.
   const effectiveFollowing = following ?? (viewerUsername ? getFollowingUsernamesCache() : new Set<string>());
-  const { isMine, matchedFollower } = isSpaceForFollowing(space, effectiveFollowing, viewerUsername);
+  const { isMine, matchedFollower, matchedRole } = isSpaceForFollowing(space, effectiveFollowing, viewerUsername);
   return {
     id: space.id,
     title: space.title,
@@ -50,6 +66,7 @@ function formatSpace(space: typeof spacesTable.$inferSelect, following?: Set<str
     topicTags: space.topicTags,
     isMine,
     matchedFollower: matchedFollower ?? null,
+    matchedRole: matchedRole ?? null,
     createdAt: space.createdAt.toISOString(),
   };
 }
