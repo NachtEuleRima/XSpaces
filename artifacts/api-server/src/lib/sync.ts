@@ -4,7 +4,7 @@
  */
 
 import { db, spacesTable } from "@workspace/db";
-import { eq, inArray } from "drizzle-orm";
+import { eq, inArray, lt, and, isNotNull } from "drizzle-orm";
 import {
   searchSpacesByState,
   getSpacesByCreatorIds,
@@ -224,6 +224,25 @@ export async function syncSpacesFromX(): Promise<SyncResult> {
           .where(inArray(spacesTable.id, toEnd.map(s => s.id)));
         markedEnded = toEnd.length;
       }
+    }
+
+    // Mark zombie spaces — X API sometimes keeps spaces as "live" for many hours
+    // after they've actually ended. Anything live for >8 hours is treated as ended.
+    const staleThreshold = new Date(Date.now() - 8 * 60 * 60 * 1000);
+    const zombieResult = await db
+      .update(spacesTable)
+      .set({ status: "ended", lastSyncedAt: new Date() })
+      .where(
+        and(
+          eq(spacesTable.status, "live"),
+          isNotNull(spacesTable.startedAt),
+          lt(spacesTable.startedAt, staleThreshold)
+        )
+      )
+      .returning({ id: spacesTable.id });
+    if (zombieResult.length > 0) {
+      logger.info({ count: zombieResult.length }, "Marked zombie live spaces as ended");
+      markedEnded += zombieResult.length;
     }
 
     logger.info({ synced, markedEnded }, "X Spaces sync complete");
