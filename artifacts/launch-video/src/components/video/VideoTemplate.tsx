@@ -4,13 +4,15 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { useVideoPlayer } from '@/lib/video';
 import { useStarTrekAudio } from '@/lib/audio/useStarTrekAudio';
 import { Scene1 } from './video_scenes/Scene1';
+import { SceneStardate } from './video_scenes/SceneStardate';
 import { Scene2 } from './video_scenes/Scene2';
 import { Scene3 } from './video_scenes/Scene3';
 import { Scene4 } from './video_scenes/Scene4';
 import { Scene5 } from './video_scenes/Scene5';
 
 export const SCENE_DURATIONS: Record<string, number> = {
-  intro: 7000,
+  intro: 4000,
+  stardate: 5000,
   mission: 4000,
   xspaces: 4000,
   broadcasting: 4000,
@@ -19,6 +21,7 @@ export const SCENE_DURATIONS: Record<string, number> = {
 
 const SCENE_COMPONENTS: Record<string, React.ComponentType> = {
   intro: Scene1,
+  stardate: SceneStardate,
   mission: Scene2,
   xspaces: Scene3,
   broadcasting: Scene4,
