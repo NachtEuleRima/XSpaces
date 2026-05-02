@@ -34,7 +34,7 @@ const SPLASH_ROUTES = [/^\/$/, /^\/space\//];
 
 function AppShell() {
   const isSplashRoute = SPLASH_ROUTES.some(r => r.test(
-    window.location.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "") || "/"
+    (window.location.pathname.replace(/\/$/, "").replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "")) || "/"
   ));
   const [showSplash, setShowSplash] = useState(() => {
     if (!isSplashRoute) return false;

@@ -12,8 +12,9 @@ createRoot(document.getElementById("root")!).render(<App />);
 // Donate button lives in index.html with position:fixed inline style
 // Hide on static/legal pages
 const DONATE_HIDDEN_PATHS = ["/privacy", "/terms"];
+const normalizedPath = window.location.pathname.replace(/\/$/, "");
 const isDonateHidden = DONATE_HIDDEN_PATHS.some(p =>
-  window.location.pathname === p || window.location.pathname.endsWith(p)
+  normalizedPath === p || normalizedPath.endsWith(p)
 );
 if (!isDonateHidden) {
   createRoot(document.getElementById("donate-root")!).render(<DonateFloat />);
