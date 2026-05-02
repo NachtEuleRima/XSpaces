@@ -47,8 +47,8 @@ export function Scene1() {
   useEffect(() => {
     // phase 1: show line2 after line1 finishes typing
     const t1 = setTimeout(() => setPhase(1), 1400);
-    // phase 2: show XCOMS.SPACE ident
-    const t2 = setTimeout(() => setPhase(2), 3000);
+    // phase 2: show ident — give line2 plenty of time to be read
+    const t2 = setTimeout(() => setPhase(2), 4200);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 

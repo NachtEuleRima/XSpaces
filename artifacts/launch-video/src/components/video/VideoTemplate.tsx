@@ -10,7 +10,7 @@ import { Scene4 } from './video_scenes/Scene4';
 import { Scene5 } from './video_scenes/Scene5';
 
 export const SCENE_DURATIONS: Record<string, number> = {
-  intro: 4000,
+  intro: 7000,
   mission: 4000,
   xspaces: 4000,
   broadcasting: 4000,
