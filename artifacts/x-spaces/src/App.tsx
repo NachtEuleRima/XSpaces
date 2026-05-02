@@ -84,10 +84,10 @@ function AppShell() {
         setShowSplash(false);
         setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" }), 50);
       }} />}
-      {!showSplash && <UsernameCapture />}
+      {!showSplash && isSplashRoute && <UsernameCapture />}
       {showDonation && <DonationModal onClose={() => setShowDonation(false)} />}
-      <SupportPopup />
-      <PostDonationToast />
+      {isSplashRoute && <SupportPopup />}
+      {isSplashRoute && <PostDonationToast />}
     </>
   );
 }
