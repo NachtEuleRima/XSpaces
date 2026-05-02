@@ -230,12 +230,13 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
               {/* Divider */}
               <div className="flex items-center gap-3 w-full">
                 <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
-                <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase whitespace-nowrap">or username</span>
+                <span className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase whitespace-nowrap">or</span>
                 <div className="flex-1 h-px" style={{ background: "hsl(195 100% 50% / 0.12)" }} />
               </div>
 
               {/* Manual callsign */}
               <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
+                <p className="text-[10px] font-mono tracking-[0.2em] text-foreground/30 uppercase text-center -mb-1">Enter username</p>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold font-mono text-lg" style={{ color: "hsl(195 100% 50%)" }}>@</span>
                   {searching && (
