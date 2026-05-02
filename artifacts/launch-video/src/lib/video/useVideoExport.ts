@@ -29,11 +29,14 @@ export function useVideoExport(
 
       const combined = new MediaStream(tracks);
 
-      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
-        ? 'video/webm;codecs=vp9,opus'
-        : MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')
-        ? 'video/webm;codecs=vp8,opus'
-        : 'video/webm';
+      const mimeType =
+        MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a') ? 'video/mp4;codecs=avc1,mp4a' :
+        MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' :
+        MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' :
+        MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' :
+        'video/webm';
+
+      const ext = mimeType.startsWith('video/mp4') ? 'mp4' : 'webm';
 
       const recorder = new MediaRecorder(combined, { mimeType });
       recorderRef.current = recorder;
@@ -47,7 +50,7 @@ export function useVideoExport(
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'xcoms-launch.webm';
+        a.download = `xcoms-launch.${ext}`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
