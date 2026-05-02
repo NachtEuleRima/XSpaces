@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Volume2, VolumeX } from 'lucide-react';
 import { useVideoPlayer } from '@/lib/video';
+import { useStarTrekAudio } from '@/lib/audio/useStarTrekAudio';
 import { Scene1 } from './video_scenes/Scene1';
 import { Scene2 } from './video_scenes/Scene2';
 import { Scene3 } from './video_scenes/Scene3';
@@ -33,6 +35,7 @@ export default function VideoTemplate({
   onSceneChange?: (sceneKey: string) => void;
 } = {}) {
   const { currentScene, currentSceneKey } = useVideoPlayer({ durations, loop });
+  const { muted, toggleMute } = useStarTrekAudio();
 
   useEffect(() => {
     onSceneChange?.(currentSceneKey);
@@ -86,6 +89,16 @@ export default function VideoTemplate({
           {SceneComponent && <SceneComponent key={currentSceneKey} />}
         </AnimatePresence>
       </div>
+
+      {/* Mute toggle */}
+      <button
+        onClick={toggleMute}
+        className="absolute top-4 right-4 z-30 w-9 h-9 flex items-center justify-center rounded-full bg-black/40 text-white/50 hover:text-white hover:bg-black/60 transition-colors"
+        title={muted ? 'Unmute' : 'Mute'}
+        aria-label={muted ? 'Unmute audio' : 'Mute audio'}
+      >
+        {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+      </button>
 
       {/* Watermark */}
       <div className="absolute bottom-4 right-4 z-20 pointer-events-none">
