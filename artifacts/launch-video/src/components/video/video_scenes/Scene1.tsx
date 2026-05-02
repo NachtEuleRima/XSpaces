@@ -102,7 +102,7 @@ export function Scene1() {
               animate={{ opacity: 1, letterSpacing: '0.55em' }}
               transition={{ duration: 1, ease: 'easeOut' }}
             >
-              XComsSpace | Live
+              XComsSpace
             </motion.p>
           </motion.div>
         )}
