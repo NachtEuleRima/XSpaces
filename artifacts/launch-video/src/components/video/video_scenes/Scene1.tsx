@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+function getCurrentStardate(): string {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  const dayOfYear = Math.floor(diff / 86400000);
+  const fraction = dayOfYear / 365.25;
+  const stardate = (now.getFullYear() - 1966) * 1000 + fraction * 1000;
+  return stardate.toFixed(1);
+}
+
 const LINE1 = 'Space...';
 const LINE2 = 'the final frontier.';
 
@@ -103,6 +113,14 @@ export function Scene1() {
               transition={{ duration: 1, ease: 'easeOut' }}
             >
               XComSpace | Live
+            </motion.p>
+            <motion.p
+              className="font-mono text-[0.9vw] tracking-[0.3em] text-white/40 mt-[0.5vh]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.4, ease: 'easeIn' }}
+            >
+              STARDATE {getCurrentStardate()}
             </motion.p>
           </motion.div>
         )}
