@@ -12,7 +12,7 @@ import { ArrowLeft, Users, Clock, Radio, Play } from "lucide-react";
 export default function SpaceDetail() {
   const params = useParams();
   const id = Number(params.id);
-  const { data: space, isLoading } = useGetSpace(id, { query: { enabled: !!id, queryKey: getGetSpaceQueryKey(id), refetchInterval: 30000 } });
+  const { data: space, isLoading } = useGetSpace(id, { query: { enabled: !!id, queryKey: getGetSpaceQueryKey(id), refetchInterval: false } });
   
   const { username, saveUsername } = useUsername();
 
