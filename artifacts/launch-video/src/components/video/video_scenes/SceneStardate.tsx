@@ -19,25 +19,20 @@ export function SceneStardate() {
       exit={{ opacity: 0, scale: 1.04 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Stardate label */}
-      <motion.p
-        className="font-mono text-[1.4vw] tracking-[0.6em] uppercase text-white/50"
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3, ease: 'circOut' }}
-      >
-        Stardate
-      </motion.p>
-
-      {/* Stardate number — hero */}
-      <motion.p
-        className="font-display text-[8vw] tracking-[0.08em] text-secondary leading-none"
+      {/* Stardate label + number — one line */}
+      <motion.div
+        className="flex items-baseline gap-[2vw]"
         initial={{ opacity: 0, scale: 0.92, filter: 'blur(12px)' }}
         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ duration: 1.2, delay: 0.5, ease: 'circOut' }}
+        transition={{ duration: 1.2, delay: 0.3, ease: 'circOut' }}
       >
-        {getCurrentStardate()}
-      </motion.p>
+        <span className="font-mono text-[2.8vw] tracking-[0.3em] uppercase text-white/50">
+          Stardate
+        </span>
+        <span className="font-display text-[6vw] tracking-[0.08em] text-secondary leading-none">
+          {getCurrentStardate()}
+        </span>
+      </motion.div>
 
       {/* Divider */}
       <motion.div
