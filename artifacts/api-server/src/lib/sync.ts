@@ -30,7 +30,7 @@ export function getFollowingUsernamesCache(): Set<string> {
 }
 
 // How stale (in ms) synced data can be before we re-fetch
-const SYNC_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const SYNC_TTL_MS = 2 * 60 * 1000; // 2 minutes
 
 let lastSyncAttempt = 0;
 let syncInProgress = false;
