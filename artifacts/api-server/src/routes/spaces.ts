@@ -21,18 +21,20 @@ function getParticipantUsernames(space: typeof spacesTable.$inferSelect): string
     .filter(Boolean);
 }
 
-function isSpaceForFollowing(space: typeof spacesTable.$inferSelect, following: Set<string>, viewerUsername?: string): boolean {
+function isSpaceForFollowing(space: typeof spacesTable.$inferSelect, following: Set<string>, viewerUsername?: string): { isMine: boolean; matchedFollower?: string } {
   const usernames = getParticipantUsernames(space);
-  if (viewerUsername && usernames.includes(viewerUsername.toLowerCase())) return true;
-  if (!viewerUsername && OWNER_USERNAME && usernames.includes(OWNER_USERNAME)) return true;
-  if (following.size === 0) return false;
-  return usernames.some(u => following.has(u));
+  if (viewerUsername && usernames.includes(viewerUsername.toLowerCase())) return { isMine: true, matchedFollower: viewerUsername };
+  if (!viewerUsername && OWNER_USERNAME && usernames.includes(OWNER_USERNAME)) return { isMine: true, matchedFollower: OWNER_USERNAME };
+  if (following.size === 0) return { isMine: false };
+  const matched = usernames.find(u => following.has(u));
+  return matched ? { isMine: true, matchedFollower: matched } : { isMine: false };
 }
 
 function formatSpace(space: typeof spacesTable.$inferSelect, following?: Set<string>, viewerUsername?: string) {
   // Only use owner cache when a real viewer is logged in (following lookup succeeded).
   // Anonymous / failed-lookup visitors get an empty set so they don't inherit the owner's quadrant.
   const effectiveFollowing = following ?? (viewerUsername ? getFollowingUsernamesCache() : new Set<string>());
+  const { isMine, matchedFollower } = isSpaceForFollowing(space, effectiveFollowing, viewerUsername);
   return {
     id: space.id,
     title: space.title,
@@ -46,7 +48,8 @@ function formatSpace(space: typeof spacesTable.$inferSelect, following?: Set<str
     coHosts: space.coHosts,
     speakers: space.speakers,
     topicTags: space.topicTags,
-    isMine: isSpaceForFollowing(space, effectiveFollowing, viewerUsername),
+    isMine,
+    matchedFollower: matchedFollower ?? null,
     createdAt: space.createdAt.toISOString(),
   };
 }

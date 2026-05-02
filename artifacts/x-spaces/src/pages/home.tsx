@@ -57,7 +57,7 @@ function SpaceGrid({ spaces, delay = 0 }: { spaces: Space[]; delay?: number }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: delay + i * 0.06 }}
         >
-          <SpaceCard space={space} />
+          <SpaceCard space={space} matchedFollower={(space as any).matchedFollower ?? undefined} />
         </motion.div>
       ))}
     </div>

@@ -6,7 +6,7 @@ import { useUsername } from "@/hooks/use-username";
 
 const MAX_AVATARS = 5;
 
-export function SpaceCard({ space }: { space: Space }) {
+export function SpaceCard({ space, matchedFollower }: { space: Space; matchedFollower?: string }) {
   const isLive = space.status === "live";
   const { username, saveUsername } = useUsername();
 
@@ -155,6 +155,14 @@ export function SpaceCard({ space }: { space: Space }) {
                 >
                   CMD · @{space.host?.username ?? "unknown"}
                 </p>
+                {matchedFollower && (
+                  <p
+                    className="text-[9px] font-mono tracking-[0.08em] mt-0.5 truncate"
+                    style={{ color: "hsl(142 70% 55%)", opacity: 0.85 }}
+                  >
+                    ↳ you follow @{matchedFollower}
+                  </p>
+                )}
               </div>
             </div>
 
