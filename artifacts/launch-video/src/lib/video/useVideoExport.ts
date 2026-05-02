@@ -17,8 +17,6 @@ export function useVideoExport(
       const displayStream = await navigator.mediaDevices.getDisplayMedia({
         video: { frameRate: 30 } as MediaTrackConstraints,
         audio: false,
-        // @ts-ignore preferCurrentTab is Chrome 94+ — skips the picker
-        preferCurrentTab: true,
       });
 
       const tracks: MediaStreamTrack[] = [...displayStream.getVideoTracks()];
@@ -46,7 +44,7 @@ export function useVideoExport(
 
       recorder.onstop = () => {
         displayStream.getTracks().forEach(t => t.stop());
-        const blob = new Blob(chunks, { type: 'video/webm' });
+        const blob = new Blob(chunks, { type: mimeType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
