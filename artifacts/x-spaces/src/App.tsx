@@ -30,14 +30,14 @@ function Router() {
   );
 }
 
-const SPLASH_BYPASS_PATHS = ["/privacy", "/terms"];
+const SPLASH_ROUTES = [/^\/$/, /^\/space\//];
 
 function AppShell() {
-  const isBypassRoute = SPLASH_BYPASS_PATHS.some(p =>
-    window.location.pathname === p || window.location.pathname.endsWith(p)
-  );
+  const isSplashRoute = SPLASH_ROUTES.some(r => r.test(
+    window.location.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "") || "/"
+  ));
   const [showSplash, setShowSplash] = useState(() => {
-    if (isBypassRoute) return false;
+    if (!isSplashRoute) return false;
     if (!localStorage.getItem("xcoms_username")) return true;
     if (sessionStorage.getItem("xcoms_session_seen")) return false;
     const lastSeen = parseInt(localStorage.getItem("xcoms_splash_seen") ?? "0", 10);
