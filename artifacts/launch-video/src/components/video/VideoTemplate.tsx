@@ -86,6 +86,16 @@ export default function VideoTemplate({
           {SceneComponent && <SceneComponent key={currentSceneKey} />}
         </AnimatePresence>
       </div>
+
+      {/* Watermark */}
+      <div className="absolute bottom-4 right-4 z-20 pointer-events-none">
+        <img
+          src={`${import.meta.env.BASE_URL}watermark.png`}
+          alt="@RimaSukhadia"
+          className="w-[140px] opacity-60"
+          style={{ imageRendering: 'auto' }}
+        />
+      </div>
     </div>
   );
 }
