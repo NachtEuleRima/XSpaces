@@ -421,3 +421,7 @@
   }
   20%, 24%, 55% { text-shadow: none; }
 }
+
+.callsign-input::placeholder {
+  text-align: center;
+}
