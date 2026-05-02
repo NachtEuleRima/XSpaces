@@ -242,7 +242,7 @@ export function WelcomeSplash({ onDone }: WelcomeSplashProps) {
                     <span className="absolute right-4 top-1/2 -translate-y-1/2" style={{ color: "hsl(195 100% 50% / 0.5)", fontSize: 11, fontFamily: "monospace" }}>…</span>
                   )}
                   <input
-                    className="w-full h-12 pl-10 pr-4 font-mono rounded-xl outline-none transition-all text-center uppercase tracking-widest text-base"
+                    className="w-full h-12 pl-10 pr-4 font-mono rounded-xl outline-none transition-all uppercase tracking-widest text-base"
                     style={{
                       background: "hsl(222 40% 9%)",
                       border: `1px solid ${suggestion ? "hsl(195 100% 50% / 0.55)" : "hsl(195 100% 50% / 0.25)"}`,
