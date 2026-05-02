@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+
 export default function Privacy() {
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    const handlePop = () => { window.location.href = "/?auth=1"; };
+    window.addEventListener("popstate", handlePop);
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
+
   return (
     <div style={{
       minHeight: "100vh",
